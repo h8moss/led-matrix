@@ -32,7 +32,7 @@ static void DrawOnCanvas(Canvas *canvas) {
   while (!interruptReceived) { }
 
   canvas->Fill(0,0,0);
-  } catch (char* e) {
+  } catch (const char* e) {
     std::cerr << e << '\n';
   } catch (...) {
     std::cerr << "Something went wrong" << '\n';
