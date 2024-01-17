@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <signal.h>
 #include <array>
+#include <iostream>
 
 #include "models/image.hpp"
 #include "visual_modules/image_visual_module.hpp"
@@ -20,6 +21,7 @@ static void InterruptHandler(int signo) {
 }
 
 static void DrawOnCanvas(Canvas *canvas) {
+  try {
   canvas->Fill(0, 0, 0);
 
   std::string imageCSV{readFileAsText("../res/image.csv")};
@@ -30,6 +32,11 @@ static void DrawOnCanvas(Canvas *canvas) {
   while (!interruptReceived) { }
 
   canvas->Fill(0,0,0);
+  } catch (char* e) {
+    std::cerr << e << '\n';
+  } catch (...) {
+    std::cerr << "Something went wrong" << '\n';
+  }
 }
 
 int main(int argc, char *argv[]) {
