@@ -9,7 +9,7 @@ bin/led-matrix.out: $(objects) rpi-rgb-led-matrix/Makefile
 
 $(objects): bin/%.o: src/%.cpp rpi-rgb-led-matrix/Makefile
 	mkdir -p $(@D)
-	g++ -c $^ -I rpi-rgb-led-matrix/include -o $@
+	g++ -c $< -I rpi-rgb-led-matrix/include -o $@
 
 rpi-rgb-led-matrix/Makefile:
 	git clone "https://github.com/hzeller/rpi-rgb-led-matrix" rpi-rgb-led-matrix
