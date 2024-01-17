@@ -34,6 +34,10 @@ static void DrawOnCanvas(Canvas *canvas) {
   canvas->Fill(0,0,0);
   } catch (const char* e) {
     std::cerr << e << '\n';
+  } catch (std::string e) {
+    std::cerr << e << '\n';
+  } catch (std::exception e) {
+    std::cerr << e.what() << '\n';
   } catch (...) {
     std::cerr << "Something went wrong" << '\n';
   }
