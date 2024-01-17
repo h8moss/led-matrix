@@ -33,17 +33,37 @@ std::array<int, 3> hexToRGB(std::string color) {
     color = color.substr(1);
   }
 
-  if (color.length() == 3) {
-    color = color[0] + color[0] + color[1] + color[1] + color[2] + color[2];
-  } else if (color.length() != 6) {
+  if (color.length() != 6 && color.length() != 3) {
     throw "A hex number must have exactly 6 or 3 digits and may contain a # character at the beginning, " + color + " contains " + std::to_string(color.length());
   }
 
-  std::cout << color << "=" << numberMap[color[0]]*16 + numberMap[color[1]] << "," << numberMap[color[2]]*16 + numberMap[color[3]] << "," << numberMap[color[4]]*16 + numberMap[color[5]] << '\n';
+  char r1{};
+  char g1{};
+  char b1{};
+
+  char r2{};
+  char g2{};
+  char b2{};
+
+  if (color.length() == 3) {
+    r1 = color.at(0);
+    r2 = color.at(0);
+    g1 = color.at(1);
+    g2 = color.at(1);
+    b1 = color.at(2);
+    b2 = color.at(2);
+  } else {
+    r1 = color.at(0);
+    r2 = color.at(1);
+    g1 = color.at(2);
+    g2 = color.at(3);
+    b1 = color.at(4);
+    b2 = color.at(5);
+  }
 
   return {
-    numberMap[color[0]]*16 + numberMap[color[1]],
-    numberMap[color[2]]*16 + numberMap[color[3]],
-    numberMap[color[4]]*16 + numberMap[color[5]],
+    numberMap[r1]*16 + numberMap[r2],
+    numberMap[g1]*16 + numberMap[g2],
+    numberMap[b1]*16 + numberMap[b2],
   };
 }
