@@ -4,6 +4,9 @@
 
 Image imageFromCSV(std::string csv) {
   array<array<array<int, 3>, 64>, 64> imageValues{};
+  while (csv[csv.length()-1] == '\n') {
+    csv = csv.substr(0, csv.length()-1);
+  }
 
   size_t pos{0};
   int count{};

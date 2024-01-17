@@ -8,7 +8,6 @@ std::string readFileAsText(std::string path) {
   std::string text{};
   while (inf) {
     inf >> text;
-    text += '\n';
   }
 
   return text;
