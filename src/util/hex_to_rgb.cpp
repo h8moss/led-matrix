@@ -39,6 +39,8 @@ std::array<int, 3> hexToRGB(std::string color) {
     throw "A hex number must have exactly 6 or 3 digits and may contain a # character at the beginning, " + color + " contains " + std::to_string(color.length());
   }
 
+  std::cout << color << "=" << numberMap[color[0]]*16 + numberMap[color[1]] << "," << numberMap[color[2]]*16 + numberMap[color[3]] << "," << numberMap[color[4]]*16 + numberMap[color[5]] << '\n'
+
   return {
     numberMap[color[0]]*16 + numberMap[color[1]],
     numberMap[color[2]]*16 + numberMap[color[3]],
