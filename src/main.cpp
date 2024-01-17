@@ -27,9 +27,10 @@ static void DrawOnCanvas(Canvas *canvas) {
   std::string imageCSV{readFileAsText("../res/image.csv")};
   ImageVisualModule ivm{imageFromCSV(imageCSV)};
 
-  ivm.draw(canvas);
 
-  while (!interruptReceived) { }
+  while (!interruptReceived) { 
+    ivm.draw(canvas);
+  }
 
   canvas->Fill(0,0,0);
   } catch (const char* e) {
