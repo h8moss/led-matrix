@@ -15,7 +15,8 @@ Image imageFromCSV(std::string csv) {
   while ((pos = csv.find(',')) != std::string::npos) {
     std::string token = csv.substr(0, pos);
     
-    std::cout << token << " = " << hexToRGB(token) << '\n';
+    std::array<int, 3> rgb{hexToRGB(token)};
+    std::cout << token << " = " << "(" << rgb[0] << ", " << rgb[1] << ", " << rgb[2] << ')' << '\n';
     imageValues[(count/64)][count % 64] = hexToRGB(token);
     csv.erase(0, pos + 1);
     count++;
