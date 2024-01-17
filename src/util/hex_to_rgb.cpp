@@ -36,7 +36,6 @@ std::array<int, 3> hexToRGB(std::string color) {
   if (color.length() == 3) {
     color = color[0] + color[0] + color[1] + color[1] + color[2] + color[2];
   } else if (color.length() != 6) {
-    std::cout << "LMAOO ERROR: " << color << '\n';
     throw  "A hex number must have exactly 6 or 3 digits and may contain a # character at the beginning";
   }
 
