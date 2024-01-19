@@ -20,19 +20,64 @@ static void InterruptHandler(int signo) {
 
 using namespace ColorsModule;
 
+static void DrawShrink(Canvas *canvas, ColorsConfiguration config) {
+  canvas->Fill(0,0,0);
+
+  int radius{(int)std::sqrt(
+    canvas->height() * canvas->height() 
+    + canvas->width() * canvas->width()
+  )+1};
+
+  int centerX{canvas->width()/2};
+  int centerY{canvas->height()/2};
+
+  int loopCount{};
+  while (!interruptReceived) {
+    int animationProgress{loopCount % (int)(config.animationDuration + config.duration)};
+
+    if (animationProgress >= config.duration) {
+      float percent{1-((float)animationProgress-config.duration / config.animationDuration)};
+      int currentRadius{(int)(radius*percent)};
+
+      int t1{currentRadius / 16};
+      int x{currentRadius};
+      int y{};
+      while (x >= y) {
+        canvas->SetPixel(centerX+x, centerY+y, 255, 0, 0);
+        canvas->SetPixel(centerX-x, centerY+y, 255, 0, 0);
+        canvas->SetPixel(centerX+x, centerY-y, 255, 0, 0);
+        canvas->SetPixel(centerX-x, centerY-y, 255, 0, 0);
+        ++y;
+        t1 += y;
+        int t2{t1-x};
+        if (t2 >= 0) {
+          t1 = t2;
+          x--;
+        }
+      }
+
+    }
+
+    ++loopCount;
+    usleep(1000);
+  }
+}
+
 static void DrawCorners(Canvas *canvas, ColorsConfiguration config) {
   canvas->Fill(0,0,0);
 
   Color currentColor{config.getColor()};
+  int totalDiagonals{127}; // 64 rows * 64 columns - 1 shared diagonal
+  // TODO: If we want this code to run on any size, we need to make this dynamic
 
   int loopCount{};
   while (!interruptReceived) {
     int animationProgress = loopCount % ((int)(config.animationDuration + config.duration));
-    int totalDiagonals{127}; // 64 rows * 64 columns - 1 shared diagonal
-    // TODO: If we want this code to run on any size, we need to make this dynamic
 
-    if (animationProgress == 0)
+    if (animationProgress == 0) {
+      canvas->Fill(currentColor.r, currentColor.g, currentColor.b);
       currentColor = config.getColor();
+    }
 
     if (animationProgress >= config.duration) {
       int delta{std::floor(totalDiagonals*((float)animationProgress-config.duration)/(config.animationDuration))};
@@ -100,8 +145,8 @@ int main(int argc, char** argv) {
       std::cout << "\tThe animation to show, should be one of the following values:" << '\n';
       std::cout << "\t\tpulse (default) - A color pulses on the screen" << '\n';
       std::cout << "\t\tcorners - A color moves from one corner to the opposite" << '\n';
-      std::cout << "\t\twalk - A color \"walks\" through the screen" << '\n';
       std::cout << "\t\tshrink - The last color shrinks to the center of the screen" << '\n';
+      std::cout << "\t\tgrow - The next color grows from the center of the screen" << '\n';
       std::cout << "--animation-duration <ms>, --ad <ms>" << '\n';
       std::cout << "\tThe amount of time, in miliseconds the transition between colors should last (default 1000)";
       std::cout << "--true-random-colors, -r" << '\n';
