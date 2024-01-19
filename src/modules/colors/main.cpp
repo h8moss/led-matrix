@@ -21,7 +21,7 @@ static void InterruptHandler(int signo) {
 using namespace ColorsModule;
 
 static void DrawShrink(Canvas *canvas, ColorsConfiguration config) {
-  canvas->Fill(0,255,0);
+  canvas->Fill(0,0,0);
 
   int radius{(int)std::sqrt(
     canvas->height() * canvas->height() 
@@ -33,9 +33,16 @@ static void DrawShrink(Canvas *canvas, ColorsConfiguration config) {
   int centerX{canvas->width()/2};
   int centerY{canvas->height()/2};
 
+  Color color{config->getColor()};
+
   int loopCount{};
   while (!interruptReceived) {
     int animationProgress{loopCount % (int)(config.animationDuration + config.duration)};
+
+    if (animationProgress == 0) {
+      canvas->Fill(color.r, color.g, color.b);
+      color = config.getColor();
+    }
 
     if (animationProgress >= config.duration) {
       float percent{1.0f-(((float)animationProgress-config.duration) / config.animationDuration)};
@@ -53,25 +60,6 @@ static void DrawShrink(Canvas *canvas, ColorsConfiguration config) {
           }
         }
       }
-      // int currentRadius{10};
-
-      // int t1{currentRadius / 16};
-      // int x{currentRadius};
-      // int y{};
-      // while (x >= y) {
-      //   canvas->SetPixel(centerX+x, centerY+y, 255, 0, 0);
-      //   canvas->SetPixel(centerX-x, centerY+y, 255, 0, 0);
-      //   canvas->SetPixel(centerX+x, centerY-y, 255, 0, 0);
-      //   canvas->SetPixel(centerX-x, centerY-y, 255, 0, 0);
-      //   ++y;
-      //   t1 += y;
-      //   int t2{t1-x};
-      //   if (t2 >= 0) {
-      //     t1 = t2;
-      //     x--;
-      //   }
-      // }
-
     }
 
     ++loopCount;
