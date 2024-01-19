@@ -14,8 +14,8 @@ namespace ColorsModule {
   enum Animation {
     pulse,
     corners,
-    walk,
-    shrink
+    shrink,
+    grow
   };
 
   class ColorsConfiguration {

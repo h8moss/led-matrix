@@ -71,8 +71,8 @@ ColorsConfiguration ColorsModule::parseArguments(int argc, char** args) {
 
         if (value == "pulse")  config.animation = Animation::pulse;
         else if (value == "corners") config.animation = Animation::corners;
-        else if (value == "walk") config.animation = Animation::walk;
         else if (value == "shrink") config.animation = Animation::shrink;
+        else if (value == "grow") config.animation = Animation::grow;
         else {
           throw "Unrecognized --animation value";
         }
