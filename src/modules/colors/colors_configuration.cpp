@@ -14,7 +14,7 @@ ColorsModule::ColorsConfiguration::ColorsConfiguration():
   srand(time(NULL));
  }
 
-Color ColorsModule::ColorsConfiguration::getColor(Color lastColor=Color::black) const {
+Color ColorsModule::ColorsConfiguration::getColor(Color lastColor) const {
   if (this->colorGeneration == ColorGenerationStrategy::random) {
     int hue{rand() % 360};
 

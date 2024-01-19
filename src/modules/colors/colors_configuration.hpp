@@ -29,7 +29,7 @@ namespace ColorsModule {
 
     ColorsConfiguration();
 
-    Color getColor(Color lastColor=Color::white) const;
+    Color getColor(Color lastColor=Color::black) const;
   };
 
 }
