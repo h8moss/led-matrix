@@ -31,17 +31,11 @@ static void DrawCorners(Canvas *canvas, ColorsConfiguration config) {
     int totalDiagonals{127}; // 64 rows * 64 columns - 1 shared diagonal
     // TODO: If we want this code to run on any size, we need to make this dynamic
 
-    int delta{};
+    if (animationProgress == 0)
+      currentColor = config.getColor();
 
     if (animationProgress >= config.duration) {
-      // int delta{std::floor(totalDiagonals*((float)animationProgress-config.duration)/(config.duration+config.animationDuration))};
-      int newDelta = std::floor(totalDiagonals*((float)animationProgress-config.duration)/(config.duration+config.animationDuration));
-
-      if (newDelta != delta) {
-        delta = newDelta;
-        std::cout << delta << '\n';
-      }
-
+      int delta{std::floor(totalDiagonals*((float)animationProgress-config.duration)/(config.animationDuration))};
       for (int x{}; x<delta; x++) {
         canvas->SetPixel(x, delta-x-1, currentColor.r, currentColor.g, currentColor.b);
       }
