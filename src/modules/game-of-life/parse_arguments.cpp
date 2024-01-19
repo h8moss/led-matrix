@@ -1,10 +1,9 @@
 #include "parse_arguments.hpp"
 #include "../../common/util/array_to_vector.hpp"
 
-
 using namespace GameOfLifeModule;
 
-GameOfLifeConfiguration parseArguments(int argc, char **argv) {
+GameOfLifeConfiguration GameOfLifeModule::parseArguments(int argc, char **argv) {
   std::vector<std::string> arguments{arrayToVector(argc, argv)};
   GameOfLifeConfiguration config{};
 
