@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "models/color.hpp"
+#include "../../common/models/color.hpp"
 
 namespace ColorsModule {
 
