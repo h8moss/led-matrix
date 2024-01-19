@@ -21,6 +21,7 @@ using namespace ColorsModule;
 
 ColorsConfiguration ColorsModule::parseArguments(int argc, char** args) {
   std::vector<std::string> arguments{arrayToVector(argc, args)};
+  
   ColorsConfiguration config{};
 
   while (arguments.size() != 0) {
