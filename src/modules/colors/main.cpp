@@ -102,10 +102,10 @@ static void DrawPulse(Canvas *canvas, ColorsConfiguration config) {
 
   Color currentColor{config.getColor()};
 
-  int animationSplit1{config.animationDuration / 2.0f};
-  int animationSplit2{(config.animationDuration + config.duration) / 2.0f};
-  int animationSplit3{config.animationDuration / 2.0f + config.duration};
-  int animationSplit4{config.animationDuration + config.duration};
+  int animationSplit1{(int)(config.animationDuration / 2.0f)};
+  int animationSplit2{(int)((config.animationDuration + config.duration) / 2.0f)};
+  int animationSplit3{(int)(config.animationDuration / 2.0f + config.duration)};
+  int animationSplit4{(int)(config.animationDuration + config.duration)};
 
   int loopCount{};
   while (!interruptReceived) {
