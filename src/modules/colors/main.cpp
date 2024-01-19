@@ -21,7 +21,7 @@ static void InterruptHandler(int signo) {
 using namespace ColorsModule;
 
 static void DrawShrink(Canvas *canvas, ColorsConfiguration config) {
-  canvas->Fill(0,0,0);
+  canvas->Fill(0,255,0);
 
   int radius{(int)std::sqrt(
     canvas->height() * canvas->height() 
@@ -37,7 +37,8 @@ static void DrawShrink(Canvas *canvas, ColorsConfiguration config) {
 
     if (animationProgress >= config.duration) {
       float percent{1-((float)animationProgress-config.duration / config.animationDuration)};
-      int currentRadius{(int)(radius*percent)};
+      // int currentRadius{(int)(radius*percent)};
+      int currentRadius{10};
 
       int t1{currentRadius / 16};
       int x{currentRadius};
