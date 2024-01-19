@@ -27,6 +27,17 @@ static void DrawOnCanvas(Canvas *canvas, ColorsConfiguration config) {
 
   int loopCount{};
   while (!interruptReceived) {
+    int animationProgress = loopCount % 400;   
+    if (animationProgress < 100) {
+      // animate color in
+      canvas->Fill(255*(float)animationProgress/100.0f, 0, 0);
+    } else if (animationProgress < 200) {
+      // canvas->Fill(255,0,0);
+    } else if (animationProgress < 300) {
+      canvas->Fill(-animationProgress + 300, 0, 0);
+    } else if (animationProgress < 400) {
+      // stay black
+    }
 
     ++loopCount;
     usleep(1000); // sleep for a ms
