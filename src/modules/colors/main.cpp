@@ -20,7 +20,36 @@ static void InterruptHandler(int signo) {
 
 using namespace ColorsModule;
 
-static void DrawOnCanvas(Canvas *canvas, ColorsConfiguration config) {
+static void DrawCorners(Canvas *canvas, ColorsConfiguration config) {
+  canvas->Fill(0,0,0);
+
+  Color currentColor{config.getColor()};
+
+  int loopCount{};
+  while (!interruptReceived) {
+    int animationProgress = loopCount % (int)(config.animationDuration + config.duration);
+    int totalDiagonals{127}; // 64 rows * 64 columns - 1 shared diagonal
+    // TODO: If we want this code to run on any size, we need to make this dynamic
+
+    if (animationProgress >= config.duration) {
+      int delta{std::ceil(totalDiagonals*((float)animationProgress-config.duration)/(config.duration+config.animationDuration))};
+      for (int i{}; i<delta; i++) {
+        for (int x{}; x<i; x++) {
+          for (int y{i-1}; y>= 0; y--) {
+            canvas->SetPixel(x, y, currentColor.r, currentColor.g, currentColor.b);
+          }
+        }
+      }
+    }     
+
+    ++loopCount;
+    usleep(1000);
+  }
+
+  canvas->Fill(0,0,0);
+}
+
+static void DrawPulse(Canvas *canvas, ColorsConfiguration config) {
   canvas->Fill(0,0,0);
 
   Color currentColor{config.getColor()};
@@ -59,8 +88,30 @@ static void DrawOnCanvas(Canvas *canvas, ColorsConfiguration config) {
 int main(int argc, char** argv) {
   try {
     ColorsConfiguration config{parseArguments(argc, argv)};
-    RGBMatrix::Options defaults;
 
+    if (config.showHelp) {
+      std::cout << "Program to show animations of colors on the full screen" << '\n';
+      std::cout << "Usage: sudo colors.out [options]" << "\n\n";
+      std::cout << "Options:" << '\n';
+      std::cout << "--colors <COLORS>, -c <COLORS>" << '\n';
+      std::cout << "\tPass a list of colors you want the screen to cycle through" << '\n';
+      std::cout << "--duration <ms>, -d <ms>" << '\n';
+      std::cout << "\tThe amount of time, in miliseconds a color should remain on the screen (default 5000)" << '\n';
+      std::cout << "--animation <ANIMATION>, -a <ANIMATION>" << '\n';
+      std::cout << "\tThe animation to show, should be one of the following values:" << '\n';
+      std::cout << "\t\tpulse (default) - A color pulses on the screen" << '\n';
+      std::cout << "\t\tcorners - A color moves from one corner to the opposite" << '\n';
+      std::cout << "\t\twalk - A color \"walks\" through the screen" << '\n';
+      std::cout << "\t\tshrink - The last color shrinks to the center of the screen" << '\n';
+      std::cout << "--animation-duration <ms>, --ad <ms>" << '\n';
+      std::cout << "\tThe amount of time, in miliseconds the transition between colors should last (default 1000)";
+      std::cout << "--true-random-colors, -r" << '\n';
+      std::cout << "\tNormally, the screen only shows fully saturated, medium lightness colors, passing this flag makes the screen show truly randomized colors" << '\n';
+    
+      return 0;
+    }
+
+    RGBMatrix::Options defaults;
     defaults.hardware_mapping = "regular";  // or e.g. "adafruit-hat"
     defaults.rows = 64;
     defaults.cols = 64;
@@ -74,7 +125,10 @@ int main(int argc, char** argv) {
     signal(SIGTERM, InterruptHandler);
     signal(SIGINT, InterruptHandler);
 
-    DrawOnCanvas(canvas, config);
+    if (config.animation == Animation::pulse)
+      DrawPulse(canvas, config);
+    else if (config.animation == Animation::corners)
+      DrawCorners(canvas, config);
 
     canvas->Clear();
     delete canvas;
