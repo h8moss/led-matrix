@@ -28,6 +28,8 @@ static void DrawShrink(Canvas *canvas, ColorsConfiguration config) {
     + canvas->width() * canvas->width()
   )+1};
 
+  int currentRadius{};
+
   int centerX{canvas->width()/2};
   int centerY{canvas->height()/2};
 
@@ -37,25 +39,37 @@ static void DrawShrink(Canvas *canvas, ColorsConfiguration config) {
 
     if (animationProgress >= config.duration) {
       float percent{1.0f-(((float)animationProgress-config.duration) / config.animationDuration)};
-      int currentRadius{(int)(radius*percent)};
-      // int currentRadius{10};
-
-      int t1{currentRadius / 16};
-      int x{currentRadius};
-      int y{};
-      while (x >= y) {
-        canvas->SetPixel(centerX+x, centerY+y, 255, 0, 0);
-        canvas->SetPixel(centerX-x, centerY+y, 255, 0, 0);
-        canvas->SetPixel(centerX+x, centerY-y, 255, 0, 0);
-        canvas->SetPixel(centerX-x, centerY-y, 255, 0, 0);
-        ++y;
-        t1 += y;
-        int t2{t1-x};
-        if (t2 >= 0) {
-          t1 = t2;
-          x--;
+      int nextRadius{(int)(radius*percent)};
+      if (nextRadius != currentRadius) {
+        for (int x{}; x<canvas->width();x++) {
+          for (int y{}; y<canvas->height(); y++) {
+            int xCentered{x-centerX};
+            int yCentered{y-centerY};
+            int distanceSquared{xCentered * xCentered + yCentered * yCentered};
+            if (distanceSquared > currentRadius * currentRadius) {
+              canvas->SetPixel(x, y, 255, 0, 0);
+            }
+          }
         }
       }
+      // int currentRadius{10};
+
+      // int t1{currentRadius / 16};
+      // int x{currentRadius};
+      // int y{};
+      // while (x >= y) {
+      //   canvas->SetPixel(centerX+x, centerY+y, 255, 0, 0);
+      //   canvas->SetPixel(centerX-x, centerY+y, 255, 0, 0);
+      //   canvas->SetPixel(centerX+x, centerY-y, 255, 0, 0);
+      //   canvas->SetPixel(centerX-x, centerY-y, 255, 0, 0);
+      //   ++y;
+      //   t1 += y;
+      //   int t2{t1-x};
+      //   if (t2 >= 0) {
+      //     t1 = t2;
+      //     x--;
+      //   }
+      // }
 
     }
 
