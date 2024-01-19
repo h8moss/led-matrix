@@ -1,13 +1,13 @@
-objects = bin/main.o bin/models/image.o bin/util/hex_to_rgb.o bin/util/image_from_csv.o bin/util/read_file.o bin/visual_modules/image_visual_module.o
+commonObjects = bin/common/util/array_to_vector.o bin/common/util/split_string.o
+colorsObjects = bin/modules/colors/models/color.o bin/modules/colors/colors_configuration.o bin/modules/colors/main.o bin/modules/colors/parse_arguments.o
 
-bin/led-matrix.out: $(objects) rpi-rgb-led-matrix/Makefile
-# Build dependencies
+bin/modules/colors/colors.out: $(colorsObjects) $(commonObjects) rpi-rgb-led-matrix/Makefile
 	cd rpi-rgb-led-matrix && $(MAKE)
 	cd ..
 
-	g++ bin/*.o bin/**/*.o -L rpi-rgb-led-matrix/lib -Wall -lrgbmatrix -lrt -lm -lpthread -o bin/led-matrix.out
+	g++ $(commonObjects) $(colorsObjects) -L rpi-rgb-led-matrix/lib -Wall -Weffc++ -Wextra -Wconversion -Wsign-conversion -lrgbmatrix -lrt -lm -lpthread -o bin/modules/colors/colors.out
 
-$(objects): bin/%.o: src/%.cpp rpi-rgb-led-matrix/Makefile
+$(commonObjects) $(colorsObjects): bin/%.o: src/%.cpp rpi-rgb-led-matrix/Makefile
 	mkdir -p $(@D)
 	g++ -c $< -I rpi-rgb-led-matrix/include -o $@
 
