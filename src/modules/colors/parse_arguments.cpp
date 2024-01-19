@@ -64,7 +64,7 @@ ColorsConfiguration ColorsModule::parseArguments(int argc, char** args) {
       } else {
         throw "Missing value for --animation-duration flag";
       }
-    } else if (arg == "--animation") {
+    } else if (arg == "--animation" || arg == "-a") {
       if (arguments.size() > 0) {
         std::string value{arguments[0]};
         arguments.erase(arguments.begin());
