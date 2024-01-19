@@ -173,6 +173,8 @@ int main(int argc, char** argv) {
       DrawPulse(canvas, config);
     else if (config.animation == Animation::corners)
       DrawCorners(canvas, config);
+    else if (config.animation == Animation::shrink)
+      DrawShrink(canvas, config);
 
     canvas->Clear();
     delete canvas;
