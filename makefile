@@ -1,5 +1,8 @@
-commonObjects = bin/common/util/array_to_vector.o bin/common/util/split_string.o
-colorsObjects = bin/modules/colors/models/color.o bin/modules/colors/colors_configuration.o bin/modules/colors/main.o bin/modules/colors/parse_arguments.o
+commonObjects = bin/common/util/array_to_vector.o bin/common/util/split_string.o bin/common/models/color.o
+colorsObjects = bin/modules/colors/colors_configuration.o bin/modules/colors/main.o bin/modules/colors/parse_arguments.o
+golObjects = bin/modules/game-of-life/game_of_life_configuration.o bin/modules/game-of-life/main.o bin/modules/game-of-life/parse_arguments.o
+
+all: bin/modules/colors/colors.out bin/modules/game-of-life/game_of_life.out
 
 bin/modules/colors/colors.out: $(colorsObjects) $(commonObjects) rpi-rgb-led-matrix/Makefile
 	cd rpi-rgb-led-matrix && $(MAKE)
@@ -7,7 +10,13 @@ bin/modules/colors/colors.out: $(colorsObjects) $(commonObjects) rpi-rgb-led-mat
 
 	g++ $(commonObjects) $(colorsObjects) -L rpi-rgb-led-matrix/lib -Wall -Weffc++ -Wextra -Wconversion -Wsign-conversion -lrgbmatrix -lrt -lm -lpthread -o bin/modules/colors/colors.out
 
-$(commonObjects) $(colorsObjects): bin/%.o: src/%.cpp rpi-rgb-led-matrix/Makefile
+bin/modules/game-of-life/game_of_life.out: $(golObjects) $(commonObjects) rpi-rgb-led-matrix/Makefile
+	cd rpi-rgb-led-matrix && $(MAKE)
+	cd ..
+
+	g++ $(commonObjects) $(golObjects) -L rpi-rgb-led-matrix/lib -Wall -Weffc++ -Wextra -Wconversion -Wsign-conversion -lrgbmatrix -lrt -lm -lpthread -o bin/modules/game-of-life/game_of_life.out
+
+$(commonObjects) $(colorsObjects) $(golObjects): bin/%.o: src/%.cpp rpi-rgb-led-matrix/Makefile
 	mkdir -p $(@D)
 	g++ -c $< -I rpi-rgb-led-matrix/include -o $@
 
