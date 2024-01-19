@@ -36,10 +36,9 @@ static void DrawShrink(Canvas *canvas, ColorsConfiguration config) {
     int animationProgress{loopCount % (int)(config.animationDuration + config.duration)};
 
     if (animationProgress >= config.duration) {
-      float percent{1-((float)animationProgress-config.duration / config.animationDuration)};
-      std::cout << percent << '\n';
-      // int currentRadius{(int)(radius*percent)};
-      int currentRadius{10};
+      float percent{1.0f-(((float)animationProgress-config.duration) / config.animationDuration)};
+      int currentRadius{(int)(radius*percent)};
+      // int currentRadius{10};
 
       int t1{currentRadius / 16};
       int x{currentRadius};
