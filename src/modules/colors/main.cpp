@@ -26,7 +26,7 @@ static void DrawOnCanvas(Canvas *canvas, ColorsConfiguration config) {
   Color currentColor{config.getColor()};
 
   int animationSplit1{config.animationDuration / 2.0f};
-  int animationSplit2{config.animationDuration / 2.0f + config.duration / 2.0f};
+  int animationSplit2{(config.animationDuration + config.duration) / 2.0f};
   int animationSplit3{config.animationDuration / 2.0f + config.duration};
   int animationSplit4{config.animationDuration + config.duration};
 
@@ -40,7 +40,7 @@ static void DrawOnCanvas(Canvas *canvas, ColorsConfiguration config) {
     } else if (animationProgress < animationSplit2) {
       
     } else if (animationProgress < animationSplit3) {
-      float progress{(-animationSplit3+animationSplit2)*animationProgress + animationSplit3};
+      float progress{(animationProgress-animationSplit2)/(animationSplit3-animationSplit2)};
       canvas->Fill(currentColor.r * progress, currentColor.g * progress, currentColor.b * progress);
     } else if (animationProgress < animationSplit4) {
       // stay black
