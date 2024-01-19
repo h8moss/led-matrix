@@ -25,25 +25,26 @@ static void DrawOnCanvas(Canvas *canvas, ColorsConfiguration config) {
 
   Color currentColor{config.getColor()};
 
-  float halfAnimationDuration{config.animationDuration/2.0f};
-  float halfDuration{config.duration/2.0f};
-  float fullDuration{config.duration + config.animationDuration};
+  int animationSplit1{config.animationDuration / 2.0f};
+  int animationSplit2{config.animationDuration / 2.0f + config.duration / 2.0f};
+  int animationSplit3{config.animationDuration / 2.0f + config.duration};
+  int animationSplit4{config.animationDuration + config.duration};
 
   int loopCount{};
   while (!interruptReceived) {
-    int animationProgress = loopCount % (int)fullDuration;
-    if (animationProgress < halfAnimationDuration) {
+    int animationProgress = loopCount % (int)animationSplit4;
+    if (animationProgress < animationSplit1) {
       // animate color in
-      float progress{(float)animationProgress/halfAnimationDuration};
+      float progress{(float)animationProgress/animationSplit1};
       canvas->Fill(currentColor.r * progress, currentColor.g * progress, currentColor.b * progress);
-    } else if (animationProgress < halfAnimationDuration + halfDuration) {
+    } else if (animationProgress < animationSplit2) {
       
-    } else if (animationProgress < config.animationDuration + halfDuration) {
-      float progress{(-((float)animationProgress-halfDuration)/halfAnimationDuration)};
+    } else if (animationProgress < animationSplit3) {
+      float progress{(-animationSplit3+animationSplit2)*animationProgress + animationSplit3};
       canvas->Fill(currentColor.r * progress, currentColor.g * progress, currentColor.b * progress);
-    } else if (animationProgress < fullDuration) {
+    } else if (animationProgress < animationSplit4) {
       // stay black
-      if (animationProgress - fullDuration-1 < 1) {
+      if (animationProgress - animationSplit4-1 < 1) {
         currentColor = config.getColor(currentColor);
       }
     }
