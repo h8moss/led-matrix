@@ -33,7 +33,7 @@ static void DrawShrink(Canvas *canvas, ColorsConfiguration config) {
   int centerX{canvas->width()/2};
   int centerY{canvas->height()/2};
 
-  Color color{config->getColor()};
+  Color color{config.getColor()};
 
   int loopCount{};
   while (!interruptReceived) {
