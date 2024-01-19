@@ -20,7 +20,7 @@ static void InterruptHandler(int signo) {
 
 using namespace ColorsModule;
 
-static void DrawShrink(Canvas *canvas, ColorsConfiguration config) {
+static void DrawCircle(Canvas *canvas, ColorsConfiguration config, bool shrink=false) {
   canvas->Fill(0,0,0);
 
   int radius{(int)std::sqrt(
@@ -45,7 +45,9 @@ static void DrawShrink(Canvas *canvas, ColorsConfiguration config) {
     }
 
     if (animationProgress >= config.duration) {
-      float percent{1.0f-(((float)animationProgress-config.duration) / config.animationDuration)};
+      float percent{(((float)animationProgress-config.duration) / config.animationDuration)};
+      if (shrink)
+        percent = 1.0f-percent;
       int nextRadius{(int)(radius*percent)};
       if (nextRadius != currentRadius) {
         currentRadius = nextRadius;
@@ -54,8 +56,10 @@ static void DrawShrink(Canvas *canvas, ColorsConfiguration config) {
             int xCentered{x-centerX};
             int yCentered{y-centerY};
             int distanceSquared{xCentered * xCentered + yCentered * yCentered};
-            if (distanceSquared > currentRadius * currentRadius) {
-              canvas->SetPixel(x, y, 255, 0, 0);
+            int squaredRadius{currentRadius*currentRadius};
+            if (distanceSquared > squaredRadius && shrink 
+                || distanceSquared < squaredRadius && !shrink ) {
+              canvas->SetPixel(x, y, color.r, color.g, color.b);
             }
           }
         }
@@ -178,7 +182,9 @@ int main(int argc, char** argv) {
     else if (config.animation == Animation::corners)
       DrawCorners(canvas, config);
     else if (config.animation == Animation::shrink)
-      DrawShrink(canvas, config);
+      DrawCircle(canvas, config, true);
+    else if (config.animation == Animation::grow)
+      DrawCircle(canvas, config, false);
 
     canvas->Clear();
     delete canvas;
