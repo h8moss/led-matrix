@@ -36,7 +36,7 @@ static void DrawCorners(Canvas *canvas, ColorsConfiguration config) {
 
     if (animationProgress >= config.duration) {
       int delta{std::floor(totalDiagonals*((float)animationProgress-config.duration)/(config.animationDuration))};
-      for (int x{}; x<delta; x++) {
+      for (int x{}; x<=delta; x++) {
         canvas->SetPixel(x, delta-x-1, currentColor.r, currentColor.g, currentColor.b);
       }
     }     
