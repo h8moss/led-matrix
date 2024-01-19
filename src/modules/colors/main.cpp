@@ -41,6 +41,7 @@ static void DrawShrink(Canvas *canvas, ColorsConfiguration config) {
       float percent{1.0f-(((float)animationProgress-config.duration) / config.animationDuration)};
       int nextRadius{(int)(radius*percent)};
       if (nextRadius != currentRadius) {
+        std::cout << currentRadius << '\n';
         for (int x{}; x<canvas->width();x++) {
           for (int y{}; y<canvas->height(); y++) {
             int xCentered{x-centerX};
