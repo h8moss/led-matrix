@@ -41,7 +41,7 @@ static void DrawOnCanvas(Canvas *canvas, ColorsConfiguration config) {
       
     } else if (animationProgress < animationSplit3) {
       float progress{(animationProgress-animationSplit2)/(animationSplit3-animationSplit2)};
-      canvas->Fill(244* progress, currentColor.g * progress, currentColor.b * progress);
+      canvas->Fill(244, 0, 11);
     } else if (animationProgress < animationSplit4) {
       // stay black
       if (animationProgress - animationSplit4-1 < 1) {
