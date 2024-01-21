@@ -43,11 +43,14 @@ static int CountNeighbors(std::vector<std::vector<bool>> board, int x, int y) {
 static void DrawGame(Canvas *canvas, GameOfLifeConfiguration config) {
   canvas->Fill(0,0,0);
 
+  int w{canvas->width()};
+  int h{canvas->height()};
+
   std::vector<std::vector<bool>> board;
 
-  for (int x{}; x<canvas->width(); x++) {
+  for (int x{}; x<w; x++) {
     std::vector<bool> column{};
-    for (int y{}; y<canvas->height(); y++) {
+    for (int y{}; y<h; y++) {
       bool value{rand() % 2 == 0};
       column.push_back(value);
 
@@ -57,8 +60,8 @@ static void DrawGame(Canvas *canvas, GameOfLifeConfiguration config) {
   }
 
   while (!interruptReceived) {
-    for (int x{}; x<board.size(); x++) {
-      for (int y{}; y<board[x].size(); y++) {
+    for (int x{}; x<w; x++) {
+      for (int y{}; y<h; y++) {
         bool value{board[x][y]};
 
         int aliveNeighbors{CountNeighbors(board, x, y)};
