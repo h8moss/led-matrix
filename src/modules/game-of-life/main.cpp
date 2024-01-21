@@ -48,7 +48,10 @@ static void DrawGame(Canvas *canvas, GameOfLifeConfiguration config) {
   for (int x{}; x<canvas->width(); x++) {
     std::vector<bool> column{};
     for (int y{}; y<canvas->height(); y++) {
-      column.push_back(rand()%2 == 0);
+      bool value{rand() % 2 == 0};
+      column.push_back(value);
+
+      canvas->SetPixel(x, y, config.color.r * value, config.color.g * value, config.color.b * value);
     }
     board.push_back(column);
   }
@@ -58,15 +61,14 @@ static void DrawGame(Canvas *canvas, GameOfLifeConfiguration config) {
       for (int y{}; y<board[x].size(); y++) {
         bool value{board[x][y]};
 
-        if (value) 
-          canvas->SetPixel(x, y, config.color.r, config.color.g, config.color.b);
-
         int aliveNeighbors{CountNeighbors(board, x, y)};
 
         if (value && (aliveNeighbors < 2 || aliveNeighbors > 3)) {
           board[x][y] = false;
+          canvas->SetPixel(x, y, 0,0,0);
         } else if (!value && aliveNeighbors == 3) {
           board[x][y] = true;
+          canvas->SetPixel(x, y, config.color.r, config.color.g, config.color.b);
         }
       }
     }
