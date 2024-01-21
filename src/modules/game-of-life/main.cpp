@@ -21,7 +21,7 @@ static void InterruptHandler(int signo) {
 
 using namespace GameOfLifeModule;
 
-static int CountNeighbors(std::vector<std::vector<bool>> board, int x, int y) {
+static int CountNeighbors(std::vector<std::vector<bool>> board, int x, int y, int width, int height) {
   int count{};
 
   for (int xDelta{-1}; xDelta <= 1; xDelta++) {
@@ -30,8 +30,8 @@ static int CountNeighbors(std::vector<std::vector<bool>> board, int x, int y) {
       int currentX{x + xDelta};
       int currentY{y + yDelta};
 
-      if (currentX < 0 || currentX >= board.size()) continue;
-      if (currentY < 0 || currentY >= board[x].size()) continue;
+      if (currentX < 0 || currentX >= width) continue;
+      if (currentY < 0 || currentY >= height) continue;
 
       count += (int)board[currentX][currentY];
     }
@@ -46,17 +46,15 @@ static void DrawGame(Canvas *canvas, GameOfLifeConfiguration config) {
   int w{canvas->width()};
   int h{canvas->height()};
 
-  std::vector<std::vector<bool>> board;
+  std::vector<std::vector<bool>> board{w, std::vector(h, false)};
 
   for (int x{}; x<w; x++) {
-    std::vector<bool> column{};
     for (int y{}; y<h; y++) {
       bool value{rand() % 2 == 0};
-      column.push_back(value);
+      board[x][y] = value;
 
       canvas->SetPixel(x, y, config.color.r * value, config.color.g * value, config.color.b * value);
     }
-    board.push_back(column);
   }
 
   while (!interruptReceived) {
@@ -64,7 +62,7 @@ static void DrawGame(Canvas *canvas, GameOfLifeConfiguration config) {
       for (int y{}; y<h; y++) {
         bool value{board[x][y]};
 
-        int aliveNeighbors{CountNeighbors(board, x, y)};
+        int aliveNeighbors{CountNeighbors(board, x, y, w, h)};
 
         if (value && (aliveNeighbors < 2 || aliveNeighbors > 3)) {
           board[x][y] = false;
