@@ -64,7 +64,8 @@ static void DrawGame(Canvas *canvas, GameOfLifeConfiguration config) {
       for (int y{}; y<h; y++) {
         bool value{board[x][y]};
 
-        int aliveNeighbors{CountNeighbors(board, x, y, w, h)};
+        // int aliveNeighbors{CountNeighbors(board, x, y, w, h)};
+        int aliveNeighbors{rand() % 8};
 
         if (value && (aliveNeighbors < 2 || aliveNeighbors > 3)) {
           board[x][y] = false;
