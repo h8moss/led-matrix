@@ -21,7 +21,7 @@ static void InterruptHandler(int signo) {
 
 using namespace GameOfLifeModule;
 
-static int CountNeighbors(std::vector<std::vector<bool>> board, int x, int y, int width, int height) {
+static int CountNeighbors(const std::vector<std::vector<bool>>& board, int x, int y, int width, int height) {
   int count{};
 
   for (int xDelta{-1}; xDelta <= 1; xDelta++) {
@@ -33,9 +33,11 @@ static int CountNeighbors(std::vector<std::vector<bool>> board, int x, int y, in
       if (currentX < 0 || currentX >= width) continue;
       if (currentY < 0 || currentY >= height) continue;
 
-      count += (int)board[currentX][currentY];
+      count += board[currentX][currentY];
     }
   }
+
+  std::cout << count << '\n';
 
   return count;
 }
@@ -50,7 +52,7 @@ static void DrawGame(Canvas *canvas, GameOfLifeConfiguration config) {
 
   for (int x{}; x<w; x++) {
     for (int y{}; y<h; y++) {
-      bool value{rand() % 2 == 0};
+      bool value{rand() & 1};
       board[x][y] = value;
 
       canvas->SetPixel(x, y, config.color.r * value, config.color.g * value, config.color.b * value);
