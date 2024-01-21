@@ -24,4 +24,6 @@ rpi-rgb-led-matrix/Makefile:
 	git clone "https://github.com/hzeller/rpi-rgb-led-matrix" rpi-rgb-led-matrix
 
 clean:
-	rm -rf bin/
+	rm -rf bin
+
+.PHONY: all clean
