@@ -37,8 +37,6 @@ static int CountNeighbors(bool** board, int x, int y, int width, int height) {
     }
   }
 
-  std::cout << count << '\n';
-
   return count;
 }
 
@@ -84,6 +82,7 @@ static void DrawGame(Canvas *canvas, GameOfLifeConfiguration config) {
           board[x][y] = !board[x][y];
           Color c{board[x][y] ? config.color : Color::black};
           canvas->SetPixel(x, y, c.r, c.g, c.b);
+          boardChanges[x][y] = false;
         }
       }
     }
