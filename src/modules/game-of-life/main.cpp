@@ -46,7 +46,6 @@ static void DrawGame(Canvas *canvas, GameOfLifeConfiguration config) {
   int w{canvas->width()};
   int h{canvas->height()};
 
-  // std::vector<std::vector<bool>> board{w, std::vector(h, false)};
   bool **board{new bool*[w]};
   bool **boardChanges{new bool*[w]};
 
