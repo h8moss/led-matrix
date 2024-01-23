@@ -5,8 +5,11 @@
 #include <signal.h>
 #include <time.h>
 #include <chrono>
+#include <string>
 
 #include "led-matrix.h"
+
+#include "../../common/canvas/drawText.hpp"
 
 using rgb_matrix::RGBMatrix;
 using rgb_matrix::Canvas;
@@ -30,7 +33,11 @@ static void DrawDate(Canvas *canvas) {
     auto timeT{std::chrono::system_clock::to_time_t(time)};
     auto tm{localtime(&timeT)};
 
-    std::cout << tm->tm_hour << ':' << tm->tm_min << ":" << tm->tm_sec << '\n';
+    std::string h{std::to_string(tm->tm_hour)};
+    std::string m{std::to_string(tm->tm_min)};
+    std::string s{std::to_string(tm->tm_sec)};
+
+    drawText(canvas, 2, 2, h + ":" + m + ":" + s, Color::red);
 
     usleep(1000* 1000); // Sleep 1 second
   }
