@@ -4,8 +4,9 @@ A simple C++ script that allows you to control a led matrix with a bunch of diff
 
 # Animations
 - [x] Shifting colors
-- [ ] Game of life
+- [x] Game of life
 - [ ] The time and date
+- [ ] Rotating square
 - [ ] Rotating cube
 - [ ] Snake
 - [ ] Sorting algorithms
