@@ -6,6 +6,8 @@ TextDrawer::TextDrawer(Canvas *_canvas): canvas{_canvas} {};
 
 int TextDrawer::drawChar(char c, int x, int y, Color color) const {
   switch (c) {
+    case ' ':
+    return 3;
     case 'a':
     return this->drawALower(x, y, color);
     case 'b':
@@ -110,6 +112,48 @@ int TextDrawer::drawChar(char c, int x, int y, Color color) const {
     return this->drawYUpper(x, y, color);
     case 'Z':
     return this->drawZUpper(x, y, color);
+    case '0':
+    return this->draw0(x, y, color);
+    case '1':
+    return this->draw1(x, y, color);
+    case '2':
+    return this->draw2(x, y, color);
+    case '3':
+    return this->draw3(x, y, color);
+    case '4':
+    return this->draw4(x, y, color);
+    case '5':
+    return this->draw5(x, y, color);
+    case '6':
+    return this->draw6(x, y, color);
+    case '7':
+    return this->draw7(x, y, color);
+    case '8':
+    return this->draw8(x, y, color);
+    case '9':
+    return this->draw9(x, y, color);
+    case ':':
+    return this->drawColon(x, y, color);
+    case '?':
+    return this->drawQuestion(x, y, color);
+    case '.':
+    return this->drawDot(x, y, color);
+    case ',':
+    return this->drawComma(x, y, color);
+    case '+':
+    return this->drawPlus(x,y,color);
+    case '-':
+    return this->drawMinus(x,y,color);
+    case '=':
+    return this->drawEquals(x,y,color);
+    case '/':
+    return this->drawSlash(x,y,color);
+    case '(':
+    return this->drawParenthesisLeft(x, y, color);
+    case ')':
+    return this->drawParenthesisRight(x, y, color);
+    case '!':
+    return this->drawExclamation(x, y, color);
   }
 }
 
