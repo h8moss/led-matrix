@@ -28,6 +28,8 @@ static void DrawDate(Canvas *canvas) {
 
   TextDrawer td{canvas};
 
+  td.drawText("abcdefghijklmnopqrstuvwxyz", 2, 10, Color::red);
+
   while (!interruptReceived) {
     canvas->Fill(0,0,0);
 
@@ -42,7 +44,6 @@ static void DrawDate(Canvas *canvas) {
     std::string weekday{std::to_string(tm->tm_wday)};
 
     td.drawText(h + ":" + m + ":" + s, 2, 2, Color::red);
-    td.drawText("abcdefghijklmnopqrstuvwxyz", 2, 2, Color::red);
 
     usleep(1000* 1000); // Sleep 1 second
   }
