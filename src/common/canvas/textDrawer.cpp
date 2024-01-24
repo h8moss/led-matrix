@@ -155,6 +155,8 @@ int TextDrawer::drawChar(char c, int x, int y, Color color) const {
     case '!':
     return this->drawExclamation(x, y, color);
   }
+
+  return 0;
 }
 
 void TextDrawer::drawText(std::string text, int x, int y, Color c) const {
@@ -320,6 +322,8 @@ int TextDrawer::drawCLower(int x, int y, Color c) const  {
   }
   c.setCanvasPixel(x+4, y+3, canvas);
   c.setCanvasPixel(x+4, y+5, canvas);
+
+  return 6;
 }
 
 int TextDrawer::drawDLower(int x, int y, Color c) const  {
