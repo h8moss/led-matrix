@@ -504,117 +504,141 @@ int TextDrawer::drawZLower(int x, int y, Color c) const {
 }
 
 int TextDrawer::drawAUpper(int x, int y, Color c) const {
-  
+  return 0;
 }
 
 int TextDrawer::drawBUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawCUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawDUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawEUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawFUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawGUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawHUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawIUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawJUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawKUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawLUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawMUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawNUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawOUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawPUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawQUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawRUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawSUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawTUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawUUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawVUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawWUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawXUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawYUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
 int TextDrawer::drawZUpper(int x, int y, Color c) const {
   
+  return 0;
 }
 
-int TextDrawer::drawColon(int x, int y, Color c) const {}
-int TextDrawer::drawQuestion(int x, int y, Color c) const {}
-int TextDrawer::drawDot(int x, int y, Color c) const {}
-int TextDrawer::drawComma(int x, int y, Color c) const {}
-int TextDrawer::drawPlus(int x, int y, Color c) const {}
-int TextDrawer::drawMinus(int x, int y, Color c) const {}
-int TextDrawer::drawEquals(int x, int y, Color c) const {}
-int TextDrawer::drawSlash(int x, int y, Color c) const {}
-int TextDrawer::drawParenthesisLeft(int x, int y, Color c) const {}
-int TextDrawer::drawParenthesisRight(int x, int y, Color c) const {}
-int TextDrawer::drawExclamation(int x, int y, Color c) const {}
+int TextDrawer::drawQuestion(int x, int y, Color c) const {return 0;}
+int TextDrawer::drawDot(int x, int y, Color c) const {return 0;}
+int TextDrawer::drawComma(int x, int y, Color c) const {return 0;}
+int TextDrawer::drawPlus(int x, int y, Color c) const {return 0;}
+int TextDrawer::drawMinus(int x, int y, Color c) const {return 0;}
+int TextDrawer::drawEquals(int x, int y, Color c) const {return 0;}
+int TextDrawer::drawSlash(int x, int y, Color c) const {return 0;}
+int TextDrawer::drawParenthesisLeft(int x, int y, Color c) const {return 0;}
+int TextDrawer::drawParenthesisRight(int x, int y, Color c) const {return 0;}
+int TextDrawer::drawExclamation(int x, int y, Color c) const {return 0;}
