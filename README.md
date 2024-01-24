@@ -10,3 +10,7 @@ A simple C++ script that allows you to control a led matrix with a bunch of diff
 - [ ] Rotating cube
 - [ ] Snake
 - [ ] Sorting algorithms
+
+# Copyright
+
+The font used in the time and date executable and in the text executable is inspired by [pixelify sans](https://fonts.google.com/specimen/Pixelify+Sans/glyphs)
