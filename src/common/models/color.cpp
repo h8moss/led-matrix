@@ -13,6 +13,11 @@ float hueToRGB(float p, float q, float t) {
 
 Color::Color(int _r, int _g, int _b): r{_r}, g{_g}, b{_b} { }
 
+
+void Color::setCanvasPixel(int x, int y, rgb_matrix::Canvas *canvas) {
+  canvas->SetPixel(x, y, this->r, this->g, this->b);
+}
+
 Color Color::fromHSL(int h, float s, float l) {
   int r{}, g{}, b{};
 

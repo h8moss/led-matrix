@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "led-matrix.h"
+
 class Color {
   public:
   int r;
@@ -9,6 +11,8 @@ class Color {
   int b;
 
   Color(int _r, int _g, int _b);
+
+  void setCanvasPixel(int x, int y, rgb_matrix::Canvas *canvas);
 
   /// @brief  Generates a color from HSL values
   /// @param h The hue of the color (0-360)
