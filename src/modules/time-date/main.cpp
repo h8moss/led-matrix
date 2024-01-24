@@ -9,7 +9,7 @@
 
 #include "led-matrix.h"
 
-#include "../../common/canvas/drawText.hpp"
+#include "../../common/canvas/textDrawer.hpp"
 
 using rgb_matrix::RGBMatrix;
 using rgb_matrix::Canvas;
@@ -26,6 +26,8 @@ static void DrawDate(Canvas *canvas) {
   int minutes{};
   int seconds{};
 
+  TextDrawer td{canvas};
+
   while (!interruptReceived) {
     canvas->Fill(0,0,0);
 
@@ -37,7 +39,10 @@ static void DrawDate(Canvas *canvas) {
     std::string m{std::to_string(tm->tm_min)};
     std::string s{std::to_string(tm->tm_sec)};
 
-    drawText(canvas, 2, 2, h + ":" + m + ":" + s, Color::red);
+    std::string weekday{std::to_string(tm->tm_wday)};
+
+    td.drawText(h + ":" + m + ":" + s, 2, 2, Color::red);
+    td.drawText("abcdefghijklmnopqrstuvwxyz", 2, 2, Color::red);
 
     usleep(1000* 1000); // Sleep 1 second
   }
