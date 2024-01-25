@@ -1,4 +1,4 @@
-#include "pad_zeros.hpp"
+#include "padZeros.hpp"
 #include <string>
 
 std::string padZeros(int number, int length) {
