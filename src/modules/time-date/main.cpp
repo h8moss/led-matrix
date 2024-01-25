@@ -1,6 +1,5 @@
 #include <iostream>
 #include <unistd.h>
-#include <math.h>
 #include <stdio.h>
 #include <signal.h>
 #include <time.h>
@@ -27,7 +26,6 @@ static void DrawDate(Canvas *canvas) {
   std::string seconds{};
 
   TextDrawer td{canvas};
-
 
   while (!interruptReceived) {
     canvas->Fill(0,0,0);
@@ -61,11 +59,13 @@ static void DrawDate(Canvas *canvas) {
       weekday = "sat";
     }
 
+    int dayNum{tm->tm_mday};
+    int monthNum{tm->tm_mon};
+    int yearNum{tm->tm_year};
+
     td.drawText(hours + ":" + minutes + ":" + seconds, 2, 2, Color::red);
-    td.drawText("abcdefghijk", 2, 10, Color::red);
-    td.drawText("lmnopqrs", 2, 20, Color::red);
-    td.drawText("tuvwxyz", 2, 30, Color::red);
-    td.drawText(weekday, 2, 40, Color::green);
+    td.drawText(weekday, 2, 10, Color::green);
+    td.drawText(std::to_string(dayNum) + " " + std::to_string(monthNum) + " " + std::to_string(yearNum), 2, 20, Color::blue);
 
     usleep(1000* 1000); // Sleep 1 second
   }
