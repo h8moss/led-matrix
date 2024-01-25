@@ -22,9 +22,9 @@ static void InterruptHandler(int signo) {
 static void DrawDate(Canvas *canvas) {
   canvas->Fill(0,0,0);
 
-  int hours{};
-  int minutes{};
-  int seconds{};
+  std::string hours{};
+  std::string minutes{};
+  std::string seconds{};
 
   TextDrawer td{canvas};
 
@@ -36,14 +36,36 @@ static void DrawDate(Canvas *canvas) {
     auto timeT{std::chrono::system_clock::to_time_t(time)};
     auto tm{localtime(&timeT)};
 
-    std::string h{std::to_string(tm->tm_hour)};
-    std::string m{std::to_string(tm->tm_min)};
-    std::string s{std::to_string(tm->tm_sec)};
+    hours = std::to_string(tm->tm_hour);
+    minutes = std::to_string(tm->tm_min);
+    seconds = std::to_string(tm->tm_sec);
+    if (hours.length() == 1) hours = '0' + hours;
+    if (minutes.length() == 1) hours = '0' + minutes;
+    if (seconds.length() == 1) hours = '0' + seconds;
 
-    std::string weekday{std::to_string(tm->tm_wday)};
+    int weekdayNum{tm->tm_wday};
+    std::string weekday{"error aaa"};
+    if (weekdayNum == 0) {
+      weekday = "sun";
+    } else if (weekdayNum == 1) {
+      weekday = "mon";
+    } else if (weekdayNum == 2) {
+      weekday = "tue";
+    } else if (weekdayNum == 3) {
+      weekday = "wed";
+    } else if (weekdayNum == 4) {
+      weekday = "thu";
+    } else if (weekdayNum == 5) {
+      weekday = "fri";
+    } else if (weekdayNum == 6) {
+      weekday = "sat";
+    }
 
-    td.drawText(h + ":" + m + ":" + s, 2, 2, Color::red);
-    td.drawText("abcdefghijklmnopqrstuvwxyz", 2, 10, Color::red);
+    td.drawText(hours + ":" + minutes + ":" + seconds, 2, 2, Color::red);
+    td.drawText("abcdefghijk", 2, 10, Color::red);
+    td.drawText("lmnopqrs", 2, 20, Color::red);
+    td.drawText("tuvwxyz", 2, 30, Color::red);
+    td.drawText(weekday, 2, 40, Color::green);
 
     usleep(1000* 1000); // Sleep 1 second
   }
