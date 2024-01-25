@@ -9,6 +9,7 @@
 #include "led-matrix.h"
 
 #include "../../common/canvas/textDrawer.hpp"
+#include "../../common/util/padZeros.hpp"
 
 using rgb_matrix::RGBMatrix;
 using rgb_matrix::Canvas;
@@ -34,12 +35,9 @@ static void DrawDate(Canvas *canvas) {
     auto timeT{std::chrono::system_clock::to_time_t(time)};
     auto tm{localtime(&timeT)};
 
-    hours = std::to_string(tm->tm_hour);
-    minutes = std::to_string(tm->tm_min);
-    seconds = std::to_string(tm->tm_sec);
-    if (hours.length() == 1) hours = '0' + hours;
-    if (minutes.length() == 1) hours = '0' + minutes;
-    if (seconds.length() == 1) hours = '0' + seconds;
+    hours = padZeros(tm->tm_hour);
+    minutes = padZeros(tm->tm_min);
+    seconds = padZeros(tm->tm_sec);
 
     int weekdayNum{tm->tm_wday};
     std::string weekday{"error aaa"};
@@ -59,13 +57,13 @@ static void DrawDate(Canvas *canvas) {
       weekday = "sat";
     }
 
-    int dayNum{tm->tm_mday};
-    int monthNum{tm->tm_mon + 1};
-    int yearNum{tm->tm_year % 100};
+    std::string dayNum{padZeros(tm->tm_mday)};
+    std::string monthNum{padZeros(tm->tm_mon + 1)};
+    std::string yearNum{padZeros(tm->tm_year % 100)};
 
     td.drawText(hours + ":" + minutes + ":" + seconds, 2, 2, Color::red);
     td.drawText(weekday, 2, 10, Color::green);
-    td.drawText(std::to_string(dayNum) + " " + std::to_string(monthNum) + " " + std::to_string(yearNum), 2, 20, Color::blue);
+    td.drawText(dayNum + " " + monthNum + " " + yearNum, 2, 20, Color::blue);
 
     usleep(1000* 1000); // Sleep 1 second
   }
