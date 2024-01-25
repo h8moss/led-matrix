@@ -166,17 +166,16 @@ void TextDrawer::drawText(std::string text, int x, int y, Color c) const {
 }
 
 int TextDrawer::draw0(int x, int y, Color c) const {
-  drawLine(canvas, x, y, 2, c);
-  drawLine(canvas, x, y+6, 2, c);
+  drawLine(canvas, x+1, y, 2, c);
+  drawLine(canvas, x+1, y+6, 2, c);
   
-  drawLine(canvas, x, y, 5, c, false);
-  drawLine(canvas, x+3, y, 5, c, false);
+  drawLine(canvas, x, y+1, 5, c, false);
+  drawLine(canvas, x+3, y+1, 5, c, false);
 
   return 5;
 }
 
 int TextDrawer::draw1(int x, int y, Color c) const {
-  c.setCanvasPixel(x+1, y, canvas);
   c.setCanvasPixel(x+1, y+1, canvas);
 
   drawLine(canvas, x+2, y, 7, c, false);
@@ -249,14 +248,11 @@ int TextDrawer::draw6(int x, int y, Color c) const {
 }
 
 int TextDrawer::draw7(int x, int y, Color c) const {
-  for (int i{}; i<3; i++)
-    c.setCanvasPixel(x+i, y, canvas);
+  drawLine(canvas, x, y, 3, c);
 
-  for (int i{}; i<3; i++) {
-    c.setCanvasPixel(x+3, y+1+i, canvas);
-    c.setCanvasPixel(x+2, y+3+i, canvas);
-    c.setCanvasPixel(x+1, y+5+i, canvas);
-  }
+  drawLine(canvas, x+3, y+1, 3, c, false);
+  drawLine(canvas, x+2, y+3, 3, c, false);
+  drawLine(canvas, x+1, y+5, 2, c, false);
 
   return 5;
 }
@@ -338,8 +334,8 @@ int TextDrawer::drawDLower(int x, int y, Color c) const  {
 }
 
 int TextDrawer::drawELower(int x, int y, Color c) const  {
-  c.setCanvasPixel(x+1, y+6, canvas);
-  c.setCanvasPixel(x+2, y+6, canvas);
+  c.setCanvasPixel(x+1, y+4, canvas);
+  c.setCanvasPixel(x+2, y+4, canvas);
 
   return drawCLower(x, y, c);
 }
@@ -389,7 +385,7 @@ int TextDrawer::drawILower(int x, int y, Color c) const {
 int TextDrawer::drawJLower(int x, int y, Color c) const {
   c.setCanvasPixel(x, y+5, canvas);
   drawLine(canvas, x+1, y+6, 2, c);
-  drawLine(canvas, x+3, y+2, 4, c, false);
+  drawLine(canvas, x+3, y, 6, c, false);
 
   return 5;
 }
@@ -418,7 +414,7 @@ int TextDrawer::drawMLower(int x, int y, Color c) const {
   drawLine(canvas, x+6, y+3, 4, c, false);
 
   drawLine(canvas, x+1, y+2, 2, c);
-  drawLine(canvas, x+5, y+2, 2, c);
+  drawLine(canvas, x+4, y+2, 2, c);
 
   return 8;
 }
@@ -496,8 +492,8 @@ int TextDrawer::drawULower(int x, int y, Color c) const {
 int TextDrawer::drawVLower(int x, int y, Color c) const {
   drawLine(canvas, x, y+2, 2, c, false);
   drawLine(canvas, x+1, y+4, 2, c, false);
-  drawLine(canvas, x+3, y+2, 2, c, false);
   drawLine(canvas, x+4, y+4, 2, c, false);
+  drawLine(canvas, x+4, y+2, 2, c, false);
 
   c.setCanvasPixel(x+2, y+6, canvas);
 
@@ -541,12 +537,12 @@ int TextDrawer::drawYLower(int x, int y, Color c) const {
 }
 
 int TextDrawer::drawZLower(int x, int y, Color c) const {
-  drawLine(canvas, x, y, 5, c);
-  drawLine(canvas, x, y+4, 5, c);
+  drawLine(canvas, x, y+2, 5, c);
+  drawLine(canvas, x, y+6, 5, c);
 
-  c.setCanvasPixel(x+3, y+1, canvas);
-  c.setCanvasPixel(x+2, y+2, canvas);
-  c.setCanvasPixel(x+1, y+3, canvas);
+  c.setCanvasPixel(x+3, y+3, canvas);
+  c.setCanvasPixel(x+2, y+4, canvas);
+  c.setCanvasPixel(x+1, y+5, canvas);
 
   return 6;
 }
