@@ -9,4 +9,4 @@ rpi-rgb-led-matrix
 
 # clangd
 compile_commands.json
-./.cache
+.cache/
