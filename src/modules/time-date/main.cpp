@@ -60,8 +60,8 @@ static void DrawDate(Canvas *canvas) {
     }
 
     int dayNum{tm->tm_mday};
-    int monthNum{tm->tm_mon};
-    int yearNum{tm->tm_year};
+    int monthNum{tm->tm_mon + 1};
+    int yearNum{tm->tm_year % 100};
 
     td.drawText(hours + ":" + minutes + ":" + seconds, 2, 2, Color::red);
     td.drawText(weekday, 2, 10, Color::green);
