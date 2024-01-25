@@ -6,3 +6,6 @@ bin
 
 # Dependency
 rpi-rgb-led-matrix
+
+# clangd
+compile_commands.json
