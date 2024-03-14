@@ -1,16 +1,20 @@
 #pragma once
 
-#include "../../common/models/color.hpp"
+#include "modules/module_configuration.hpp"
+#include "common/models/color.hpp"
 
-namespace GameOfLifeModule {
-  class GameOfLifeConfiguration {
-    public:
+namespace GameOfLife
+{
+  class Configuration : public ModuleConfiguration
+  {
+  public:
+    Configuration();
+
+    virtual char *getHelp() const override;
+    virtual void parseArguments(char **argv, int argc) override;
 
     int duration;
     Color color;
     bool generateColor;
-    bool showHelp;
-
-    GameOfLifeConfiguration();
   };
 }
