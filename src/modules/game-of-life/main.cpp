@@ -1,11 +1,7 @@
-#include "parse_arguments.hpp"
-#include "game_of_life_configuration.hpp"
+#include "modules/game-of-life/parse_arguments.hpp"
+#include "modules/game-of-life/game_of_life_configuration.hpp"
 
 #include <iostream>
-#include <random>
-#include <cmath>
-#include <vector>
-#include <algorithm>
 #include <signal.h>
 #include <unistd.h>
 

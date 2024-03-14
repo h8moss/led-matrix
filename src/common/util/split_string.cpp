@@ -1,4 +1,4 @@
-#include "split_string.hpp"
+#include "common/util/split_string.hpp"
 
 std::vector<std::string> split(std::string value, std::string delimiter) {
 

@@ -1,5 +1,5 @@
-#include "parse_arguments.hpp"
-#include "../../common/util/split_string.hpp"
+#include "modules/colors/parse_arguments.hpp"
+#include "common/util/split_string.hpp"
 
 #include <iostream>
 

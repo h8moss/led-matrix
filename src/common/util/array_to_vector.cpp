@@ -1,4 +1,4 @@
-#include "array_to_vector.hpp"
+#include "common/util/array_to_vector.hpp"
 
 std::vector<std::string> arrayToVector(int size, char** array) {
   std::vector<std::string> result{};

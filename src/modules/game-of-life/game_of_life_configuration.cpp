@@ -1,9 +1,9 @@
-#include "game_of_life_configuration.hpp"
+#include "modules/game-of-life/game_of_life_configuration.hpp"
 
-GameOfLifeModule::GameOfLifeConfiguration::GameOfLifeConfiguration():
-  duration{100},
-  color{Color::black},
-  generateColor{true},
-  showHelp{false}
-  { }
-  
+GameOfLifeModule::GameOfLifeConfiguration::GameOfLifeConfiguration()
+    : duration{100},
+      color{},
+      generateColor{true},
+      showHelp{false}
+{
+}

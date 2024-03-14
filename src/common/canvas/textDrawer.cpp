@@ -1,6 +1,5 @@
-#include "textDrawer.hpp"
-
-#include "drawLine.hpp"
+#include "common/canvas/textDrawer.hpp"
+#include "common/canvas/drawLine.hpp"
 
 TextDrawer::TextDrawer(Canvas *_canvas): canvas{_canvas} {};
 
@@ -597,32 +596,42 @@ int TextDrawer::drawDUpper(int x, int y, Color c) const {
 }
 
 int TextDrawer::drawEUpper(int x, int y, Color c) const {
+  drawFUpper(x, y, c);
 
-  return 0;
+  drawLine(canvas, x+1, y+6,  3, c);
+  return 6;
 }
 
 int TextDrawer::drawFUpper(int x, int y, Color c) const {
-  
-  return 0;
+  drawLine(canvas, x+1, y,  3, c);
+  drawLine(canvas, x+1, y+3,  2, c);
+
+  drawLine(canvas, x, y, 7, c, false);
+  return 6;
 }
 
 int TextDrawer::drawGUpper(int x, int y, Color c) const {
-  
-  return 0;
+  drawCUpper(x, y, c);
+  drawLine(canvas, x+2, 4, 2, c);
+  return 6;
 }
 
 int TextDrawer::drawHUpper(int x, int y, Color c) const {
+  drawLine(canvas, x, y, 7, c, false);
+  drawLine(canvas, x+4, y, 7, c, false);
+  drawLine(canvas, x+1, y+3, 3, c);
   
-  return 0;
+  return 6;
 }
 
 int TextDrawer::drawIUpper(int x, int y, Color c) const {
-  
-  return 0;
+  drawLine(canvas, x, y, 3, c);
+  drawLine(canvas, x, y+6, 3, c);
+  drawLine(canvas, x+1, y+1, 5, c);
+  return 4;
 }
 
 int TextDrawer::drawJUpper(int x, int y, Color c) const {
-  
   return 0;
 }
 

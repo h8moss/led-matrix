@@ -1,5 +1,5 @@
-#include "parse_arguments.hpp"
-#include "../../common/util/array_to_vector.hpp"
+#include "modules/game-of-life/parse_arguments.hpp"
+#include "common/util/array_to_vector.hpp"
 
 using namespace GameOfLifeModule;
 
