@@ -24,7 +24,7 @@ bin/modules/time-date/time_date.out: $(timeDateObjects) $(commonObjects) rpi-rgb
 
 $(commonObjects) $(colorsObjects) $(golObjects) $(timeDateObjects): bin/%.o: src/%.cpp rpi-rgb-led-matrix/Makefile
 	mkdir -p $(@D)
-	g++ -c $< -I rpi-rgb-led-matrix/include -o $@
+	g++ -c $< -I rpi-rgb-led-matrix/include -I include -o $@
 
 rpi-rgb-led-matrix/Makefile:
 	git clone "https://github.com/hzeller/rpi-rgb-led-matrix" rpi-rgb-led-matrix
