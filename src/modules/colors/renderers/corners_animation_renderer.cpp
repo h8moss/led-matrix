@@ -1,4 +1,4 @@
-#include "modules/colors/corners_animation_renderer.hpp"
+#include "modules/colors/renderers/corners_animation_renderer.hpp"
 
 #include <cmath>
 

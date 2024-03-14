@@ -1,4 +1,4 @@
-#include "modules/colors/circle_animation_renderer.hpp"
+#include "modules/colors/renderers/circle_animation_renderer.hpp"
 #include "common/util/better_canvas.hpp"
 
 #include <cmath>

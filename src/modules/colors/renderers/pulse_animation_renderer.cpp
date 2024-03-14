@@ -1,4 +1,4 @@
-#include "modules/colors/pulse_animation_renderer.hpp"
+#include "modules/colors/renderers/pulse_animation_renderer.hpp"
 
 Colors::PulseAnimationRenderer::PulseAnimationRenderer(BetterCanvas *canvas)
     : currentColor{},
