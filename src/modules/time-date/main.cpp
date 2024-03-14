@@ -8,8 +8,8 @@
 
 #include "led-matrix.h"
 
-#include "../../common/canvas/textDrawer.hpp"
-#include "../../common/util/padZeros.hpp"
+#include "common/canvas/textDrawer.hpp"
+#include "common/util/padZeros.hpp"
 
 using rgb_matrix::RGBMatrix;
 using rgb_matrix::Canvas;
