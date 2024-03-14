@@ -1,4 +1,5 @@
 #pragma once
+
 #include "common/util/better_canvas.hpp"
 #include "modules/module.hpp"
 #include "modules/colors/colors_configuration.hpp"
