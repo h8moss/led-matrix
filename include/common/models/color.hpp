@@ -2,10 +2,7 @@
 
 #include <string>
 
-#include "led-matrix.h"
-
-class Color
-{
+class Color {
 public:
   int r;
   int g;

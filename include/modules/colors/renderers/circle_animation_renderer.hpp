@@ -1,30 +1,29 @@
 #pragma once
 
-#include "modules/module.hpp"
-#include "common/util/better_canvas.hpp"
 #include "common/models/color.hpp"
+#include "common/util/better_canvas.hpp"
 #include "modules/colors/colors_configuration.hpp"
+#include "modules/module.hpp"
 
-namespace Colors
-{
+namespace Colors {
 
-  class CircleAnimationRenderer : public Module<Colors::Configuration>
-  {
-  public:
-    CircleAnimationRenderer(BetterCanvas *canvas, bool shrink = false);
+class CircleAnimationRenderer : public Module<Colors::Configuration> {
+public:
+  CircleAnimationRenderer(BetterCanvas *canvas, bool _shrink = false);
+  virtual ~CircleAnimationRenderer();
 
-    virtual int render() override;
-    virtual void setup() override;
-    virtual void teardown() override;
+  virtual int render() override;
+  virtual void setup() override;
+  virtual void teardown() override;
 
-  private:
-    int radius;
-    int currentRadius;
-    int centerX;
-    int centerY;
-    Color color;
-    int loopCount;
+private:
+  int radius;
+  int currentRadius;
+  int centerX;
+  int centerY;
+  Color color;
+  int loopCount;
 
-    bool shrink;
-  };
-}
+  bool shrink;
+};
+} // namespace Colors
