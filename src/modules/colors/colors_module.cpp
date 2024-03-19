@@ -3,16 +3,13 @@
 #include "modules/colors/colors_configuration.hpp"
 #include "modules/module.hpp"
 
-#include "modules/colors/circle_animation_renderer.hpp"
-#include "modules/colors/corners_animation_renderer.hpp"
-#include "modules/colors/pulse_animation_renderer.hpp"
+#include "modules/colors/renderers/circle_animation_renderer.hpp"
+#include "modules/colors/renderers/corners_animation_renderer.hpp"
+#include "modules/colors/renderers/pulse_animation_renderer.hpp"
 
-Colors::ColorsModule::ColorsModule(BetterCanvas *canvas) : Module(canvas)
-{
-}
+Colors::ColorsModule::ColorsModule(BetterCanvas *canvas) : Module(canvas) {}
 
-void Colors::ColorsModule::setup()
-{
+void Colors::ColorsModule::setup() {
   if (configuration.animation == Animation::corners)
     renderer = new CornersAnimationRenderer(canvas);
   else if (configuration.animation == Animation::grow)
@@ -28,17 +25,8 @@ void Colors::ColorsModule::setup()
   renderer->setup();
 }
 
-int Colors::ColorsModule::render()
-{
-  return renderer->render();
-}
+int Colors::ColorsModule::render() { return renderer->render(); }
 
-void Colors::ColorsModule::teardown()
-{
-  renderer->teardown();
-}
+void Colors::ColorsModule::teardown() { renderer->teardown(); }
 
-Colors::ColorsModule::~ColorsModule()
-{
-  delete renderer;
-}
+Colors::ColorsModule::~ColorsModule() { delete renderer; }
