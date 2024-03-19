@@ -3,6 +3,7 @@
 
 # build
 bin
+build
 
 # Dependency
 rpi-rgb-led-matrix
