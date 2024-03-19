@@ -43,7 +43,6 @@ set(SHARED_SOURCES
 	${CMAKE_SOURCE_DIR}/src/modules/colors/colors_module.cpp
 	${CMAKE_SOURCE_DIR}/src/modules/game-of-life/game_of_life_configuration.cpp
 	${CMAKE_SOURCE_DIR}/src/modules/game-of-life/game_of_life_module.cpp
-	${CMAKE_SOURCE_DIR}/src/modules/module.cpp
 	${CMAKE_SOURCE_DIR}/src/modules/module_configuration.cpp
 )
 
@@ -58,5 +57,5 @@ if(NOT RGBMATRIX_LIB)
 	message(FATAL_ERROR "Could not find rgbmatrix")
 endif()
 
-target_link_libraries(led-matrix PRIVATE ${RGBMATRIX_LIB} rt m pthread)
-target_link_libraries(led-matrix-manager PRIVATE ${RGBMATRIX_LIB} rt m pthread)
+target_link_libraries(led-matrix PRIVATE  rt m pthread ${RGBMATRIX_LIB})
+target_link_libraries(led-matrix-manager PRIVATE  rt m pthread ${RGBMATRIX_LIB})
