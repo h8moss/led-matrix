@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include "led-matrix.h"
 
@@ -93,3 +93,4 @@ public:
 
   TextDrawer(Canvas *canvas);
 };
+*/
