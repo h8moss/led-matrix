@@ -15,4 +15,26 @@ void GameOfLife::GOLBoard::set(int x, int y, bool value) {
 
 void GameOfLife::GOLBoard::toggle(int x, int y) { set(x, y, !get(x, y)); }
 
-int GameOfLife::GOLBoard::countNeighbours(int x, int y) {}
+int GameOfLife::GOLBoard::countNeighbours(int x, int y) {
+  int count{};
+
+  for (int xDelta{-1}; xDelta <= 1; xDelta++) {
+    for (int yDelta{-1}; yDelta <= 1; yDelta++) {
+      if (xDelta == yDelta && xDelta == 0)
+        continue;
+      int currentX{x + xDelta};
+      int currentY{y + yDelta};
+
+      if (currentX < 0 || currentX >= w)
+        continue;
+      if (currentY < 0 || currentY >= h)
+        continue;
+
+      count += board[currentX][currentY];
+    }
+  }
+
+  return count;
+}
+
+GameOfLife::GOLBoard::~GOLBoard() {}

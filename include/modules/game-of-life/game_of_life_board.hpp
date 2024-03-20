@@ -6,8 +6,8 @@ class GOLBoard {
 public:
   GOLBoard(int _w, int _h);
 
-  const int w;
-  const int h;
+  int w;
+  int h;
 
   bool get(int x, int y);
   void set(int x, int y, bool value);

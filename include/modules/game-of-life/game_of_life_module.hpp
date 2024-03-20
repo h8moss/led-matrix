@@ -1,17 +1,24 @@
 #pragma once
 
-#include "modules/module.hpp"
+#include "modules/game-of-life/game_of_life_board.hpp"
 #include "modules/game-of-life/game_of_life_configuration.hpp"
+#include "modules/module.hpp"
 
-namespace GameOfLife
-{
-  class GOLModule : public Module<GameOfLife::Configuration>
-  {
-  public:
-    GOLModule(BetterCanvas *canvas);
+namespace GameOfLife {
+class GOLModule : public Module<GameOfLife::Configuration> {
+public:
+  GOLModule(BetterCanvas *canvas);
 
-    void setup() override;
-    int render() override;
-    void teardown() override;
-  };
-}
+  void setup() override;
+  int render() override;
+  void teardown() override;
+
+  ~GOLModule();
+
+private:
+  int w;
+  int h;
+  GOLBoard board;
+  GOLBoard changes;
+};
+} // namespace GameOfLife
