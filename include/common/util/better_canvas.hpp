@@ -1,6 +1,8 @@
 #pragma once
 
 #include "common/models/color.hpp"
+#include "common/models/colored_text.hpp"
+
 #include "led-matrix.h"
 
 class BetterCanvas {
@@ -16,6 +18,9 @@ public:
   void drawLine(int x1, int y1, int x2, int y2, Color c);
   void drawSquare(int x, int y, int w, int h, Color c, bool filled = false);
   void drawCircle(int x, int y, int r, Color c, bool filled = false);
+
+  void drawText(std::vector<ColoredText> text);
+  void drawChar(char ch, Color c);
 
   int getWidth() const;
   int getHeight() const;
