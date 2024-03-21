@@ -3,6 +3,7 @@
 #include "common/models/color.hpp"
 #include "common/models/colored_text.hpp"
 
+#include "graphics.h"
 #include "led-matrix.h"
 
 class BetterCanvas {
@@ -29,4 +30,8 @@ public:
 
 private:
   rgb_matrix::Canvas *canvas;
+
+  rgb_matrix::Font *font;
+
+  rgb_matrix::Font *getFont();
 };

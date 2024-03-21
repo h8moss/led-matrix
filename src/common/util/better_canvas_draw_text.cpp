@@ -6,12 +6,13 @@
 void BetterCanvas::drawChar(char ch, Color c) {}
 
 void BetterCanvas::drawText(std::vector<ColoredText> text) {
-  rgb_matrix::Font font{};
-  font.LoadFont("/usr/fonts");
+  rgb_matrix::Font *font{getFont()};
   Color c{};
+  int x{2};
+  int y{2};
   for (ColoredText t : text) {
     c = t.color;
-    for (char ch : t.text) {
-    }
+
+    x += rgb_matrix::DrawText(canvas, font, x, y, c, nullptr, t.text.c_str());
   }
 }

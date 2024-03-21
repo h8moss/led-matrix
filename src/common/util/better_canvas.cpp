@@ -5,6 +5,9 @@ BetterCanvas::BetterCanvas(int argc, char **argv,
                            rgb_matrix::RGBMatrix::Options options)
     : canvas{nullptr} {
   canvas = rgb_matrix::RGBMatrix::CreateFromFlags(&argc, &argv, &options);
+  if (canvas == nullptr) {
+    throw "Error creating canvas!";
+  }
 }
 
 BetterCanvas::BetterCanvas(const BetterCanvas &canvas) {
@@ -71,3 +74,12 @@ void BetterCanvas::drawCircle(int x, int y, int r, Color c, bool filled) {
 
 int BetterCanvas::getWidth() const { return canvas->width(); }
 int BetterCanvas::getHeight() const { return canvas->height(); }
+
+rgb_matrix::Font *BetterCanvas::getFont() {
+  if (this->font == nullptr) {
+    font = new rgb_matrix::Font();
+    font->LoadFont("./fonts/font"); // TODO: Fix font
+  }
+
+  return font;
+}
