@@ -17,7 +17,7 @@ ExternalProject_Add(
 	BUILD_IN_SOURCE ON
 	BUILD_COMMAND "make"
 	INSTALL_COMMAND ""
-)_
+)
 
 include_directories(
 	${CMAKE_SOURCE_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/include
