@@ -6,7 +6,7 @@
 #include <string>
 
 namespace TimeDate {
-class TimeDateModule : public Module<Configuration> {
+class TimeDateModule : public Module {
 public:
   TimeDateModule(BetterCanvas *_canvas);
 
