@@ -1,12 +1,13 @@
 #include "modules/colors/renderers/circle_animation_renderer.hpp"
 #include "common/util/better_canvas.hpp"
+#include "modules/colors/colors_configuration.hpp"
 
 #include <cmath>
 
 Colors::CircleAnimationRenderer::CircleAnimationRenderer(BetterCanvas *canvas,
                                                          bool _shrink)
-    : radius{}, currentRadius{}, centerX{}, centerY{}, color{}, loopCount{},
-      shrink{_shrink}, Module(canvas) {}
+    : Module(canvas, new Colors::Configuration), radius{}, currentRadius{},
+      centerX{}, centerY{}, color{}, loopCount{}, shrink{_shrink} {}
 
 Colors::CircleAnimationRenderer::~CircleAnimationRenderer() {}
 
@@ -21,20 +22,27 @@ void Colors::CircleAnimationRenderer::setup() {
   currentRadius = 0;
   loopCount = 0;
 
-  color = configuration.getColor();
+  color = static_cast<Colors::Configuration *>(configuration)->getColor();
 }
 
 int Colors::CircleAnimationRenderer::render() {
-  int animationProgress{loopCount % (int)(configuration.animationDuration +
-                                          configuration.duration)};
+  int animationProgress{
+      loopCount %
+      (int)(static_cast<Colors::Configuration *>(configuration)
+                ->animationDuration +
+            static_cast<Colors::Configuration *>(configuration)->duration)};
   if (animationProgress == 0) {
     canvas->fill(color);
-    color = configuration.getColor();
+    color = static_cast<Colors::Configuration *>(configuration)->getColor();
   }
 
-  if (animationProgress >= configuration.duration) {
-    float percent{(((float)animationProgress - configuration.duration) /
-                   configuration.animationDuration)};
+  if (animationProgress >=
+      static_cast<Colors::Configuration *>(configuration)->duration) {
+    float percent{
+        (((float)animationProgress -
+          static_cast<Colors::Configuration *>(configuration)->duration) /
+         static_cast<Colors::Configuration *>(configuration)
+             ->animationDuration)};
     if (this->shrink)
       percent = 1.0f - percent;
     int nextRadius{(int)(radius * percent)};

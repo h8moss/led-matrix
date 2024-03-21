@@ -2,12 +2,11 @@
 
 #include "common/models/color.hpp"
 #include "common/util/better_canvas.hpp"
-#include "modules/colors/colors_configuration.hpp"
 #include "modules/module.hpp"
 
 namespace Colors {
 
-class CircleAnimationRenderer : public Module<Colors::Configuration> {
+class CircleAnimationRenderer : public Module {
 public:
   CircleAnimationRenderer(BetterCanvas *canvas, bool _shrink = false);
   virtual ~CircleAnimationRenderer();

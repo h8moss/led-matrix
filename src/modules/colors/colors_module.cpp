@@ -7,16 +7,18 @@
 #include "modules/colors/renderers/corners_animation_renderer.hpp"
 #include "modules/colors/renderers/pulse_animation_renderer.hpp"
 
-Colors::ColorsModule::ColorsModule(BetterCanvas *canvas) : Module(canvas) {}
+Colors::ColorsModule::ColorsModule(BetterCanvas *canvas)
+    : Module(canvas, new ConfigurationWithAnimation()) {}
 
 void Colors::ColorsModule::setup() {
-  if (configuration.animation == Animation::corners)
+  auto conf{static_cast<Colors::ConfigurationWithAnimation *>(configuration)};
+  if (conf->animation == Animation::corners)
     renderer = new CornersAnimationRenderer(canvas);
-  else if (configuration.animation == Animation::grow)
+  else if (conf->animation == Animation::grow)
     renderer = new CircleAnimationRenderer(canvas);
-  else if (configuration.animation == Animation::shrink)
+  else if (conf->animation == Animation::shrink)
     renderer = new CircleAnimationRenderer(canvas, true);
-  else if (configuration.animation == Animation::pulse)
+  else if (conf->animation == Animation::pulse)
     renderer = new PulseAnimationRenderer(canvas);
   else
     throw "Unknown Animation";

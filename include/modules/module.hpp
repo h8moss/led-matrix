@@ -1,11 +1,13 @@
 #pragma once
 #include "common/util/better_canvas.hpp"
+#include "modules/module_configuration.hpp"
 
 #include <string>
 
-template <typename TConfig> class Module {
+class Module {
 public:
-  Module(BetterCanvas *_canvas) : configuration{}, canvas{_canvas} {}
+  Module(BetterCanvas *_canvas, ModuleConfiguration *config)
+      : configuration{config}, canvas{_canvas} {}
 
   std::string name;
   std::string description;
@@ -13,9 +15,12 @@ public:
   virtual void setup() = 0;
   virtual int render() = 0;
   virtual void teardown() = 0;
-  TConfig configuration;
+  ModuleConfiguration *configuration;
 
-  virtual ~Module() { delete canvas; }
+  virtual ~Module() {
+    delete canvas;
+    delete configuration;
+  }
 
 protected:
   BetterCanvas *canvas = nullptr;

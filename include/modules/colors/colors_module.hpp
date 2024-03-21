@@ -1,11 +1,10 @@
 #pragma once
 
 #include "common/util/better_canvas.hpp"
-#include "modules/colors/colors_configuration.hpp"
 #include "modules/module.hpp"
 
 namespace Colors {
-class ColorsModule : public Module<Colors::ConfigurationWithAnimation> {
+class ColorsModule : public Module {
 public:
   ColorsModule(BetterCanvas *canvas);
   virtual ~ColorsModule();
@@ -15,6 +14,6 @@ public:
   virtual void teardown() override;
 
 private:
-  Module<Colors::Configuration> *renderer;
+  Module *renderer;
 };
 } // namespace Colors

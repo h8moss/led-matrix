@@ -3,11 +3,11 @@
 #include "common/util/split_string.hpp"
 
 #include <ctime>
-#include <random>
 
 Colors::Configuration::Configuration()
-    : colorGenerationStrategy{Colors::ColorGenerationStrategy::random},
-      colors{}, duration{5000}, animationDuration{1000}, ModuleConfiguration() {
+    : ModuleConfiguration(),
+      colorGenerationStrategy{Colors::ColorGenerationStrategy::random},
+      colors{}, duration{5000}, animationDuration{1000} {
   srand(time(nullptr));
 }
 

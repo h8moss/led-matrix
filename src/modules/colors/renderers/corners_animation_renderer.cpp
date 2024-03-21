@@ -1,13 +1,16 @@
 #include "modules/colors/renderers/corners_animation_renderer.hpp"
+#include "modules/colors/colors_configuration.hpp"
 
 #include <cmath>
 
 Colors::CornersAnimationRenderer::CornersAnimationRenderer(BetterCanvas *canvas)
-    : currentColor{}, totalDiagonals{}, loopCount{}, Module(canvas) {}
+    : Module(canvas, new Colors::Configuration()), currentColor{},
+      totalDiagonals{}, loopCount{} {}
 
 void Colors::CornersAnimationRenderer::setup() {
   canvas->clear();
-  currentColor = configuration.getColor();
+  currentColor =
+      static_cast<Colors::Configuration *>(configuration)->getColor();
   totalDiagonals = canvas->getWidth() * canvas->getHeight() - 1;
   loopCount = 0;
 }
@@ -15,17 +18,24 @@ void Colors::CornersAnimationRenderer::setup() {
 int Colors::CornersAnimationRenderer::render() {
   int animationProgress =
       loopCount %
-      ((int)(configuration.animationDuration + configuration.duration));
+      ((int)(static_cast<Colors::Configuration *>(configuration)
+                 ->animationDuration +
+             static_cast<Colors::Configuration *>(configuration)->duration));
 
   if (animationProgress == 0) {
     canvas->fill(currentColor);
-    currentColor = configuration.getColor();
+    currentColor =
+        static_cast<Colors::Configuration *>(configuration)->getColor();
   }
 
-  if (animationProgress >= configuration.duration) {
-    int delta{std::floor(totalDiagonals *
-                         ((float)animationProgress - configuration.duration) /
-                         (configuration.animationDuration))};
+  if (animationProgress >=
+      static_cast<Colors::Configuration *>(configuration)->duration) {
+    int delta{static_cast<int>(std::floor(
+        totalDiagonals *
+        ((float)animationProgress -
+         static_cast<Colors::Configuration *>(configuration)->duration) /
+        (static_cast<Colors::Configuration *>(configuration)
+             ->animationDuration)))};
     for (int x{}; x <= delta; x++) {
       canvas->setPixel(x, delta - x - 1, currentColor);
     }

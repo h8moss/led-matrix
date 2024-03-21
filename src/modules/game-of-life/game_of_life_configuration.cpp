@@ -2,15 +2,9 @@
 #include "common/util/array_to_vector.hpp"
 
 GameOfLife::Configuration::Configuration()
-    : duration{10},
-      color{},
-      generateColor{true},
-      ModuleConfiguration()
-{
-}
+    : ModuleConfiguration(), duration{10}, color{}, generateColor{true} {}
 
-char *GameOfLife::Configuration::getHelp() const
-{
+char *GameOfLife::Configuration::getHelp() const {
   return "Program to show Conway's game of life on screen\n"
          "Usage: sudo game_of_life.out [options]"
          "\n\n"
@@ -21,43 +15,32 @@ char *GameOfLife::Configuration::getHelp() const
          "\tThe amount of time, in miliseconds a round lasts (default 10)\n";
 }
 
-void GameOfLife::Configuration::parseArguments(char **argv, int argc)
-{
+void GameOfLife::Configuration::parseArguments(char **argv, int argc) {
   std::vector<std::string> arguments{arrayToVector(argc, argv)};
-  while (arguments.size() != 0)
-  {
+  while (arguments.size() != 0) {
     std::string arg{arguments[0]};
     arguments.erase(arguments.begin());
 
-    if (arg == "--duration" || arg == "-d")
-    {
-      if (arguments.size() > 0)
-      {
+    if (arg == "--duration" || arg == "-d") {
+      if (arguments.size() > 0) {
         std::string value{arguments[0]};
         arguments.erase(arguments.begin());
 
         float val{std::stof(value)};
 
         this->duration = val;
-      }
-      else
-      {
+      } else {
         throw "Missing value for --duration flag";
       }
-    }
-    else if (arg == "--color" || arg == "-c")
-    {
-      if (arguments.size() > 0)
-      {
+    } else if (arg == "--color" || arg == "-c") {
+      if (arguments.size() > 0) {
         std::string value{arguments[0]};
         arguments.erase(arguments.begin());
 
         this->color = Color::fromHex(value);
         this->generateColor = false;
       }
-    }
-    else if (arg == "--help" || arg == "-h")
-    {
+    } else if (arg == "--help" || arg == "-h") {
       this->showHelp = true;
       return;
     }

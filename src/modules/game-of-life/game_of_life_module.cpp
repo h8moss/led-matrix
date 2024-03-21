@@ -1,11 +1,13 @@
 #include "modules/game-of-life/game_of_life_module.hpp"
 #include "common/util/better_canvas.hpp"
 #include "modules/game-of-life/game_of_life_board.hpp"
+#include "modules/game-of-life/game_of_life_configuration.hpp"
 
 #include <ctime>
 
 GameOfLife::GOLModule::GOLModule(BetterCanvas *canvas)
-    : Module(canvas), w{}, h{}, board{0, 0}, changes{0, 0} {}
+    : Module(canvas, new GameOfLife::Configuration()), w{}, h{}, board{0, 0},
+      changes{0, 0} {}
 
 void GameOfLife::GOLModule::setup() {
   srand((unsigned int)time(nullptr));
@@ -21,7 +23,8 @@ void GameOfLife::GOLModule::setup() {
       bool value{static_cast<bool>(rand() & 1)};
       board.set(x, y, value);
 
-      canvas->setPixel(x, y, configuration.color);
+      canvas->setPixel(
+          x, y, static_cast<GameOfLife::Configuration *>(configuration)->color);
     }
   }
 }
@@ -45,14 +48,18 @@ int GameOfLife::GOLModule::render() {
     for (int y{}; y < h; y++) {
       if (changes.get(x, y)) {
         board.toggle(x, y);
-        Color c{board.get(x, y) ? configuration.color : Color::black};
+        Color c{
+            board.get(x, y)
+                ? static_cast<GameOfLife::Configuration *>(configuration)->color
+                : Color::black};
         canvas->setPixel(x, y, c);
         changes.set(x, y, false);
       }
     }
   }
 
-  return configuration.duration * 1000;
+  return static_cast<GameOfLife::Configuration *>(configuration)->duration *
+         1000;
 }
 
 void GameOfLife::GOLModule::teardown() {

@@ -1,11 +1,10 @@
 #pragma once
 
 #include "modules/game-of-life/game_of_life_board.hpp"
-#include "modules/game-of-life/game_of_life_configuration.hpp"
 #include "modules/module.hpp"
 
 namespace GameOfLife {
-class GOLModule : public Module<GameOfLife::Configuration> {
+class GOLModule : public Module {
 public:
   GOLModule(BetterCanvas *canvas);
 
