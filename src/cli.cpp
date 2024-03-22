@@ -23,7 +23,6 @@ static void printUsage(std::vector<Module *> modules) {
 }
 
 int main(int argc, char **argv) {
-
   try {
     rgb_matrix::RGBMatrix::Options defaults;
     defaults.hardware_mapping = "regular";
@@ -68,14 +67,14 @@ int main(int argc, char **argv) {
     }
 
     module->setup();
-    std::cout << "Press Ctrl-C to stop";
+    std::cout << "Press Ctrl-C to stop" << std::endl;
 
     while (!interruptReceived) {
       usleep(module->render());
     }
 
     module->teardown();
-    std::cout << "Ctrl-C received, Exiting";
+    std::cout << "Ctrl-C received, Exiting" << std::endl;
 
     for (auto mod : modules) {
       delete mod;
