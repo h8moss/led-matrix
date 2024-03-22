@@ -28,7 +28,7 @@ int Colors::CornersAnimationRenderer::render() {
         static_cast<Colors::Configuration *>(configuration)->getColor();
   }
 
-  if (animationProgress >=
+  if ((float)animationProgress >=
       static_cast<Colors::Configuration *>(configuration)->duration) {
     int delta{static_cast<int>(std::floor(
         totalDiagonals *

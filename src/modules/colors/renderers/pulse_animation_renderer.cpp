@@ -2,7 +2,7 @@
 #include "modules/colors/colors_configuration.hpp"
 
 Colors::PulseAnimationRenderer::PulseAnimationRenderer(BetterCanvas *canvas)
-    : Module(canvas, new nolors::Configuration()), currentColor{},
+    : Module(canvas, new Colors::Configuration()), currentColor{},
       animationSplits{}, loopCount{} {}
 
 void Colors::PulseAnimationRenderer::setup() {

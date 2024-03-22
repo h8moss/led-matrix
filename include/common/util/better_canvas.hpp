@@ -21,7 +21,6 @@ public:
   void drawCircle(int x, int y, int r, Color c, bool filled = false);
 
   void drawText(std::vector<ColoredText> text);
-  void drawChar(char ch, Color c);
 
   int getWidth() const;
   int getHeight() const;

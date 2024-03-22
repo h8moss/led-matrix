@@ -36,7 +36,7 @@ int Colors::CircleAnimationRenderer::render() {
     color = static_cast<Colors::Configuration *>(configuration)->getColor();
   }
 
-  if (animationProgress >=
+  if ((float)animationProgress >=
       static_cast<Colors::Configuration *>(configuration)->duration) {
     float percent{
         (((float)animationProgress -

@@ -8,7 +8,7 @@ Colors::Configuration::Configuration()
     : ModuleConfiguration(),
       colorGenerationStrategy{Colors::ColorGenerationStrategy::random},
       colors{}, duration{5000}, animationDuration{1000} {
-  srand(time(nullptr));
+  srand((unsigned int)time(nullptr));
 }
 
 char *Colors::Configuration::getHelp() const {
