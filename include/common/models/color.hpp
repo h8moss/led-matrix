@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "graphics.h"
+
 class Color {
 public:
   int r;
@@ -21,6 +23,8 @@ public:
   static Color fromHex(std::string hex);
 
   friend Color operator*(const Color &c1, float value);
+
+  rgb_matrix::Color toRGBMatrixColor();
 
   static const Color white;
   static const Color black;

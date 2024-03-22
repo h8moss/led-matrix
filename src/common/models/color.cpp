@@ -79,5 +79,12 @@ const Color Color::green = {0, 255, 0};
 const Color Color::blue = {0, 0, 255};
 
 Color operator*(const Color &c1, float value) {
-  return Color(c1.r * value, c1.g * value, c1.b * value);
+  return Color((int)((float)c1.r * value), // Red
+               (int)((float)c1.g * value), // Green
+               (int)((float)c1.b * value)  // Blue
+  );
+}
+
+rgb_matrix::Color Color::toRGBMatrixColor() {
+  return rgb_matrix::Color((uint8_t)r, (uint8_t)g, (uint8_t)b);
 }
