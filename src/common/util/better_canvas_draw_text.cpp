@@ -3,8 +3,6 @@
 
 #include "graphics.h"
 
-void BetterCanvas::drawChar(char ch, Color c) {}
-
 void BetterCanvas::drawText(std::vector<ColoredText> text) {
   rgb_matrix::Font *font{getFont()};
   Color c{};
@@ -13,6 +11,7 @@ void BetterCanvas::drawText(std::vector<ColoredText> text) {
   for (ColoredText t : text) {
     c = t.color;
 
-    x += rgb_matrix::DrawText(canvas, font, x, y, c, nullptr, t.text.c_str());
+    x += rgb_matrix::DrawText(canvas, *font, x, y, c.toRGBMatrixColor(),
+                              nullptr, t.text.c_str());
   }
 }

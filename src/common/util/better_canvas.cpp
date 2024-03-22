@@ -24,10 +24,13 @@ BetterCanvas::~BetterCanvas() {
 }
 
 void BetterCanvas::setPixel(int x, int y, Color c) {
-  canvas->SetPixel(x, y, c.r, c.g, c.b);
+  canvas->SetPixel(x, y, (unsigned char)c.r, (unsigned char)c.g,
+                   (unsigned char)c.b);
 }
 
-void BetterCanvas::fill(Color c) { canvas->Fill(c.r, c.g, c.b); }
+void BetterCanvas::fill(Color c) {
+  canvas->Fill((unsigned char)c.r, (unsigned char)c.g, (unsigned char)c.b);
+}
 
 void BetterCanvas::clear() { canvas->Clear(); }
 
@@ -66,7 +69,7 @@ void BetterCanvas::drawCircle(int x, int y, int r, Color c, bool filled) {
       int distanceSqrd{x0 * x0 + y0 * y0};
       if ((filled && distanceSqrd < r * r + r) ||
           (!filled && distanceSqrd < r * r + r && distanceSqrd > r * r - r)) {
-        setPixel(x0, y0, c);
+        setPixel(x0 + x, y0 + y, c);
       }
     }
   }
