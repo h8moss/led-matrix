@@ -12,12 +12,16 @@ ExternalProject_Add(
 	PREFIX ${CMAKE_SOURCE_DIR}/rpi-rgb-led-matrix
 	GIT_REPOSITORY https://github.com/hzeller/rpi-rgb-led-matrix
 	SOURCE_DIR ${CMAKE_SOURCE_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix
+	BINARY_DIR ${CMAKE_SOURCE_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/lib
 	UPDATE_COMMAND ""
 	CONFIGURE_COMMAND ""
-	BUILD_IN_SOURCE ON
 	BUILD_COMMAND "make"
 	INSTALL_COMMAND ""
 )
+
+ExternalProject_Get_Property(rpi-rgb-led-matrix BINARY_DIR)
+add_library(led-matrix-lib UNKNOWN IMPORTED)
+set_property(TARGET led-matrix-lib PROPERTY IMPORTED_LOCATION ${BINARY_DIR}/librgbmatrix.a)
 
 include_directories(
 	${CMAKE_SOURCE_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/include
@@ -55,10 +59,8 @@ set(MANAGER_SOURCES ${SHARED_SOURCES} ${CMAKE_SOURCE_DIR}/src/manager.cpp)
 add_executable(led-matrix ${CLI_SOURCES})
 add_executable(led-matrix-manager ${MANAGER_SOURCES})
 
-find_library(RGBMATRIX_LIB rgbmatrix HINTS ${CMAKE_SOURCE_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/lib)
-if(NOT RGBMATRIX_LIB)
-	message(FATAL_ERROR "Could not find rgbmatrix")
-endif()
+add_dependencies(led-matrix rpi-rgb-led-matrix)
+add_dependencies(led-matrix-manager rpi-rgb-led-matrix)
 
-target_link_libraries(led-matrix PRIVATE  rt m pthread ${RGBMATRIX_LIB})
-target_link_libraries(led-matrix-manager PRIVATE  rt m pthread ${RGBMATRIX_LIB})
+target_link_libraries(led-matrix PRIVATE  rt m pthread led-matrix-lib)
+target_link_libraries(led-matrix-manager PRIVATE  rt m pthread led-matrix-lib)
