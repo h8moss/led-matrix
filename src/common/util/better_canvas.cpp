@@ -81,7 +81,9 @@ int BetterCanvas::getHeight() const { return canvas->height(); }
 rgb_matrix::Font *BetterCanvas::getFont() {
   if (this->font == nullptr) {
     font = new rgb_matrix::Font();
-    font->LoadFont("./fonts/font"); // TODO: Fix font
+    font->LoadFont("../rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/fonts/"
+                   "10x20.bdf"); // TODO:
+                                 // Fix font
   }
 
   return font;
