@@ -1,10 +1,6 @@
 #include "modules/game-of-life/game_of_life_configuration.hpp"
 #include "common/util/array_to_vector.hpp"
 
-#ifdef DEBUG
-#include <iostream>
-#endif
-
 GameOfLife::Configuration::Configuration()
     : ModuleConfiguration(), duration{10}, color{}, generateColor{true} {}
 
@@ -26,33 +22,18 @@ void GameOfLife::Configuration::parseArguments(char **argv, int argc) {
     std::string arg{arguments[0]};
     arguments.erase(arguments.begin());
 
-#ifdef DEBUG
-    std::cout << "[DEBUG] Parsing argument: " << arg << std::endl;
-#endif
-
     if (arg == "--duration" || arg == "-d") {
-#ifdef DEBUG
-      std::cout << "[DEBUG] Argument is --duration" << std::endl;
-#endif
       if (arguments.size() > 0) {
         std::string value{arguments[0]};
         arguments.erase(arguments.begin());
 
         float val{std::stof(value)};
 
-#ifdef DEBUG
-        std::cout << "[DEBUG] Argument value is " << val << std::endl;
-#endif
-
         this->duration = val;
       } else {
         throw "Missing value for --duration flag";
       }
     } else if (arg == "--color" || arg == "-c") {
-#ifdef DEBUG
-      std::cout << "[DEBUG] Argument --color" << std::endl;
-#endif
-
       if (arguments.size() > 0) {
         std::string value{arguments[0]};
         arguments.erase(arguments.begin());
@@ -60,17 +41,12 @@ void GameOfLife::Configuration::parseArguments(char **argv, int argc) {
         this->color = Color::fromHex(value);
         this->generateColor = false;
 
-#ifdef DEBUG
-        std::cout << "[DEBUG] Argument value is " << value
-                  << " which gets parsed as (" << this->color.r << ","
-                  << this->color.g << "," << this->color.b << ")" << std::endl;
-#endif
+      } else {
+        throw "Missing value for --color flag";
       }
     } else if (arg == "--help" || arg == "-h") {
       this->showHelp = true;
       return;
     }
   }
-
-  return;
 }
