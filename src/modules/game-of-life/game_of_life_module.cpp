@@ -4,6 +4,7 @@
 #include "modules/game-of-life/game_of_life_configuration.hpp"
 
 #include <ctime>
+#include <random>
 
 GameOfLife::GOLModule::GOLModule(BetterCanvas *canvas)
     : Module(canvas, new GameOfLife::Configuration()), w{}, h{}, board{0, 0},
@@ -20,6 +21,13 @@ void GameOfLife::GOLModule::setup() {
   h = canvas->getHeight();
   board = GOLBoard(w, h);
   changes = GOLBoard(w, h);
+
+  if (static_cast<GameOfLife::Configuration *>(configuration)->generateColor) {
+    srand(time(nullptr));
+    int h{rand() % 360};
+    Color c{Color::fromHSL(h, 1.0f, 0.5f)};
+    static_cast<GameOfLife::Configuration *>(configuration)->color = c;
+  }
 
   for (int x{}; x < w; x++) {
     for (int y{}; y < h; y++) {
