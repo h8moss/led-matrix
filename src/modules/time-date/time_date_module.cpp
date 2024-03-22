@@ -1,10 +1,16 @@
 #include "modules/time-date/time_date_module.hpp"
 #include "common/util/better_canvas.hpp"
-#include "common/util/padZeros.hpp"
+#include "common/util/pad_zeros.hpp"
 #include "modules/time-date/time_date_configuration.hpp"
 
+#include <chrono>
+#include <string>
+
 TimeDate::TimeDateModule::TimeDateModule(BetterCanvas *_canvas)
-    : Module(_canvas, new TimeDate::Configuration()) {}
+    : Module(_canvas, new TimeDate::Configuration()) {
+  this->name = "time-date";
+  this->description = "Shows the current time and date";
+}
 
 void TimeDate::TimeDateModule::setup() {
 

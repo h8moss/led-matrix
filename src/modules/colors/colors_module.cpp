@@ -8,7 +8,10 @@
 #include "modules/colors/renderers/pulse_animation_renderer.hpp"
 
 Colors::ColorsModule::ColorsModule(BetterCanvas *canvas)
-    : Module(canvas, new ConfigurationWithAnimation()) {}
+    : Module(canvas, new ConfigurationWithAnimation()) {
+  this->name = "colors";
+  this->description = "Shows simple color animations";
+}
 
 void Colors::ColorsModule::setup() {
   auto conf{static_cast<Colors::ConfigurationWithAnimation *>(configuration)};

@@ -7,7 +7,10 @@
 
 GameOfLife::GOLModule::GOLModule(BetterCanvas *canvas)
     : Module(canvas, new GameOfLife::Configuration()), w{}, h{}, board{0, 0},
-      changes{0, 0} {}
+      changes{0, 0} {
+  this->name = "game-of-life";
+  this->description = "Plays Connway's game of life on the screen";
+}
 
 void GameOfLife::GOLModule::setup() {
   srand((unsigned int)time(nullptr));
