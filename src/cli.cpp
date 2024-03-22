@@ -34,7 +34,6 @@ int main(int argc, char **argv) {
     defaults.show_refresh_rate = false;
     BetterCanvas *canvas = new BetterCanvas(argc, argv, defaults);
 
-    // TODO: Fix this bullshite
     std::vector<Module *> modules{
         new Colors::ColorsModule(canvas),
         new GameOfLife::GOLModule(canvas),
@@ -69,12 +68,14 @@ int main(int argc, char **argv) {
     }
 
     module->setup();
+    std::cout << "Press Ctrl-C to stop";
 
     while (!interruptReceived) {
       usleep(module->render());
     }
 
     module->teardown();
+    std::cout << "Ctrl-C received, Exiting";
 
     for (auto mod : modules) {
       delete mod;
