@@ -20,6 +20,9 @@ public:
   virtual ~Module() {
     delete canvas;
     delete configuration;
+
+    canvas = nullptr;
+    configuration = nullptr;
   }
 
 protected:
