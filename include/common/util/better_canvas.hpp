@@ -20,7 +20,7 @@ public:
   void drawSquare(int x, int y, int w, int h, Color c, bool filled = false);
   void drawCircle(int x, int y, int r, Color c, bool filled = false);
 
-  void drawText(std::vector<ColoredText> text);
+  void drawText(std::vector<ColoredText> text, int x = 2);
 
   int getWidth() const;
   int getHeight() const;
