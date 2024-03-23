@@ -7,7 +7,7 @@ void BetterCanvas::drawText(std::vector<ColoredText> text) {
   rgb_matrix::Font *font{getFont()};
   Color c{};
   int x{2};
-  int y{2};
+  int y{2 + font->height()};
   for (ColoredText t : text) {
     c = t.color;
 
