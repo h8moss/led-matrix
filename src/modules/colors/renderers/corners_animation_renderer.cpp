@@ -4,13 +4,11 @@
 #include <cmath>
 
 Colors::CornersAnimationRenderer::CornersAnimationRenderer(BetterCanvas *canvas)
-    : Module(canvas, new Colors::Configuration()), currentColor{},
-      totalDiagonals{}, loopCount{} {}
+    : Renderer(canvas), currentColor{}, totalDiagonals{}, loopCount{} {}
 
 void Colors::CornersAnimationRenderer::setup() {
   canvas->clear();
-  currentColor =
-      static_cast<Colors::Configuration *>(configuration)->getColor();
+  currentColor = getConfig()->getColor();
   totalDiagonals = canvas->getWidth() * canvas->getHeight() - 1;
   loopCount = 0;
 }
@@ -18,24 +16,17 @@ void Colors::CornersAnimationRenderer::setup() {
 int Colors::CornersAnimationRenderer::render() {
   int animationProgress =
       loopCount %
-      ((int)(static_cast<Colors::Configuration *>(configuration)
-                 ->animationDuration +
-             static_cast<Colors::Configuration *>(configuration)->duration));
+      ((int)(getConfig()->animationDuration + getConfig()->duration));
 
   if (animationProgress == 0) {
     canvas->fill(currentColor);
-    currentColor =
-        static_cast<Colors::Configuration *>(configuration)->getColor();
+    currentColor = getConfig()->getColor();
   }
 
-  if ((float)animationProgress >=
-      static_cast<Colors::Configuration *>(configuration)->duration) {
+  if ((float)animationProgress >= getConfig()->duration) {
     int delta{static_cast<int>(std::floor(
-        totalDiagonals *
-        ((float)animationProgress -
-         static_cast<Colors::Configuration *>(configuration)->duration) /
-        (static_cast<Colors::Configuration *>(configuration)
-             ->animationDuration)))};
+        totalDiagonals * ((float)animationProgress - getConfig()->duration) /
+        (getConfig()->animationDuration)))};
     for (int x{}; x <= delta; x++) {
       canvas->setPixel(x, delta - x - 1, currentColor);
     }
@@ -44,5 +35,3 @@ int Colors::CornersAnimationRenderer::render() {
   ++loopCount;
   return 1000;
 }
-
-void Colors::CornersAnimationRenderer::teardown() { canvas->clear(); }

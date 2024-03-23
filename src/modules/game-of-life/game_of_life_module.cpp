@@ -22,11 +22,11 @@ void GameOfLife::GOLModule::setup() {
   board = GOLBoard(w, h);
   changes = GOLBoard(w, h);
 
-  if (static_cast<GameOfLife::Configuration *>(configuration)->generateColor) {
+  if (getConfig()->generateColor) {
     srand(time(nullptr));
     int h{rand() % 360};
     Color c{Color::fromHSL(h, 1.0f, 0.5f)};
-    static_cast<GameOfLife::Configuration *>(configuration)->color = c;
+    getConfig()->color = c;
   }
 
   for (int x{}; x < w; x++) {
@@ -34,8 +34,7 @@ void GameOfLife::GOLModule::setup() {
       bool value{static_cast<bool>(rand() & 1)};
       board.set(x, y, value);
 
-      canvas->setPixel(
-          x, y, static_cast<GameOfLife::Configuration *>(configuration)->color);
+      canvas->setPixel(x, y, getConfig()->color);
     }
   }
 }
@@ -59,31 +58,20 @@ int GameOfLife::GOLModule::render() {
     for (int y{}; y < h; y++) {
       if (changes.get(x, y)) {
         board.toggle(x, y);
-        Color c{
-            board.get(x, y)
-                ? static_cast<GameOfLife::Configuration *>(configuration)->color
-                : Color::black};
+        Color c{board.get(x, y) ? getConfig()->color : Color::black};
         canvas->setPixel(x, y, c);
         changes.set(x, y, false);
       }
     }
   }
 
-  return static_cast<GameOfLife::Configuration *>(configuration)->duration *
-         1000;
+  return getConfig()->duration * 1000;
 }
 
-void GameOfLife::GOLModule::teardown() {
-  // for (int x{}; x < w; x++) {
-  //   delete[] board[x];
-  //   delete[] boardChanges[x];
-  // }
-  //
-  // delete[] board;
-  // delete[] boardChanges;
-  //
-  // board = nullptr;
-  // boardChanges = nullptr;
-}
+void GameOfLife::GOLModule::teardown() {}
 
 GameOfLife::GOLModule::~GOLModule() { teardown(); }
+
+GameOfLife::Configuration *GameOfLife::GOLModule::getConfig() const {
+  return static_cast<GameOfLife::Configuration *>(configuration);
+}

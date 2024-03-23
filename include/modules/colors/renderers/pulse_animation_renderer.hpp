@@ -1,11 +1,11 @@
 #pragma once
 #include <array>
 
-#include "modules/module.hpp"
+#include "modules/colors/renderers/renderer.hpp"
 
 namespace Colors {
 
-class PulseAnimationRenderer : public Module {
+class PulseAnimationRenderer : public Renderer {
 public:
   PulseAnimationRenderer(BetterCanvas *canvas);
 

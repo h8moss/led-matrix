@@ -14,6 +14,8 @@ public:
   virtual int render() override;
   virtual void teardown() override;
 
+  TimeDate::Configuration *getConfig() const;
+
   virtual ~TimeDateModule();
 
 protected:

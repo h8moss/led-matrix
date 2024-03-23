@@ -1,32 +1,21 @@
 #include "modules/colors/renderers/pulse_animation_renderer.hpp"
 #include "modules/colors/colors_configuration.hpp"
+#include "modules/colors/renderers/circle_animation_renderer.hpp"
 
 Colors::PulseAnimationRenderer::PulseAnimationRenderer(BetterCanvas *canvas)
-    : Module(canvas, new Colors::Configuration()), currentColor{},
-      animationSplits{}, loopCount{} {}
+    : Renderer(canvas), currentColor{}, animationSplits{}, loopCount{} {}
 
 void Colors::PulseAnimationRenderer::setup() {
   canvas->clear();
-  currentColor =
-      static_cast<Colors::Configuration *>(configuration)->getColor();
+  currentColor = getConfig()->getColor();
 
-  animationSplits[0] = (int)(static_cast<Colors::Configuration *>(configuration)
-                                 ->animationDuration /
-                             2.0f);
+  animationSplits[0] = (int)(getConfig()->animationDuration / 2.0f);
   animationSplits[1] =
-      (int)((static_cast<Colors::Configuration *>(configuration)
-                 ->animationDuration +
-             static_cast<Colors::Configuration *>(configuration)->duration) /
-            2.0f);
+      (int)((getConfig()->animationDuration + getConfig()->duration) / 2.0f);
   animationSplits[2] =
-      (int)(static_cast<Colors::Configuration *>(configuration)
-                    ->animationDuration /
-                2.0f +
-            static_cast<Colors::Configuration *>(configuration)->duration);
+      (int)(getConfig()->animationDuration / 2.0f + getConfig()->duration);
   animationSplits[3] =
-      (int)(static_cast<Colors::Configuration *>(configuration)
-                ->animationDuration +
-            static_cast<Colors::Configuration *>(configuration)->duration);
+      (int)(getConfig()->animationDuration + getConfig()->duration);
 
   loopCount = 0;
 }
@@ -45,8 +34,7 @@ int Colors::PulseAnimationRenderer::render() {
   } else if (animationProgress < animationSplits[3]) {
     // stay black
     if (animationProgress - animationSplits[3] - 1 < 1) {
-      currentColor = static_cast<Colors::Configuration *>(configuration)
-                         ->getColor(currentColor);
+      currentColor = getConfig()->getColor(currentColor);
     }
   }
 

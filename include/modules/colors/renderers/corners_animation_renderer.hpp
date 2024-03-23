@@ -2,11 +2,11 @@
 
 #include "common/models/color.hpp"
 #include "common/util/better_canvas.hpp"
-#include "modules/module.hpp"
+#include "modules/colors/renderers/renderer.hpp"
 
 namespace Colors {
 
-class CornersAnimationRenderer : public Module {
+class CornersAnimationRenderer : public Renderer {
 public:
   CornersAnimationRenderer(BetterCanvas *canvas);
 

@@ -6,8 +6,8 @@
 
 Colors::CircleAnimationRenderer::CircleAnimationRenderer(BetterCanvas *canvas,
                                                          bool _shrink)
-    : Module(canvas, new Colors::Configuration), radius{}, currentRadius{},
-      centerX{}, centerY{}, color{}, loopCount{}, shrink{_shrink} {}
+    : Renderer(canvas), radius{}, currentRadius{}, centerX{}, centerY{},
+      color{}, loopCount{}, shrink{_shrink} {}
 
 Colors::CircleAnimationRenderer::~CircleAnimationRenderer() {}
 
@@ -22,27 +22,20 @@ void Colors::CircleAnimationRenderer::setup() {
   currentRadius = 0;
   loopCount = 0;
 
-  color = static_cast<Colors::Configuration *>(configuration)->getColor();
+  color = getConfig()->getColor();
 }
 
 int Colors::CircleAnimationRenderer::render() {
-  int animationProgress{
-      loopCount %
-      (int)(static_cast<Colors::Configuration *>(configuration)
-                ->animationDuration +
-            static_cast<Colors::Configuration *>(configuration)->duration)};
+  int animationProgress{loopCount % (int)(getConfig()->animationDuration +
+                                          getConfig()->duration)};
   if (animationProgress == 0) {
     canvas->fill(color);
-    color = static_cast<Colors::Configuration *>(configuration)->getColor();
+    color = getConfig()->getColor();
   }
 
-  if ((float)animationProgress >=
-      static_cast<Colors::Configuration *>(configuration)->duration) {
-    float percent{
-        (((float)animationProgress -
-          static_cast<Colors::Configuration *>(configuration)->duration) /
-         static_cast<Colors::Configuration *>(configuration)
-             ->animationDuration)};
+  if ((float)animationProgress >= getConfig()->duration) {
+    float percent{(((float)animationProgress - getConfig()->duration) /
+                   getConfig()->animationDuration)};
     if (this->shrink)
       percent = 1.0f - percent;
     int nextRadius{(int)(radius * percent)};

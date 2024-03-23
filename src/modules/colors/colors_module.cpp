@@ -14,7 +14,7 @@ Colors::ColorsModule::ColorsModule(BetterCanvas *canvas)
 }
 
 void Colors::ColorsModule::setup() {
-  auto conf{static_cast<Colors::ConfigurationWithAnimation *>(configuration)};
+  auto conf{getConfig()};
   if (conf->animation == Animation::corners)
     renderer = new CornersAnimationRenderer(canvas);
   else if (conf->animation == Animation::grow)
@@ -35,3 +35,7 @@ int Colors::ColorsModule::render() { return renderer->render(); }
 void Colors::ColorsModule::teardown() { renderer->teardown(); }
 
 Colors::ColorsModule::~ColorsModule() { delete renderer; }
+
+Colors::ConfigurationWithAnimation *Colors::ColorsModule::getConfig() const {
+  return static_cast<Colors::ConfigurationWithAnimation *>(configuration);
+}

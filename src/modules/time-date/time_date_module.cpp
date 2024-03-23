@@ -67,3 +67,7 @@ int TimeDate::TimeDateModule::render() {
 void TimeDate::TimeDateModule::teardown() { canvas->clear(); }
 
 TimeDate::TimeDateModule::~TimeDateModule() {}
+
+TimeDate::Configuration *TimeDate::TimeDateModule::getConfig() const {
+  return static_cast<TimeDate::Configuration *>(configuration);
+}
