@@ -35,3 +35,5 @@ int Colors::CornersAnimationRenderer::render() {
   ++loopCount;
   return 1000;
 }
+
+void Colors::CornersAnimationRenderer::teardown() { canvas->clear(); }
