@@ -49,6 +49,7 @@ set(SHARED_SOURCES
 	${CMAKE_SOURCE_DIR}/src/modules/colors/renderers/circle_animation_renderer.cpp
 	${CMAKE_SOURCE_DIR}/src/modules/colors/renderers/corners_animation_renderer.cpp
 	${CMAKE_SOURCE_DIR}/src/modules/colors/renderers/pulse_animation_renderer.cpp
+	${CMAKE_SOURCE_DIR}/src/modules/colors/renderers/renderer.cpp
 	${CMAKE_SOURCE_DIR}/src/modules/colors/colors_configuration.cpp
 	${CMAKE_SOURCE_DIR}/src/modules/colors/colors_module.cpp
 	${CMAKE_SOURCE_DIR}/src/modules/game-of-life/game_of_life_board.cpp
