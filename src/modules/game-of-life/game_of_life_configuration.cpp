@@ -3,7 +3,7 @@
 
 GameOfLife::Configuration::Configuration()
     : ModuleConfiguration(), duration{10}, color{}, generateColor{true},
-      fade{false}, fadeSpeed{} {}
+      fade{false}, fadeSpeed{0.1f} {}
 
 char *GameOfLife::Configuration::getHelp() const {
   return "Program to show Conway's game of life on screen\n"
