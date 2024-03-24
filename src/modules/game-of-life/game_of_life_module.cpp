@@ -80,13 +80,15 @@ int GameOfLife::GOLModule::render() {
     }
 
     canvas->setPixel(fadeData[i].x, fadeData[i].y,
-                     getConfig()->color * fadeData[i].fade);
+                     fadeData[i].fade < 0.1f
+                         ? Color::black
+                         : getConfig()->color * fadeData[i].fade);
   }
 
   // Remove fadeData
   fadeData.erase(
       std::remove_if(fadeData.begin(), fadeData.end(),
-                     [](const FadeData &d) { return d.fade < 0.1f; }),
+                     [](const FadeData &d) { return d.fade < 0.12f; }),
       fadeData.end());
 
   return getConfig()->duration * 1000;
