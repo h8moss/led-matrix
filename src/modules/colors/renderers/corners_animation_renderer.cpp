@@ -28,8 +28,6 @@ int Colors::CornersAnimationRenderer::render() {
     int delta{static_cast<int>(std::floor(
         totalDiagonals * ((float)animationProgress - getConfig()->duration) /
         (getConfig()->animationDuration)))};
-    dLog("delta:");
-    dLog(delta);
     for (int x{}; x <= delta; x++) {
       canvas->setPixel(x, delta - x - 1, currentColor);
     }
