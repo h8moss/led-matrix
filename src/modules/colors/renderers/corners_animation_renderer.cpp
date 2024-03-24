@@ -10,7 +10,7 @@ Colors::CornersAnimationRenderer::CornersAnimationRenderer(BetterCanvas *canvas)
 void Colors::CornersAnimationRenderer::setup() {
   canvas->clear();
   currentColor = getConfig()->getColor();
-  totalDiagonals = canvas->getWidth() * canvas->getHeight() - 1;
+  totalDiagonals = canvas->getWidth() + canvas->getHeight() - 1;
   loopCount = 0;
 }
 
