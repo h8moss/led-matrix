@@ -1,14 +1,15 @@
 #include "modules/game-of-life/game_of_life_module.hpp"
+#include "common/models/fade_data.hpp"
 #include "common/util/better_canvas.hpp"
 #include "modules/game-of-life/game_of_life_board.hpp"
 #include "modules/game-of-life/game_of_life_configuration.hpp"
 
+#include <algorithm>
 #include <ctime>
-#include <random>
 
 GameOfLife::GOLModule::GOLModule(BetterCanvas *canvas)
     : Module(canvas, new GameOfLife::Configuration()), w{}, h{}, board{0, 0},
-      changes{0, 0} {
+      changes{0, 0}, fadeData{} {
   this->name = "game-of-life";
   this->description = "Plays Connway's game of life on the screen";
 }
@@ -21,6 +22,7 @@ void GameOfLife::GOLModule::setup() {
   h = canvas->getHeight();
   board = GOLBoard(w, h);
   changes = GOLBoard(w, h);
+  fadeData = std::vector<FadeData>(w * h);
 
   if (getConfig()->generateColor) {
     srand(time(nullptr));
@@ -58,12 +60,34 @@ int GameOfLife::GOLModule::render() {
     for (int y{}; y < h; y++) {
       if (changes.get(x, y)) {
         board.toggle(x, y);
+        if (!board.get(x, y)) {
+          fadeData.push_back({.x{x}, .y{y}, .fade{1.0f}});
+        } else {
+          canvas->setPixel(x, y, getConfig()->color);
+        }
         Color c{board.get(x, y) ? getConfig()->color : Color::black};
         canvas->setPixel(x, y, c);
         changes.set(x, y, false);
       }
     }
   }
+
+  for (size_t i{}; i < fadeData.size(); i++) {
+    if (getConfig()->fade) {
+      fadeData[i].fade -= 0.1f;
+    } else {
+      fadeData[i].fade = 0.0f;
+    }
+
+    canvas->setPixel(fadeData[i].x, fadeData[i].y,
+                     getConfig()->color * fadeData[i].fade);
+  }
+
+  // Remove fadeData
+  fadeData.erase(
+      std::remove_if(fadeData.begin(), fadeData.end(),
+                     [](const FadeData &d) { return d.fade < 0.1f; }),
+      fadeData.end());
 
   return getConfig()->duration * 1000;
 }

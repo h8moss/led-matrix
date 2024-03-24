@@ -2,7 +2,8 @@
 #include "common/util/array_to_vector.hpp"
 
 GameOfLife::Configuration::Configuration()
-    : ModuleConfiguration(), duration{10}, color{}, generateColor{true} {}
+    : ModuleConfiguration(), duration{10}, color{}, generateColor{true},
+      fade{false} {}
 
 char *GameOfLife::Configuration::getHelp() const {
   return "Program to show Conway's game of life on screen\n"
@@ -12,7 +13,9 @@ char *GameOfLife::Configuration::getHelp() const {
          "--color <COLOR>, -c <COLOR>\n"
          "\tPass the color you want the game to be, in HEX (#ff0000)\n"
          "--duration <ms>, -d <ms>\n"
-         "\tThe amount of time, in miliseconds a round lasts (default 10)\n";
+         "\tThe amount of time, in miliseconds a round lasts (default 10)\n"
+         "--fade, -f\n"
+         "\tAdd a fading effect to dying cells\n";
 }
 
 void GameOfLife::Configuration::parseArguments(char **argv, int argc) {
@@ -44,6 +47,8 @@ void GameOfLife::Configuration::parseArguments(char **argv, int argc) {
       } else {
         throw "Missing value for --color flag";
       }
+    } else if (arg == "--fade" || arg == "-f") {
+      this->fade = true;
     } else if (arg == "--help" || arg == "-h") {
       this->showHelp = true;
       return;

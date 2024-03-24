@@ -14,5 +14,6 @@ public:
   float duration;
   Color color;
   bool generateColor;
+  bool fade;
 };
 } // namespace GameOfLife
