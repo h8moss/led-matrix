@@ -74,13 +74,13 @@ int GameOfLife::GOLModule::render() {
 
   for (size_t i{}; i < fadeData.size(); i++) {
     if (getConfig()->fade) {
-      fadeData[i].fade -= 0.1f;
+      fadeData[i].fade -= getConfig()->fadeSpeed;
     } else {
       fadeData[i].fade = 0.0f;
     }
 
     canvas->setPixel(fadeData[i].x, fadeData[i].y,
-                     fadeData[i].fade < 0.1f
+                     fadeData[i].fade < 0.05f
                          ? Color::black
                          : getConfig()->color * fadeData[i].fade);
   }

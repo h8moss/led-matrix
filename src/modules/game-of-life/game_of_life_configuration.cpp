@@ -3,7 +3,7 @@
 
 GameOfLife::Configuration::Configuration()
     : ModuleConfiguration(), duration{10}, color{}, generateColor{true},
-      fade{false} {}
+      fade{false}, fadeSpeed{} {}
 
 char *GameOfLife::Configuration::getHelp() const {
   return "Program to show Conway's game of life on screen\n"
@@ -15,7 +15,10 @@ char *GameOfLife::Configuration::getHelp() const {
          "--duration <ms>, -d <ms>\n"
          "\tThe amount of time, in miliseconds a round lasts (default 10)\n"
          "--fade, -f\n"
-         "\tAdd a fading effect to dying cells\n";
+         "\tAdd a fading effect to dying cells\n"
+         "--fade-speed, -s\n"
+         "\tThe speed by which fade occurs, a number between 0.0 and 1.0, "
+         "default is 0.1";
 }
 
 void GameOfLife::Configuration::parseArguments(char **argv, int argc) {
@@ -46,6 +49,17 @@ void GameOfLife::Configuration::parseArguments(char **argv, int argc) {
 
       } else {
         throw "Missing value for --color flag";
+      }
+    } else if (arg == "--fade-speed" || arg == "-s") {
+      if (arguments.size() > 0) {
+        std::string value{arguments[0]};
+        arguments.erase(arguments.begin());
+
+        float val{std::stof(value)};
+
+        this->fadeSpeed = val;
+      } else {
+        throw "Missing value for --fade-speed flag";
       }
     } else if (arg == "--fade" || arg == "-f") {
       this->fade = true;
