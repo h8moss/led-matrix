@@ -1,0 +1,90 @@
+#include "common/util/better_canvas.hpp"
+#include "led-matrix.h"
+
+BetterCanvas::BetterCanvas(int argc, char **argv,
+                           rgb_matrix::RGBMatrix::Options options)
+    : canvas{nullptr} {
+  canvas = rgb_matrix::RGBMatrix::CreateFromFlags(&argc, &argv, &options);
+  if (canvas == nullptr) {
+    throw "Error creating canvas!";
+  }
+}
+
+BetterCanvas::BetterCanvas(const BetterCanvas &canvas) {
+  this->canvas = canvas.canvas;
+}
+
+BetterCanvas BetterCanvas::operator=(const BetterCanvas &canvas1) {
+  this->canvas = canvas1.canvas;
+}
+
+BetterCanvas::~BetterCanvas() {
+  this->canvas->Clear();
+  delete this->canvas;
+}
+
+void BetterCanvas::setPixel(int x, int y, Color c) {
+  canvas->SetPixel(x, y, (unsigned char)c.r, (unsigned char)c.g,
+                   (unsigned char)c.b);
+}
+
+void BetterCanvas::fill(Color c) {
+  canvas->Fill((unsigned char)c.r, (unsigned char)c.g, (unsigned char)c.b);
+}
+
+void BetterCanvas::clear() { canvas->Clear(); }
+
+void BetterCanvas::drawLine(int x1, int y1, int x2, int y2, Color c) {
+  if (x1 > x2) {
+    int temp{x2};
+    x2 = x1;
+    x1 = temp;
+  }
+
+  float m{(float)(y2 - y1) / (float)(x2 - x1)};
+  for (int x{x1}; x <= x2; x++) {
+    int y{(int)(m * (x - x1) + y1)};
+    setPixel(x, y, c);
+  }
+}
+
+void BetterCanvas::drawSquare(int x, int y, int w, int h, Color c,
+                              bool filled) {
+  if (filled) {
+    for (int deltaY{}; deltaY < h; deltaY++) {
+      int currentY{y + deltaY};
+      drawLine(x, currentY, x + w, currentY, c);
+    }
+  } else {
+    drawLine(x, y, x + w, y, c);
+    drawLine(x, y + h, x + w, y + h, c);
+    drawLine(x, y, x, y + h, c);
+    drawLine(x + w, y, x + w, y + h, c);
+  }
+}
+
+void BetterCanvas::drawCircle(int x, int y, int r, Color c, bool filled) {
+  for (int y0{-r}; y0 <= r; y0++) {
+    for (int x0{-r}; x0 <= r; x0++) {
+      int distanceSqrd{x0 * x0 + y0 * y0};
+      if ((filled && distanceSqrd < r * r + r) ||
+          (!filled && distanceSqrd < r * r + r && distanceSqrd > r * r - r)) {
+        setPixel(x0 + x, y0 + y, c);
+      }
+    }
+  }
+}
+
+int BetterCanvas::getWidth() const { return canvas->width(); }
+int BetterCanvas::getHeight() const { return canvas->height(); }
+
+rgb_matrix::Font *BetterCanvas::getFont() {
+  if (this->font == nullptr) {
+    font = new rgb_matrix::Font();
+    font->LoadFont("../rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/fonts/"
+                   "10x20.bdf"); // TODO:
+                                 // Fix font
+  }
+
+  return font;
+}
