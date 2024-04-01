@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
       int ready =
           select(STDIN_FILENO + 1, &readfds, nullptr, nullptr, &timeout);
       if (ready == -1 && errno == EINTR) {
-        continue;
+        break; // Maybe?
       }
     }
 
