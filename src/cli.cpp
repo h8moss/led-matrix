@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <signal.h>
+#include <sys/select.h>
 #include <unistd.h>
 #include <vector>
 
@@ -47,6 +48,10 @@ int main(int argc, char **argv) {
     signal(SIGTERM, Interrupt);
     signal(SIGINT, Interrupt);
 
+    fd_set readfds;
+    FD_ZERO(&readfds);
+    FD_SET(STDIN_FILENO, &readfds);
+
     Module *module{nullptr};
     for (auto mod : modules) {
       if (mod->name == argv[1]) {
@@ -70,7 +75,12 @@ int main(int argc, char **argv) {
     std::cout << "Press Ctrl-C to stop" << std::endl;
 
     while (!interruptReceived) {
-      usleep(module->render());
+      struct timeval timeout = {0, module->render()};
+      int ready =
+          select(STDIN_FILENO + 1, &readfds, nullptr, nullptr, &timeout);
+      if (ready == -1 && errno == EINTR) {
+        continue;
+      }
     }
 
     module->teardown();
