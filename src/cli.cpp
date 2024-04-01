@@ -47,6 +47,7 @@ int main(int argc, char **argv) {
 
     signal(SIGTERM, Interrupt);
     signal(SIGINT, Interrupt);
+    signal(SIGKILL, Interrupt);
 
     fd_set readfds;
     FD_ZERO(&readfds);
@@ -79,7 +80,7 @@ int main(int argc, char **argv) {
       int ready =
           select(STDIN_FILENO + 1, &readfds, nullptr, nullptr, &timeout);
       if (ready == -1 && errno == EINTR) {
-        break; // Maybe?
+        continue;
       }
     }
 
