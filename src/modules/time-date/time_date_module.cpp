@@ -21,7 +21,7 @@ void TimeDate::TimeDateModule::setup() {
   seconds = "";
 }
 
-int TimeDate::TimeDateModule::render() {
+long int TimeDate::TimeDateModule::render() {
   canvas->clear();
 
   auto time{std::chrono::system_clock::now()};

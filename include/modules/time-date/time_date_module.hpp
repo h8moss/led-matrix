@@ -11,7 +11,7 @@ public:
   TimeDateModule(BetterCanvas *_canvas);
 
   virtual void setup() override;
-  virtual int render() override;
+  virtual long int render() override;
   virtual void teardown() override;
 
   TimeDate::Configuration *getConfig() const;

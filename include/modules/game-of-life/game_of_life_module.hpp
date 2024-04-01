@@ -12,7 +12,7 @@ public:
   GOLModule(BetterCanvas *canvas);
 
   void setup() override;
-  int render() override;
+  long int render() override;
   void teardown() override;
 
   GameOfLife::Configuration *getConfig() const;

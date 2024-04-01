@@ -11,7 +11,7 @@ public:
   virtual ~ColorsModule();
 
   virtual void setup() override;
-  virtual int render() override;
+  virtual long int render() override;
   virtual void teardown() override;
 
   Colors::ConfigurationWithAnimation *getConfig() const;

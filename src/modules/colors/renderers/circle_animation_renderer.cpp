@@ -25,7 +25,7 @@ void Colors::CircleAnimationRenderer::setup() {
   color = getConfig()->getColor();
 }
 
-int Colors::CircleAnimationRenderer::render() {
+long int Colors::CircleAnimationRenderer::render() {
   int animationProgress{loopCount % (int)(getConfig()->animationDuration +
                                           getConfig()->duration)};
   if (animationProgress == 0) {

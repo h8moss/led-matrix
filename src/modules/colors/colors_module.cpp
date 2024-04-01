@@ -30,7 +30,7 @@ void Colors::ColorsModule::setup() {
   renderer->setup();
 }
 
-int Colors::ColorsModule::render() { return renderer->render(); }
+long int Colors::ColorsModule::render() { return renderer->render(); }
 
 void Colors::ColorsModule::teardown() { renderer->teardown(); }
 

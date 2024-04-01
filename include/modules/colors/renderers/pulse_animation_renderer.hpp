@@ -9,7 +9,7 @@ class PulseAnimationRenderer : public Renderer {
 public:
   PulseAnimationRenderer(BetterCanvas *canvas);
 
-  virtual int render() override;
+  virtual long int render() override;
   virtual void setup() override;
   virtual void teardown() override;
 

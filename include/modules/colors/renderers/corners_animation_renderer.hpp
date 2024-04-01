@@ -10,7 +10,7 @@ class CornersAnimationRenderer : public Renderer {
 public:
   CornersAnimationRenderer(BetterCanvas *canvas);
 
-  virtual int render() override;
+  virtual long int render() override;
   virtual void setup() override;
   virtual void teardown() override;
 

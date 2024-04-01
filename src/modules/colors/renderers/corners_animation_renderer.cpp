@@ -14,7 +14,7 @@ void Colors::CornersAnimationRenderer::setup() {
   loopCount = 0;
 }
 
-int Colors::CornersAnimationRenderer::render() {
+long int Colors::CornersAnimationRenderer::render() {
   int animationProgress =
       loopCount %
       ((int)(getConfig()->animationDuration + getConfig()->duration));

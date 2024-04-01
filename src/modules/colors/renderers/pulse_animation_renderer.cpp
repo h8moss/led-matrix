@@ -20,7 +20,7 @@ void Colors::PulseAnimationRenderer::setup() {
   loopCount = 0;
 }
 
-int Colors::PulseAnimationRenderer::render() {
+long int Colors::PulseAnimationRenderer::render() {
   int animationProgress = loopCount % (int)animationSplits[3];
   if (animationProgress < animationSplits[0]) {
     // animate color in

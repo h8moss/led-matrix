@@ -41,7 +41,7 @@ void GameOfLife::GOLModule::setup() {
   }
 }
 
-int GameOfLife::GOLModule::render() {
+long int GameOfLife::GOLModule::render() {
   for (int x{}; x < w; x++) {
     for (int y{}; y < h; y++) {
       bool value{board.get(x, y)};

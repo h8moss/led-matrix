@@ -13,7 +13,7 @@ public:
   std::string description;
 
   virtual void setup() = 0;
-  virtual int render() = 0;
+  virtual long int render() = 0;
   virtual void teardown() = 0;
   ModuleConfiguration *configuration;
 
