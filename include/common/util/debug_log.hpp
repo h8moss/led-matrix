@@ -1,7 +1,11 @@
-#include <iostream>
+#pragma once
 
-template <typename T> void dLog(const T str) {
 #ifdef DEBUG
-  std::cout << str << '\n';
+#include <iostream>
+#endif
+
+template <typename T> void dLog(const T str, char endln = '\n') {
+#ifdef DEBUG
+  std::cout << str << endln;
 #endif
 }
