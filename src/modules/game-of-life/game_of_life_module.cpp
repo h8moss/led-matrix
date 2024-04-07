@@ -42,6 +42,7 @@ void GameOfLife::GOLModule::setup() {
 }
 
 long int GameOfLife::GOLModule::render() {
+  GOLBoard next{w, h};
   for (int x{}; x < w; x++) {
     for (int y{}; y < h; y++) {
       bool value{board.get(x, y)};
@@ -49,25 +50,24 @@ long int GameOfLife::GOLModule::render() {
       int aliveNeighbors{board.countNeighbours(x, y)};
 
       if (value && (aliveNeighbors < 2 || aliveNeighbors > 3)) {
-        changes.set(x, y, true);
+        next.set(x, y, false);
       } else if (!value && aliveNeighbors == 3) {
-        changes.set(x, y, true);
+        next.set(x, y, true);
+      } else {
+        next.set(x, y, value);
       }
     }
   }
-
   for (int x{}; x < w; x++) {
     for (int y{}; y < h; y++) {
-      if (changes.get(x, y)) {
-        board.toggle(x, y);
-        if (!board.get(x, y)) {
+      bool newVal{next.get(x, y)};
+      if (newVal != board.get(x, y)) {
+        board.set(x, y, newVal);
+        if (!newVal) {
           fadeData.push_back({.x{x}, .y{y}, .fade{1.0f}});
         } else {
           canvas->setPixel(x, y, getConfig()->color);
         }
-        Color c{board.get(x, y) ? getConfig()->color : Color::black};
-        canvas->setPixel(x, y, c);
-        changes.set(x, y, false);
       }
     }
   }
