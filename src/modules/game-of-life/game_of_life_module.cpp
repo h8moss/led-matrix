@@ -59,7 +59,7 @@ long int GameOfLife::GOLModule::render() {
         next.set(x, y, value);
       }
     }
-    dLog(' ');
+    dLog('\n');
   }
   for (int x{}; x < w; x++) {
     for (int y{}; y < h; y++) {
