@@ -48,7 +48,6 @@ long int GameOfLife::GOLModule::render() {
   for (int x{}; x < w; x++) {
     for (int y{}; y < h; y++) {
       bool value{board.get(x, y)};
-      dLog(value, ' ');
 
       int aliveNeighbors{board.countNeighbours(x, y)};
 
@@ -60,9 +59,7 @@ long int GameOfLife::GOLModule::render() {
         next.set(x, y, value);
       }
     }
-    dLog(' ');
   }
-  dLog(' ');
   for (int x{}; x < w; x++) {
     for (int y{}; y < h; y++) {
       bool newVal{next.get(x, y)};
