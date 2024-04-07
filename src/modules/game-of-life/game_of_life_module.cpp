@@ -1,7 +1,6 @@
 #include "modules/game-of-life/game_of_life_module.hpp"
 #include "common/models/fade_data.hpp"
 #include "common/util/better_canvas.hpp"
-#include "common/util/debug_log.hpp"
 #include "modules/game-of-life/game_of_life_board.hpp"
 #include "modules/game-of-life/game_of_life_configuration.hpp"
 
@@ -44,7 +43,6 @@ void GameOfLife::GOLModule::setup() {
 }
 
 long int GameOfLife::GOLModule::render() {
-  GOLBoard next{w, h};
   for (int x{}; x < w; x++) {
     for (int y{}; y < h; y++) {
       bool value{board.get(x, y)};
@@ -52,24 +50,25 @@ long int GameOfLife::GOLModule::render() {
       int aliveNeighbors{board.countNeighbours(x, y)};
 
       if (value && (aliveNeighbors < 2 || aliveNeighbors > 3)) {
-        next.set(x, y, false);
+        changes.set(x, y, true);
       } else if (!value && aliveNeighbors == 3) {
-        next.set(x, y, true);
-      } else {
-        next.set(x, y, value);
+        changes.set(x, y, true);
       }
     }
   }
+
   for (int x{}; x < w; x++) {
     for (int y{}; y < h; y++) {
-      bool newVal{next.get(x, y)};
-      if (newVal != board.get(x, y)) {
-        board.set(x, y, newVal);
-        if (!newVal) {
+      if (changes.get(x, y)) {
+        board.toggle(x, y);
+        if (!board.get(x, y)) {
           fadeData.push_back({.x{x}, .y{y}, .fade{1.0f}});
         } else {
           canvas->setPixel(x, y, getConfig()->color);
         }
+        Color c{board.get(x, y) ? getConfig()->color : Color::black};
+        canvas->setPixel(x, y, c);
+        changes.set(x, y, false);
       }
     }
   }
