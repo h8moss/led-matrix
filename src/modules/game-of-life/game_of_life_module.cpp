@@ -47,6 +47,7 @@ long int GameOfLife::GOLModule::render() {
   for (int x{}; x < w; x++) {
     for (int y{}; y < h; y++) {
       bool value{board.get(x, y)};
+      dLog(value, ' ');
 
       int aliveNeighbors{board.countNeighbours(x, y)};
 
@@ -58,6 +59,7 @@ long int GameOfLife::GOLModule::render() {
         next.set(x, y, value);
       }
     }
+    dLog(' ');
   }
   for (int x{}; x < w; x++) {
     for (int y{}; y < h; y++) {
@@ -66,14 +68,11 @@ long int GameOfLife::GOLModule::render() {
         board.set(x, y, newVal);
         if (!newVal) {
           fadeData.push_back({.x{x}, .y{y}, .fade{1.0f}});
-          dLog("0", ' ');
         } else {
           canvas->setPixel(x, y, getConfig()->color);
-          dLog("1", ' ');
         }
       }
     }
-    dLog("");
   }
 
   for (size_t i{}; i < fadeData.size(); i++) {
