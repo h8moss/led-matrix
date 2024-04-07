@@ -37,7 +37,8 @@ void GameOfLife::GOLModule::setup() {
       bool value{static_cast<bool>(rand() & 1)};
       board.set(x, y, value);
 
-      canvas->setPixel(x, y, getConfig()->color);
+      if (value)
+        canvas->setPixel(x, y, getConfig()->color);
     }
   }
 }
