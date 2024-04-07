@@ -1,6 +1,7 @@
 #include "modules/game-of-life/game_of_life_module.hpp"
 #include "common/models/fade_data.hpp"
 #include "common/util/better_canvas.hpp"
+#include "common/util/debug_log.hpp"
 #include "modules/game-of-life/game_of_life_board.hpp"
 #include "modules/game-of-life/game_of_life_configuration.hpp"
 
@@ -65,11 +66,14 @@ long int GameOfLife::GOLModule::render() {
         board.set(x, y, newVal);
         if (!newVal) {
           fadeData.push_back({.x{x}, .y{y}, .fade{1.0f}});
+          dLog("0", ' ');
         } else {
           canvas->setPixel(x, y, getConfig()->color);
+          dLog("1", ' ');
         }
       }
     }
+    dLog("");
   }
 
   for (size_t i{}; i < fadeData.size(); i++) {
