@@ -20,11 +20,12 @@ A simple C++ script that allows you to control a led matrix with a bunch of diff
 
 # Usage
 
-In order to make this thing, you gotta compile it first (I know, if I figure out how, maybe I'll add releases one day
+In order to use this thing, you gotta compile it first (I know, if I figure out how, maybe I'll add releases one day)
 
-To build this project you will need to have git, cmake and make installed on your system.
+To build this project you will need to have git, cmake and make installed on your raspberry pi.
+Said raspberry pi must also be set up with a led matrix
 
-To compile, in your raspberry pi connected to an led matrix run the following:
+To compile, on the raspberry pi run he following:
 
 (note, if you want help connecting the raspberry pi to an led matrix, I will make a tutorial at some point)
 
@@ -43,6 +44,5 @@ must be run with `sudo`
 `led-matrix` runs using flags and the command line, it should hopefully give you a self explanatory "usage" message if 
 you just run `sudo led-matrix`
 
-`led-matrix-manager` is similar but receives input from stdin instead, this can be used for integrations, but I don't
-recommend using it on it's own
+`led-matrix-manager` not meant to be run by the user, instead, by otrher applications so they can control the led matrix
 
