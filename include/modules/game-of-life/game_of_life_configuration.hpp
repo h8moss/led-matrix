@@ -16,5 +16,6 @@ public:
   bool generateColor;
   bool fade;
   float fadeSpeed;
+  bool restartOnStagnation;
 };
 } // namespace GameOfLife

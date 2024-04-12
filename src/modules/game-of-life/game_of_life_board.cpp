@@ -37,4 +37,17 @@ int GameOfLife::GOLBoard::countNeighbours(int x, int y) {
   return count;
 }
 
+long int GameOfLife::GOLBoard::getHash() const {
+  int multiply{2};
+  long int value{};
+  for (int x{}; x < w; x++) {
+    for (int y{}; x < h; x++) {
+      value += board[x][y] * multiply;
+      multiply *= 2;
+    }
+  }
+
+  return value;
+}
+
 GameOfLife::GOLBoard::~GOLBoard() {}

@@ -6,6 +6,8 @@
 
 #include "common/models/fade_data.hpp"
 
+#include <map>
+
 namespace GameOfLife {
 class GOLModule : public Module {
 public:
@@ -26,5 +28,7 @@ private:
   GOLBoard changes;
 
   std::vector<FadeData> fadeData;
+
+  std::map<long int, int> stateHashes;
 };
 } // namespace GameOfLife

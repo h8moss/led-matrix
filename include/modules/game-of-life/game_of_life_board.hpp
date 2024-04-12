@@ -15,6 +15,8 @@ public:
 
   int countNeighbours(int x, int y);
 
+  long int getHash() const;
+
   ~GOLBoard();
 
 private:

@@ -9,7 +9,7 @@
 
 GameOfLife::GOLModule::GOLModule(BetterCanvas *canvas)
     : Module(canvas, new GameOfLife::Configuration()), w{}, h{}, board{0, 0},
-      changes{0, 0}, fadeData{} {
+      changes{0, 0}, fadeData{}, stateHashes{} {
   this->name = "game-of-life";
   this->description = "Plays Connway's game of life on the screen";
 }
@@ -23,6 +23,7 @@ void GameOfLife::GOLModule::setup() {
   board = GOLBoard(w, h);
   changes = GOLBoard(w, h);
   fadeData = std::vector<FadeData>(w * h);
+  stateHashes = std::map<long int, int>();
 
   if (getConfig()->generateColor) {
     srand(time(nullptr));
@@ -43,6 +44,18 @@ void GameOfLife::GOLModule::setup() {
 }
 
 long int GameOfLife::GOLModule::render() {
+
+  if (getConfig()->restartOnStagnation) {
+    long int hash{board.getHash()};
+
+    // TODO: Make sure this is how you check the value exists
+    if (stateHashes.count(hash) > 0) {
+      setup();
+      return getConfig()->duration * 1000;
+    }
+    stateHashes[hash] = 1;
+  }
+
   for (int x{}; x < w; x++) {
     for (int y{}; y < h; y++) {
       bool value{board.get(x, y)};

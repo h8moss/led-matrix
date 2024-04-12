@@ -3,7 +3,7 @@
 
 GameOfLife::Configuration::Configuration()
     : ModuleConfiguration(), duration{10}, color{}, generateColor{true},
-      fade{false}, fadeSpeed{0.1f} {}
+      fade{false}, fadeSpeed{0.1f}, restartOnStagnation{true} {}
 
 char *GameOfLife::Configuration::getHelp() const {
   return "Program to show Conway's game of life on screen\n"
@@ -18,7 +18,10 @@ char *GameOfLife::Configuration::getHelp() const {
          "\tAdd a fading effect to dying cells\n"
          "--fade-speed, -s\n"
          "\tThe speed by which fade occurs, a number between 0.0 and 1.0, "
-         "default is 0.1";
+         "default is 0.1\n"
+         "--allow-stagnation\n"
+         "\tIf passed, the game of life won't reset even if it falls on an "
+         "infinite loop\n";
 }
 
 void GameOfLife::Configuration::parseArguments(char **argv, int argc) {
@@ -58,6 +61,8 @@ void GameOfLife::Configuration::parseArguments(char **argv, int argc) {
         float val{std::stof(value)};
 
         this->fadeSpeed = val;
+      } else if (arg == "--allow-stagnation") {
+        restartOnStagnation = false;
       } else {
         throw "Missing value for --fade-speed flag";
       }
