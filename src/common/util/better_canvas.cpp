@@ -88,7 +88,7 @@ rgb_matrix::Font *BetterCanvas::getFont() {
 #endif
 
     font = new rgb_matrix::Font();
-    font->LoadFont(FONT_DIR "10x20.bdf");
+    font->LoadFont(FONT_DIR "4x6.bdf");
   }
 
   return font;
