@@ -80,10 +80,15 @@ int BetterCanvas::getHeight() const { return canvas->height(); }
 
 rgb_matrix::Font *BetterCanvas::getFont() {
   if (this->font == nullptr) {
+#ifndef FONT_DIR
+#define FONT_DIR "MISSING"
+
+    throw "Missing font directory declaration, this should not happen, please "
+          "contact developer!";
+#endif
+
     font = new rgb_matrix::Font();
-    font->LoadFont("../rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/fonts/"
-                   "10x20.bdf"); // TODO:
-                                 // Fix font
+    font->LoadFont(FONT_DIR "10x20.bdf");
   }
 
   return font;
