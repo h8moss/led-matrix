@@ -47,17 +47,14 @@ void GameOfLife::GOLModule::setup() {
 long int GameOfLife::GOLModule::render() {
 
   if (getConfig()->restartOnStagnation) {
-    long int hash{board.getHash()};
+    std::string hash{board.getHash()};
 
-    dLog(hash);
-
-    if (stateHashes.find(hash) != stateHashes.end() && stateHashes[hash]) {
-      dLog("------------------");
+    if (stateHashes.count(hash) > 0) {
       teardown();
       setup();
       return getConfig()->duration * 1000;
     }
-    stateHashes[hash] = 1;
+    stateHashes.insert(hash);
   }
 
   for (int x{}; x < w; x++) {

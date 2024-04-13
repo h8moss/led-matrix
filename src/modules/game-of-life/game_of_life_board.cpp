@@ -1,5 +1,7 @@
 #include "modules/game-of-life/game_of_life_board.hpp"
 
+#include <string>
+
 GameOfLife::GOLBoard::GOLBoard(int _w, int _h) : w{_w}, h{_h} {
   board = std::vector<std::vector<bool>>(w);
   for (int i{}; i < w; i++) {
@@ -37,13 +39,12 @@ int GameOfLife::GOLBoard::countNeighbours(int x, int y) {
   return count;
 }
 
-long int GameOfLife::GOLBoard::getHash() const {
-  int multiply{2};
-  long int value{};
+std::string GameOfLife::GOLBoard::getHash() const {
+  std::string value{};
+
   for (int x{}; x < w; x++) {
     for (int y{}; x < h; x++) {
-      value += board[x][y] * multiply;
-      multiply *= 2;
+      value += board[x][y];
     }
   }
 

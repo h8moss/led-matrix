@@ -6,7 +6,7 @@
 
 #include "common/models/fade_data.hpp"
 
-#include <map>
+#include <unordered_set>
 
 namespace GameOfLife {
 class GOLModule : public Module {
@@ -29,6 +29,6 @@ private:
 
   std::vector<FadeData> fadeData;
 
-  std::map<long int, int> stateHashes;
+  std::unordered_set<std::string> stateHashes;
 };
 } // namespace GameOfLife
