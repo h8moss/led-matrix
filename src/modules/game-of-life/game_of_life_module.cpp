@@ -1,6 +1,7 @@
 #include "modules/game-of-life/game_of_life_module.hpp"
 #include "common/models/fade_data.hpp"
 #include "common/util/better_canvas.hpp"
+#include "common/util/debug_log.hpp"
 #include "modules/game-of-life/game_of_life_board.hpp"
 #include "modules/game-of-life/game_of_life_configuration.hpp"
 
@@ -48,8 +49,9 @@ long int GameOfLife::GOLModule::render() {
   if (getConfig()->restartOnStagnation) {
     long int hash{board.getHash()};
 
-    // TODO: Make sure this is how you check the value exists
-    if (stateHashes.find(hash) != stateHashes.end()) {
+    dLog(hash);
+
+    if (stateHashes.find(hash) != stateHashes.end() && stateHashes[hash]) {
       teardown();
       setup();
       return getConfig()->duration * 1000;
