@@ -43,11 +43,10 @@ std::string GameOfLife::GOLBoard::getHash() const {
   std::string value{};
 
   for (int x{}; x < w; x++) {
-    for (int y{}; x < h; x++) {
+    for (int y{}; y < h; y++) {
       value += board[x][y];
     }
   }
-
   return value;
 }
 
