@@ -52,6 +52,7 @@ long int GameOfLife::GOLModule::render() {
     dLog(hash);
 
     if (stateHashes.find(hash) != stateHashes.end() && stateHashes[hash]) {
+      dLog("------------------");
       teardown();
       setup();
       return getConfig()->duration * 1000;
