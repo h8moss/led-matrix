@@ -61,11 +61,11 @@ void GameOfLife::Configuration::parseArguments(char **argv, int argc) {
         float val{std::stof(value)};
 
         this->fadeSpeed = val;
-      } else if (arg == "--allow-stagnation") {
-        restartOnStagnation = false;
       } else {
         throw "Missing value for --fade-speed flag";
       }
+    } else if (arg == "--allow-stagnation") {
+      this->restartOnStagnation = false;
     } else if (arg == "--fade" || arg == "-f") {
       this->fade = true;
     } else if (arg == "--help" || arg == "-h") {
