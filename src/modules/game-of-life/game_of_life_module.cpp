@@ -49,7 +49,8 @@ long int GameOfLife::GOLModule::render() {
     long int hash{board.getHash()};
 
     // TODO: Make sure this is how you check the value exists
-    if (stateHashes.count(hash) > 0) {
+    if (stateHashes.find(hash) != stateHashes.end()) {
+      teardown();
       setup();
       return getConfig()->duration * 1000;
     }
