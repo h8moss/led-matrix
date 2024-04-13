@@ -8,6 +8,7 @@ A simple C++ script that allows you to control a led matrix with a bunch of diff
 - [x] The time and date
 - [ ] Rotating square
 - [ ] Rotating cube
+- [ ] Mandelbrot set
 - [ ] That one donut rendering thing that appears on YT
 - [ ] Snake
 - [ ] Sorting algorithms
@@ -17,6 +18,8 @@ A simple C++ script that allows you to control a led matrix with a bunch of diff
 - [ ] Arbitrary images
 - [ ] Arbitrary videos
 - [ ] Arbitrary text
+
+
 
 # Usage
 
