@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <vector>
 
 namespace GameOfLife {
@@ -14,6 +15,8 @@ public:
   void toggle(int x, int y);
 
   int countNeighbours(int x, int y);
+
+  std::string getHash() const;
 
   ~GOLBoard();
 

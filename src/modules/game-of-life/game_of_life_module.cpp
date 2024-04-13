@@ -1,6 +1,7 @@
 #include "modules/game-of-life/game_of_life_module.hpp"
 #include "common/models/fade_data.hpp"
 #include "common/util/better_canvas.hpp"
+#include "common/util/debug_log.hpp"
 #include "modules/game-of-life/game_of_life_board.hpp"
 #include "modules/game-of-life/game_of_life_configuration.hpp"
 
@@ -9,7 +10,7 @@
 
 GameOfLife::GOLModule::GOLModule(BetterCanvas *canvas)
     : Module(canvas, new GameOfLife::Configuration()), w{}, h{}, board{0, 0},
-      changes{0, 0}, fadeData{} {
+      changes{0, 0}, fadeData{}, stateHashes{} {
   this->name = "game-of-life";
   this->description = "Plays Connway's game of life on the screen";
 }
@@ -23,6 +24,7 @@ void GameOfLife::GOLModule::setup() {
   board = GOLBoard(w, h);
   changes = GOLBoard(w, h);
   fadeData = std::vector<FadeData>(w * h);
+  stateHashes = std::unordered_set<std::string>();
 
   if (getConfig()->generateColor) {
     srand(time(nullptr));
@@ -43,6 +45,18 @@ void GameOfLife::GOLModule::setup() {
 }
 
 long int GameOfLife::GOLModule::render() {
+
+  if (getConfig()->restartOnStagnation) {
+    std::string hash{board.getHash()};
+
+    if (stateHashes.count(hash) > 0) {
+      teardown();
+      setup();
+      return getConfig()->duration * 1000;
+    }
+    stateHashes.insert(hash);
+  }
+
   for (int x{}; x < w; x++) {
     for (int y{}; y < h; y++) {
       bool value{board.get(x, y)};
