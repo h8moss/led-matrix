@@ -35,7 +35,7 @@ include_directories(
 link_directories(${CMAKE_BINARY_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/lib)
 
 # Font directory
-set(FONT_DIR "\"${CMAKE_SOURCE_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/fonts/\"")
+set(FONT_DIR "\\\"${CMAKE_SOURCE_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/fonts/\\\"")
 
 # Add warnings to compilation
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DFONT_DIR=${FONT_DIR}")
