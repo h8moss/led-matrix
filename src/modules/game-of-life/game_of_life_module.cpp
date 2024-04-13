@@ -24,7 +24,7 @@ void GameOfLife::GOLModule::setup() {
   board = GOLBoard(w, h);
   changes = GOLBoard(w, h);
   fadeData = std::vector<FadeData>(w * h);
-  stateHashes = std::map<long int, int>();
+  stateHashes = std::unordered_set<std::string>();
 
   if (getConfig()->generateColor) {
     srand(time(nullptr));
