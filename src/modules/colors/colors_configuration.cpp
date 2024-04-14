@@ -12,8 +12,7 @@ Colors::Configuration::Configuration()
 }
 
 char *Colors::Configuration::getHelp() const {
-  return "Program to show animations of colors on the full screen\n"
-         "Usage: sudo colors.out [options]"
+  return "Module to show animations of colors on the full screen"
          "\n\n"
          "Options:\n"
          "--colors <COLORS>, -c <COLORS>\n"

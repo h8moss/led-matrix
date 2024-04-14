@@ -6,8 +6,7 @@ GameOfLife::Configuration::Configuration()
       fade{false}, fadeSpeed{0.1f}, restartOnStagnation{true} {}
 
 char *GameOfLife::Configuration::getHelp() const {
-  return "Program to show Conway's game of life on screen\n"
-         "Usage: sudo game_of_life.out [options]"
+  return "Module to show Conway's game of life on screen"
          "\n\n"
          "Options:\n"
          "--color <COLOR>, -c <COLOR>\n"
