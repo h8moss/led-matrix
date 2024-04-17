@@ -52,13 +52,15 @@ int main(int argc, char **argv) {
         // Received instructions
         dLog("Received instructions: ");
         s[number] = '\0';
+        std::string instruction{s};
         dLog(s);
-        if (s == "die") {
+        if (instruction == "die") {
           break;
         }
 
         for (auto mod : modules) {
-          if (mod->name == s) {
+          if (mod->name == instruction) {
+            dLog("Initiating " + mod->name);
             if (module != nullptr) {
               module->teardown();
             }
