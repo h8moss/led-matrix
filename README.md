@@ -47,7 +47,7 @@ must be run with `sudo`
 `led-matrix` runs using flags and the command line, it should hopefully give you a self explanatory "usage" message if 
 you just run `sudo led-matrix`
 
-`led-matrix-manager` not meant to be run by the user, instead, by otrher applications so they can control the led matrix
+`led-matrix-manager` can be controlled through a linux FIFO, for IPC
 
 # Fonts
 
