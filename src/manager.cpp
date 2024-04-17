@@ -3,12 +3,13 @@
 #include <unistd.h>
 
 #include "common/util/better_canvas.hpp"
+#include "common/util/debug_log.hpp"
 #include "modules/colors/colors_module.hpp"
 #include "modules/game-of-life/game_of_life_module.hpp"
 #include "modules/module.hpp"
+#include "modules/time-date/time_date_module.hpp"
 
 #include "led-matrix.h"
-#include "modules/time-date/time_date_module.hpp"
 
 using std::cout;
 using std::endl;
@@ -46,10 +47,12 @@ int main(int argc, char **argv) {
 
     do {
       number = read(fd, s, 50);
+      dLog("number: " + std::to_string(number));
       if (number > 0) {
         // Received instructions
+        dLog("Received instructions");
         s[number] = '\0';
-        cout << s[number];
+        cout << s << endl;
         if (s == "die") {
           break;
         }
