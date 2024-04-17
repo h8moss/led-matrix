@@ -50,9 +50,9 @@ int main(int argc, char **argv) {
       dLog("number: " + std::to_string(number));
       if (number > 0) {
         // Received instructions
-        dLog("Received instructions");
+        dLog("Received instructions: ");
         s[number] = '\0';
-        cout << s << endl;
+        dLog(s);
         if (s == "die") {
           break;
         }
@@ -77,6 +77,8 @@ int main(int argc, char **argv) {
           if (sleepTime > 0) {
             usleep(sleepTime * 1000);
           }
+        } else {
+          sleep(1);
         }
       }
     } while (!shouldExit);
