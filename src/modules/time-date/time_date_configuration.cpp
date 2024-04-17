@@ -7,7 +7,7 @@
 
 TimeDate::Configuration::Configuration() : ModuleConfiguration(), font{"4x6"} {}
 
-char *TimeDate::Configuration::getHelp() const {
+const char *TimeDate::Configuration::getHelp() const {
   return "This module displays the time and date acurate to the second"
          "\n\n"
          "Options:\n"

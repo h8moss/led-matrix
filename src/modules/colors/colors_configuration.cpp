@@ -11,7 +11,7 @@ Colors::Configuration::Configuration()
   srand((unsigned int)time(nullptr));
 }
 
-char *Colors::Configuration::getHelp() const {
+const char *Colors::Configuration::getHelp() const {
   return "Module to show animations of colors on the full screen"
          "\n\n"
          "Options:\n"
