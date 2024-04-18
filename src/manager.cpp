@@ -91,6 +91,7 @@ int main(int argc, char **argv) {
           }
         } else {
           sleep(1);
+          timeCounter += 1000;
         }
       }
     } while (!shouldExit);
