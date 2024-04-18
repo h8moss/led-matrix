@@ -64,6 +64,10 @@ int main(int argc, char **argv) {
         if (instruction == "die") {
           dLog("Received DEATH");
           break;
+        } else if (instruction == "off") {
+          module->teardown();
+          module = nullptr;
+          continue;
         }
 
         for (auto mod : modules) {
@@ -95,6 +99,16 @@ int main(int argc, char **argv) {
         }
       }
     } while (!shouldExit);
+
+    if (module != nullptr) {
+      module->teardown();
+      module = nullptr;
+    }
+
+    for (auto mod : modules) {
+      delete mod;
+    }
+
   } catch (const char *err) {
     std::cerr << err << std::endl;
     return 1;
