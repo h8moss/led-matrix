@@ -31,6 +31,8 @@ int main(int argc, char **argv) {
         new TimeDate::TimeDateModule(canvas),
     };
 
+    long int timeCounter{};
+
     if (argc < 2) {
       cout << "USAGE: sudo led-matrix-manager <FIFO>" << endl;
     }
@@ -46,7 +48,12 @@ int main(int argc, char **argv) {
     bool shouldExit{false};
 
     do {
-      number = read(fd, s, 50);
+      if (timeCounter >= 1000) { // Only check commands every second
+        number = read(fd, s, 50);
+        timeCounter = 0;
+      } else {
+        number = 0;
+      }
       dLog("number: " + std::to_string(number));
       if (number > 0) {
         // Received instructions
@@ -74,12 +81,13 @@ int main(int argc, char **argv) {
         // Normal loop
         if (module != nullptr) {
           long int sleepTime{module->render()};
-          if (sleepTime > 1000) {
-            sleepTime = sleepTime % 1000;
-            sleep(sleepTime / 1000);
+          timeCounter += sleepTime / 1000;
+          if (sleepTime > 1000000) {
+            sleep(sleepTime / 1000000);
+            sleepTime = sleepTime % 1000000;
           }
           if (sleepTime > 0) {
-            usleep(sleepTime * 1000);
+            usleep(sleepTime);
           }
         } else {
           sleep(1);
