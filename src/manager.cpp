@@ -54,8 +54,8 @@ int main(int argc, char **argv) {
         s[number] = '\0';
         std::string instruction{s};
         dLog(s);
-        dLog("Instruction \"" + instruction + "\" == die? " + instruction ==
-             "die");
+        dLog("Instruction \"" + instruction + "\" == die? " +
+             ((instruction == "die") ? "true" : "false"));
         if (instruction == "die") {
           dLog("Received DEATH");
           break;
