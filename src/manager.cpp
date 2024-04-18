@@ -56,6 +56,13 @@ int main(int argc, char **argv) {
         dLog(s);
         dLog("Instruction \"" + instruction + "\" == die? " +
              ((instruction == "die") ? "true" : "false"));
+
+        for (char c : s) {
+          dLog((int)c, ' ');
+          dLog(c, ' ');
+        }
+        dLog("");
+
         if (instruction == "die") {
           dLog("Received DEATH");
           break;
