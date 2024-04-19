@@ -18,7 +18,7 @@ A simple C++ script that allows you to control a led matrix with a bunch of diff
 - [ ] Arbitrary images
 - [ ] Arbitrary videos
 - [ ] Arbitrary text
-
+- [ ] Arbitrary drawings
 
 
 # Usage
