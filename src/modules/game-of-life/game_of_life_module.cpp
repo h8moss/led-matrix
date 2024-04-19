@@ -109,7 +109,7 @@ long int GameOfLife::GOLModule::render() {
   return getConfig()->duration * 1000;
 }
 
-void GameOfLife::GOLModule::teardown() {}
+void GameOfLife::GOLModule::teardown() { canvas->clear(); }
 
 GameOfLife::GOLModule::~GOLModule() { teardown(); }
 
