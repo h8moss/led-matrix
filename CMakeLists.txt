@@ -49,6 +49,7 @@ set(SHARED_SOURCES
 	${CMAKE_SOURCE_DIR}/src/common/util/better_canvas_draw_text.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/pad_zeros.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/split_string.cpp
+	${CMAKE_SOURCE_DIR}/src/common/util/starts_with.cpp
 	${CMAKE_SOURCE_DIR}/src/modules/colors/renderers/circle_animation_renderer.cpp
 	${CMAKE_SOURCE_DIR}/src/modules/colors/renderers/corners_animation_renderer.cpp
 	${CMAKE_SOURCE_DIR}/src/modules/colors/renderers/pulse_animation_renderer.cpp
