@@ -1,6 +1,8 @@
 #include "modules/game-of-life/game_of_life_configuration.hpp"
 #include "common/util/array_to_vector.hpp"
+#include "common/util/debug_log.hpp"
 #include "common/util/split_string.hpp"
+
 #include <vector>
 
 GameOfLife::Configuration::Configuration()
@@ -85,7 +87,8 @@ void GameOfLife::Configuration::parseData(std::string data) {
     arguments.erase(arguments.begin());
 
     if (arg.size() < 2) {
-      throw "Value mismatch on " + arg[0];
+      dLog("Warning: Value mismatch for argument " + arg[0]);
+      continue;
     }
 
     if (arg[0] == "duration" || arg[0] == "d") {
