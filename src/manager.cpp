@@ -4,6 +4,7 @@
 
 #include "common/util/better_canvas.hpp"
 #include "common/util/debug_log.hpp"
+#include "common/util/starts_with.hpp"
 #include "modules/colors/colors_module.hpp"
 #include "modules/game-of-life/game_of_life_module.hpp"
 #include "modules/module.hpp"
@@ -72,7 +73,7 @@ int main(int argc, char **argv) {
 
         for (auto mod : modules) {
           dLog("CHECKING " + mod->name);
-          if (mod->name == instruction) {
+          if (startsWith(instruction, mod->name)) {
             dLog("Initiating " + mod->name);
             if (module != nullptr) {
               module->teardown();
