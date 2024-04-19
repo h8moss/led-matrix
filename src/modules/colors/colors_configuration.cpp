@@ -37,6 +37,7 @@ char *Colors::Configuration::getHelp() const {
 }
 
 void Colors::Configuration::parseArguments(char **_, int __) { return; }
+void Colors::Configuration::parseData(std::string _) { return; }
 
 void Colors::ConfigurationWithAnimation::parseArguments(char **argv, int argc) {
   std::vector<std::string> arguments{arrayToVector(argc, argv)};
@@ -106,6 +107,48 @@ void Colors::ConfigurationWithAnimation::parseArguments(char **argv, int argc) {
     } else if (arg == "--help" || arg == "-h") {
       showHelp = true;
       return;
+    }
+  }
+}
+
+void Colors::ConfigurationWithAnimation::parseData(std::string data) {
+  std::vector<std::string> arguments{split(data, " ")};
+
+  while (arguments.size() != 0) {
+    std::vector<std::string> arg{split(arguments[0], ":")};
+    arguments.erase(arguments.begin());
+
+    if (arg[0] == "colors" || arg[0] == "c") {
+      std::vector<std::string> splitValues{split(arg[1], ",")};
+
+      for (auto color : splitValues) {
+        colors.push_back(Color::fromHex(color));
+      }
+
+      colorGenerationStrategy = ColorGenerationStrategy::specific;
+    } else if (arg[0] == "duration" || arg[0] == "d") {
+      float val{std::stof(arg[1])};
+
+      duration = val;
+    } else if (arg[0] == "animation-duration" || arg[1] == "ad") {
+      float val{std::stof(arg[1])};
+
+      animationDuration = val;
+    } else if (arg[0] == "animation" || arg[0] == "a") {
+
+      if (arg[1] == "pulse")
+        animation = Animation::pulse;
+      else if (arg[1] == "corners")
+        animation = Animation::corners;
+      else if (arg[1] == "shrink")
+        animation = Animation::shrink;
+      else if (arg[1] == "grow")
+        animation = Animation::grow;
+
+    } else if (arg[0] == "true-random-colors" || arg[0] == "r") {
+      if (arg[1] == "1") {
+        colorGenerationStrategy = ColorGenerationStrategy::trueRandom;
+      }
     }
   }
 }

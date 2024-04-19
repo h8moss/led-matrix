@@ -10,6 +10,7 @@ public:
 
   virtual char *getHelp() const override;
   virtual void parseArguments(char **argv, int argc) override;
+  virtual void parseData(std::string data) override;
 
   float duration;
   Color color;

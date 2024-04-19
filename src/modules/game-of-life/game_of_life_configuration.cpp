@@ -1,5 +1,7 @@
 #include "modules/game-of-life/game_of_life_configuration.hpp"
 #include "common/util/array_to_vector.hpp"
+#include "common/util/split_string.hpp"
+#include <vector>
 
 GameOfLife::Configuration::Configuration()
     : ModuleConfiguration(), duration{10}, color{}, generateColor{true},
@@ -71,6 +73,41 @@ void GameOfLife::Configuration::parseArguments(char **argv, int argc) {
     } else if (arg == "--help" || arg == "-h") {
       this->showHelp = true;
       return;
+    }
+  }
+}
+
+void GameOfLife::Configuration::parseData(std::string data) {
+  std::vector<std::string> arguments{split(data, " ")};
+  while (arguments.size() != 0) {
+
+    std::vector<std::string> arg{split(arguments[0], ":")};
+    arguments.erase(arguments.begin());
+
+    if (arg.size() < 2) {
+      throw "Value mismatch on " + arg[0];
+    }
+
+    if (arg[0] == "duration" || arg[0] == "d") {
+      float val{std::stof(arg[1])};
+
+      this->duration = val;
+    } else if (arg[0] == "color" || arg[0] == "c") {
+
+      this->color = Color::fromHex(arg[1]);
+      this->generateColor = false;
+
+    } else if (arg[0] == "fade-speed" || arg[0] == "s") {
+
+      float val{std::stof(arg[1])};
+
+      this->fadeSpeed = val;
+    }
+
+    else if (arg[0] == "allow-stagnation") {
+      this->restartOnStagnation = arg[1] != "1";
+    } else if (arg[0] == "fade" || arg[0] == "f") {
+      this->fade = arg[1] == "1";
     }
   }
 }
