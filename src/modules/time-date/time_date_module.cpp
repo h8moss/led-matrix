@@ -13,8 +13,8 @@ TimeDate::TimeDateModule::TimeDateModule(BetterCanvas *_canvas)
 }
 
 void TimeDate::TimeDateModule::setup() {
-
   canvas->clear();
+  canvas->fontName = getConfig()->font;
 
   hours = "";
   minutes = "";

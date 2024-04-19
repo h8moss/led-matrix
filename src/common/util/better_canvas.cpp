@@ -2,8 +2,9 @@
 #include "led-matrix.h"
 
 BetterCanvas::BetterCanvas(int argc, char **argv,
-                           rgb_matrix::RGBMatrix::Options options)
-    : canvas{nullptr} {
+                           rgb_matrix::RGBMatrix::Options options,
+                           std::string _fontName)
+    : canvas{nullptr}, fontName{_fontName} {
   canvas = rgb_matrix::RGBMatrix::CreateFromFlags(&argc, &argv, &options);
   if (canvas == nullptr) {
     throw "Error creating canvas!";
@@ -16,6 +17,7 @@ BetterCanvas::BetterCanvas(const BetterCanvas &canvas) {
 
 BetterCanvas BetterCanvas::operator=(const BetterCanvas &canvas1) {
   this->canvas = canvas1.canvas;
+  this->fontName = canvas1.fontName;
 }
 
 BetterCanvas::~BetterCanvas() {
@@ -87,8 +89,13 @@ rgb_matrix::Font *BetterCanvas::getFont() {
           "contact developer!";
 #endif
 
+    if (fontName == "")
+      throw "Missing font name";
+
+    std::string fontLocation{FONT_DIR + fontName + ".bdf"};
+
     font = new rgb_matrix::Font();
-    font->LoadFont(FONT_DIR "4x6.bdf");
+    font->LoadFont(fontLocation.c_str());
   }
 
   return font;
