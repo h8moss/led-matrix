@@ -88,6 +88,11 @@ int main(int argc, char **argv) {
         // Normal loop
         if (module != nullptr) {
           long int sleepTime{module->render()};
+          if (sleepTime < 0) {
+            module->teardown();
+            module = nullptr;
+            continue;
+          }
           timeCounter += sleepTime / 1000;
           if (sleepTime > 1000000) {
             sleep(sleepTime / 1000000);

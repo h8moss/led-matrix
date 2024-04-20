@@ -76,11 +76,18 @@ int main(int argc, char **argv) {
     std::cout << "Press Ctrl-C to stop" << std::endl;
 
     while (!interruptReceived) {
-      struct timeval timeout = {0, module->render()};
-      int ready =
-          select(STDIN_FILENO + 1, &readfds, nullptr, nullptr, &timeout);
-      if (ready == -1 && errno == EINTR) {
-        continue;
+      long int sleepTime{module->render()};
+
+      if (sleepTime < 0) {
+        break;
+      }
+
+      if (sleepTime > 1000000) {
+        sleep(sleepTime / 1000000);
+        sleepTime = sleepTime % 1000000;
+      }
+      if (sleepTime > 0) {
+        usleep(sleepTime);
       }
     }
 
