@@ -16,6 +16,8 @@ public:
 
   TimeDate::Configuration *getConfig() const;
 
+  virtual void createConfiguration() override;
+
   virtual ~TimeDateModule();
 
 protected:

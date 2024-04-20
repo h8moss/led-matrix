@@ -16,6 +16,8 @@ public:
 
   Colors::ConfigurationWithAnimation *getConfig() const;
 
+  virtual void createConfiguration() override;
+
 private:
   Module *renderer;
 };

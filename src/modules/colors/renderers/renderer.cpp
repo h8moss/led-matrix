@@ -8,3 +8,11 @@ Colors::Renderer::Renderer(BetterCanvas *canvas)
 Colors::Configuration *Colors::Renderer::getConfig() const {
   return static_cast<Colors::Configuration *>(configuration);
 }
+
+void Colors::Renderer::createConfiguration() {
+  if (configuration != nullptr) {
+    delete configuration;
+  }
+
+  configuration = new Colors::Configuration();
+}

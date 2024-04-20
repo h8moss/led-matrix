@@ -17,6 +17,8 @@ public:
   virtual void teardown() = 0;
   ModuleConfiguration *configuration;
 
+  virtual void createConfiguration() = 0;
+
   virtual ~Module() {
     delete canvas;
     delete configuration;

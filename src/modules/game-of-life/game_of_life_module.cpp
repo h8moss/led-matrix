@@ -116,3 +116,11 @@ GameOfLife::GOLModule::~GOLModule() { teardown(); }
 GameOfLife::Configuration *GameOfLife::GOLModule::getConfig() const {
   return static_cast<GameOfLife::Configuration *>(configuration);
 }
+
+void GameOfLife::GOLModule::createConfiguration() {
+  if (configuration != nullptr) {
+    delete configuration;
+  }
+
+  configuration = new GameOfLife::Configuration();
+}
