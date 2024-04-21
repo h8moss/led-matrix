@@ -40,7 +40,7 @@ long int Colors::CornersAnimationRenderer::render() {
       canvas->setPixel(x, delta - x - 1, currentColor);
     }
     if (getConfig()->fading) {
-      fadeData.push_back({delta, 0, 1.0f});
+      fadeData.push_back({.x = delta, .y = 0, .fade = 1.0f});
     }
   }
   if (getConfig()->fading) {
