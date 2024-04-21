@@ -1,26 +1,33 @@
 #include "modules/colors/renderers/corners_animation_renderer.hpp"
-#include "common/util/debug_log.hpp"
 #include "modules/colors/colors_configuration.hpp"
 
 #include <cmath>
 
 Colors::CornersAnimationRenderer::CornersAnimationRenderer(BetterCanvas *canvas)
-    : Renderer(canvas), currentColor{}, totalDiagonals{}, loopCount{} {}
+    : Renderer(canvas), currentColor{}, totalDiagonals{}, loopCount{},
+      fadeData{} {}
 
 void Colors::CornersAnimationRenderer::setup() {
   canvas->clear();
   currentColor = getConfig()->getColor();
   totalDiagonals = canvas->getWidth() + canvas->getHeight() - 1;
   loopCount = 0;
+  fadeData = {};
 }
 
 long int Colors::CornersAnimationRenderer::render() {
   int animationProgress =
       loopCount %
       ((int)(getConfig()->animationDuration + getConfig()->duration));
+  if (getConfig()->runOnce &&
+      animationProgress ==
+          ((int)(getConfig()->animationDuration + getConfig()->duration))) {
+    return -1;
+  }
 
   if (animationProgress == 0) {
-    canvas->fill(currentColor);
+    if (!getConfig()->fading)
+      canvas->fill(currentColor);
     currentColor = getConfig()->getColor();
   }
 
@@ -31,6 +38,25 @@ long int Colors::CornersAnimationRenderer::render() {
     for (int x{}; x <= delta; x++) {
       canvas->setPixel(x, delta - x - 1, currentColor);
     }
+    if (getConfig()->fading) {
+      fadeData.push_back({delta, 0, 1.0f});
+    }
+  }
+  if (getConfig()->fading) {
+
+    for (size_t i{}; i < fadeData.size(); i++) {
+      fadeData[i].fade -= 1.0f / getConfig()->duration;
+      // fadeData[i].x is where we stored delta, y is useless
+      for (int x{}; x <= fadeData[i].x; x++) {
+        canvas->setPixel(x, fadeData[i].x - x - 1,
+                         currentColor * fadeData[i].fade);
+      }
+    }
+
+    fadeData.erase(
+        std::remove_if(fadeData.begin(), fadeData.end(),
+                       [](const FadeData &d) { return d.fade < 0.12f; }),
+        fadeData.end());
   }
 
   ++loopCount;
