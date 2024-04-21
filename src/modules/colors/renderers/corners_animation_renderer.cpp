@@ -1,6 +1,7 @@
 #include "modules/colors/renderers/corners_animation_renderer.hpp"
 #include "modules/colors/colors_configuration.hpp"
 
+#include <algorithm>
 #include <cmath>
 
 Colors::CornersAnimationRenderer::CornersAnimationRenderer(BetterCanvas *canvas)
