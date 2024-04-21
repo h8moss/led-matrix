@@ -34,7 +34,11 @@ char *Colors::Configuration::getHelp() const {
          "--true-random-colors, -r\n"
          "\tNormally, the screen only shows fully saturated, medium lightness "
          "colors, passing this flag makes the screen show truly randomized "
-         "colors\n";
+         "colors\n"
+         "--fade, -f\n"
+         "\tMake the colors fade as they are drawn\n"
+         "--once\n"
+         "\tThe animation runs only once, and then it exits\n";
 }
 
 void Colors::Configuration::parseArguments(char **_, int __) { return; }
@@ -105,6 +109,10 @@ void Colors::ConfigurationWithAnimation::parseArguments(char **argv, int argc) {
       }
     } else if (arg == "--true-random-colors" || arg == "-r") {
       colorGenerationStrategy = ColorGenerationStrategy::trueRandom;
+    } else if (arg == "--fade" || arg == "-f") {
+      fading = true;
+    } else if (arg == "--once") {
+      runOnce = true;
     } else if (arg == "--help" || arg == "-h") {
       showHelp = true;
       return;
@@ -155,6 +163,10 @@ void Colors::ConfigurationWithAnimation::parseData(std::string data) {
       if (arg[1] == "1") {
         colorGenerationStrategy = ColorGenerationStrategy::trueRandom;
       }
+    } else if (arg[0] == "fade" || arg[0] == "f") {
+      fading = arg[1] == "1";
+    } else if (arg[0] == "once") {
+      runOnce = arg[1] == "1";
     }
   }
 }

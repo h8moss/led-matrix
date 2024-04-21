@@ -22,6 +22,8 @@ public:
   std::vector<Color> colors;
   float duration;
   float animationDuration;
+  bool fading;
+  bool runOnce;
 
   Color getColor(Color lastColor = Color::black) const;
 
