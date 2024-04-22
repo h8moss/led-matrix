@@ -1,10 +1,8 @@
 #pragma once
 
 #include "common/models/color.hpp"
-#include "common/models/fade_data.hpp"
 #include "common/util/better_canvas.hpp"
 #include "modules/colors/renderers/renderer.hpp"
-#include <vector>
 
 namespace Colors {
 
@@ -20,7 +18,5 @@ private:
   Color currentColor;
   int totalDiagonals;
   int loopCount;
-
-  std::vector<FadeData> fadeData;
 };
 } // namespace Colors
