@@ -32,6 +32,10 @@ long int Colors::PulseAnimationRenderer::render() {
                    (float)(animationSplits[2] - animationSplits[1])};
     canvas->fill(currentColor * progress);
   } else if (animationProgress < animationSplits[3]) {
+    // TODO: Check this works!
+    if (getConfig()->runOnce)
+      return -1;
+
     // stay black
     if (animationProgress - animationSplits[3] - 1 < 1) {
       currentColor = getConfig()->getColor(currentColor);
