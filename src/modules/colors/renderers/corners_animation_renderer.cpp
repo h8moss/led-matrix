@@ -58,6 +58,10 @@ long int Colors::CornersAnimationRenderer::render() {
     currentColor = getConfig()->getColor();
   } else if (progress < getConfig()->duration) {
     // state 0
+
+  } else if (progress <
+             (int)(getConfig()->duration + getConfig()->animationDuration) -
+                 1) {
     for (int iter{}; iter < (getConfig()->fading ? 5 : 1); iter++) {
       float fade{1.0f - (0.2f * iter)}; // BUG: If we ever make `iter` this an
                                         // argument, edit 0.2f to 1/iter
@@ -70,9 +74,6 @@ long int Colors::CornersAnimationRenderer::render() {
         canvas->setPixel(x, delta - x - 1, currentColor * fade);
       }
     }
-  } else if (progress <
-             (int)(getConfig()->duration + getConfig()->animationDuration) -
-                 1) {
     // state 1
   } else {
     // State 2
