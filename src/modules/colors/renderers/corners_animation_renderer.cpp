@@ -1,6 +1,8 @@
 #include "modules/colors/renderers/corners_animation_renderer.hpp"
 #include "modules/colors/colors_configuration.hpp"
 
+#include "common/util/debug_log.hpp"
+
 #include <algorithm>
 #include <cmath>
 
@@ -44,6 +46,7 @@ long int Colors::CornersAnimationRenderer::render() {
     }
   }
   if (getConfig()->fading) {
+    dLog("SIZE: " + std::to_string(fadeData.size()));
 
     for (size_t i{}; i < fadeData.size(); i++) {
       // fadeData[i].fade -= 1.0f / getConfig()->duration;
