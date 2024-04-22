@@ -36,7 +36,7 @@ char *Colors::Configuration::getHelp() const {
          "colors, passing this flag makes the screen show truly randomized "
          "colors\n"
          "--fade, -f\n"
-         "\tMake the colors fade as they are drawn\n"
+         "\tMake the colors fade as they are drawn (does nothing for pulse)\n"
          "--once\n"
          "\tThe animation runs only once, and then it exits\n";
 }
