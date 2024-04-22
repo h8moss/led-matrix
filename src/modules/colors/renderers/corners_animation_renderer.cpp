@@ -1,4 +1,5 @@
 #include "modules/colors/renderers/corners_animation_renderer.hpp"
+#include "common/util/debug_log.hpp"
 #include "modules/colors/colors_configuration.hpp"
 
 #include <cmath>
@@ -62,9 +63,10 @@ long int Colors::CornersAnimationRenderer::render() {
   } else if (progress <
              (int)(getConfig()->duration + getConfig()->animationDuration) -
                  1) {
-    for (int iter{}; iter < (getConfig()->fading ? 5 : 1); iter++) {
-      float fade{1.0f - (0.2f * iter)}; // BUG: If we ever make `iter` this an
+    for (int iter{}; iter < (getConfig()->fading ? 10 : 1); iter++) {
+      float fade{1.0f - (0.1f * iter)}; // BUG: If we ever make `iter` this an
                                         // argument, edit 0.2f to 1/iter
+      dLog(fade);
       int delta{static_cast<int>(std::floor(
                     totalDiagonals * ((float)progress - getConfig()->duration) /
                     (getConfig()->animationDuration))) -
