@@ -50,8 +50,12 @@ long int Colors::CornersAnimationRenderer::render() {
       fadeData[i].fade -= 0.01f;
       // fadeData[i].x is where we stored delta, y is useless
       for (int x{}; x <= fadeData[i].x; x++) {
-        canvas->setPixel(x, fadeData[i].x - x - 1,
-                         currentColor * fadeData[i].fade);
+        if (fadeData[i].fade <= 0.12f) {
+          canvas->setPixel(x, fadeData[i].x - x - 1, Color::black);
+        } else {
+          canvas->setPixel(x, fadeData[i].x - x - 1,
+                           currentColor * fadeData[i].fade);
+        }
       }
     }
 
