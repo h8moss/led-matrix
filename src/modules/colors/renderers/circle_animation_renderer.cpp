@@ -41,18 +41,19 @@ long int Colors::CircleAnimationRenderer::render() {
     int nextRadius{(int)(radius * percent)};
     if (nextRadius != currentRadius) {
       currentRadius = nextRadius;
-      for (int x{}; x < canvas->getWidth(); x++) {
-        for (int y{}; y < canvas->getHeight(); y++) {
-          int xCentered{x - centerX};
-          int yCentered{y - centerY};
-          int distanceSquared{xCentered * xCentered + yCentered * yCentered};
-          int squaredRadius{currentRadius * currentRadius};
-          if ((distanceSquared > squaredRadius && this->shrink) ||
-              (distanceSquared < squaredRadius && !this->shrink)) {
-            canvas->setPixel(x, y, color);
-          }
-        }
-      }
+      canvas->drawCircle(centerX, centerY, currentRadius, color);
+      // for (int x{}; x < canvas->getWidth(); x++) {
+      //   for (int y{}; y < canvas->getHeight(); y++) {
+      //     int xCentered{x - centerX};
+      //     int yCentered{y - centerY};
+      //     int distanceSquared{xCentered * xCentered + yCentered * yCentered};
+      //     int squaredRadius{currentRadius * currentRadius};
+      //     if ((distanceSquared > squaredRadius && this->shrink) ||
+      //         (distanceSquared < squaredRadius && !this->shrink)) {
+      //       canvas->setPixel(x, y, color);
+      //     }
+      //   }
+      // }
     }
   }
   ++loopCount;
