@@ -1,7 +1,6 @@
 #include "modules/game-of-life/game_of_life_module.hpp"
 #include "common/models/fade_data.hpp"
 #include "common/util/better_canvas.hpp"
-#include "common/util/debug_log.hpp"
 #include "modules/game-of-life/game_of_life_board.hpp"
 #include "modules/game-of-life/game_of_life_configuration.hpp"
 
@@ -46,13 +45,17 @@ void GameOfLife::GOLModule::setup() {
 
 long int GameOfLife::GOLModule::render() {
 
-  if (getConfig()->restartOnStagnation) {
+  if (getConfig()->onStagnation != StagnationBehaviour::ignore) {
     std::string hash{board.getHash()};
 
     if (stateHashes.count(hash) > 0) {
-      teardown();
-      setup();
-      return getConfig()->duration * 1000;
+      if (getConfig()->onStagnation == StagnationBehaviour::reset) {
+        teardown();
+        setup();
+        return getConfig()->duration * 1000;
+      } else if (getConfig()->onStagnation == StagnationBehaviour::quit) {
+        return -1;
+      }
     }
     stateHashes.insert(hash);
   }
