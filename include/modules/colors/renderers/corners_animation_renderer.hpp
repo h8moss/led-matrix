@@ -18,5 +18,7 @@ private:
   Color currentColor;
   int totalDiagonals;
   int loopCount;
+
+  float fullDuration;
 };
 } // namespace Colors

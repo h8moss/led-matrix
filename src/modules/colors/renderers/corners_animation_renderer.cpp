@@ -5,13 +5,15 @@
 #include <cmath>
 
 Colors::CornersAnimationRenderer::CornersAnimationRenderer(BetterCanvas *canvas)
-    : Renderer(canvas), currentColor{}, totalDiagonals{}, loopCount{} {}
+    : Renderer(canvas), currentColor{}, totalDiagonals{}, loopCount{},
+      fullDuration{} {}
 
 void Colors::CornersAnimationRenderer::setup() {
   canvas->clear();
   currentColor = getConfig()->getColor();
   totalDiagonals = canvas->getWidth() + canvas->getHeight() - 1;
   loopCount = 0;
+  fullDuration = getConfig()->duration + getConfig()->animationDuration;
 }
 
 long int Colors::CornersAnimationRenderer::render() {
@@ -51,33 +53,29 @@ long int Colors::CornersAnimationRenderer::render() {
   // duration and animation duration. Duration is state 0, animation duration is
   // state 1 is animadtionDur and state 2 last 0 secs
 
-  int progress{loopCount %
-               (int)(getConfig()->duration + getConfig()->animationDuration)};
+  int progress{loopCount % (int)(fullDuration)};
 
   if (progress == 0) {
     canvas->fill(getConfig()->fading ? Color::black : currentColor);
     currentColor = getConfig()->getColor();
-  } else if (progress < getConfig()->duration) {
-    // state 0
+  } else if (progress < getConfig()->animationDuration) {
 
-  } else if (progress <
-             (int)(getConfig()->duration + getConfig()->animationDuration) -
-                 1) {
     for (int iter{}; iter < (getConfig()->fading ? 11 : 1); iter++) {
       float fade{1.0f - (0.1f * iter)}; // BUG: If we ever make `iter` this an
-                                        // argument, edit 0.2f to 1/iter
+                                        // argument, edit 0.1f to 1/iter
       int delta{static_cast<int>(std::floor(
-                    totalDiagonals * ((float)progress - getConfig()->duration) /
-                    (getConfig()->animationDuration))) -
+                    (totalDiagonals + getConfig()->fading ? 10 : 0) *
+                    (float)progress / getConfig()->animationDuration)) -
                 iter};
 
       for (int x{}; x <= delta; x++) {
         canvas->setPixel(x, delta - x - 1, currentColor * fade);
       }
     }
+  } else if (progress < (int)(fullDuration)) {
+
     // state 1
   } else {
-    // State 2
   }
 
   ++loopCount;
