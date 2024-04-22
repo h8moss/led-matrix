@@ -64,7 +64,7 @@ long int Colors::CornersAnimationRenderer::render() {
       float fade{1.0f - (0.1f * iter)}; // BUG: If we ever make `iter` this an
                                         // argument, edit 0.1f to 1/iter
       int delta{static_cast<int>(std::floor(
-                    (totalDiagonals + getConfig()->fading ? 10 : 0) *
+                    (totalDiagonals + (getConfig()->fading ? 10 : 0)) *
                     (float)progress / getConfig()->animationDuration)) -
                 iter};
 
