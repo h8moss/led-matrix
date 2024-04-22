@@ -11,7 +11,10 @@ Colors::CornersAnimationRenderer::CornersAnimationRenderer(BetterCanvas *canvas)
 void Colors::CornersAnimationRenderer::setup() {
   canvas->clear();
   currentColor = getConfig()->getColor();
-  totalDiagonals = canvas->getWidth() + canvas->getHeight() - 1;
+  // diagonls = x * y, we add 10 more if we are doing fading to give time for
+  // the fading to actually happen
+  totalDiagonals =
+      canvas->getWidth() + canvas->getHeight() + (getConfig()->fading ? 10 : 0);
   loopCount = 0;
   fullDuration = getConfig()->duration + getConfig()->animationDuration;
 }
@@ -63,9 +66,8 @@ long int Colors::CornersAnimationRenderer::render() {
     for (int iter{}; iter < (getConfig()->fading ? 11 : 1); iter++) {
       float fade{1.0f - (0.1f * iter)}; // BUG: If we ever make `iter` this an
                                         // argument, edit 0.1f to 1/iter
-      int delta{static_cast<int>(std::floor(
-                    (totalDiagonals + (getConfig()->fading ? 10 : 0)) *
-                    (float)progress / getConfig()->animationDuration)) -
+      int delta{static_cast<int>(std::floor(totalDiagonals * (float)progress /
+                                            getConfig()->animationDuration)) -
                 iter};
 
       for (int x{}; x <= delta; x++) {
