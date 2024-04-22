@@ -41,7 +41,7 @@ long int Colors::CircleAnimationRenderer::render() {
     int nextRadius{(int)(radius * percent)};
     if (nextRadius != currentRadius) {
       currentRadius = nextRadius;
-      canvas->drawCircle(centerX, centerY, currentRadius, color);
+      canvas->drawCircle(centerX, centerY, currentRadius, color, true);
       // for (int x{}; x < canvas->getWidth(); x++) {
       //   for (int y{}; y < canvas->getHeight(); y++) {
       //     int xCentered{x - centerX};
