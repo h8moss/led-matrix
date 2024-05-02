@@ -50,6 +50,10 @@ void TimeDate::Configuration::parseData(std::string data) {
       dLog("Warning: Argument mismatch for " + arg[0]);
       continue;
     }
+
+    if (arg[0] == "font" || arg[0] == "f") {
+      this->font = arg[1];
+    }
   }
 }
 
