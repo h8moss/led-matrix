@@ -10,7 +10,7 @@ public:
       : configuration{config}, canvas{_canvas} {}
 
   std::string name;
-  std::string description;
+  std::string description; // TODO: What is this even for??? REMOVE IT
 
   virtual void setup() = 0;
   virtual long int render() = 0;

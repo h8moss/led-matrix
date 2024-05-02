@@ -26,35 +26,35 @@ void Colors::CircleAnimationRenderer::setup() {
 }
 
 long int Colors::CircleAnimationRenderer::render() {
-  int animationProgress{loopCount % (int)(getConfig()->animationDuration +
-                                          getConfig()->duration)};
-  if (animationProgress == 0) {
+  int progress{loopCount %
+               (int)(getConfig()->animationDuration + getConfig()->duration)};
+  if (progress == 0) {
     canvas->fill(color);
     color = getConfig()->getColor();
   }
 
-  if ((float)animationProgress >= getConfig()->duration) {
-    float percent{(((float)animationProgress - getConfig()->duration) /
-                   getConfig()->animationDuration)};
-    if (this->shrink)
+  if (getConfig()->runOnce &&
+      progress ==
+          (int)(getConfig()->animationDuration + getConfig()->duration) - 1) {
+    return -1;
+  }
+
+  if ((float)progress <= getConfig()->animationDuration) {
+    float percent{(float)progress / getConfig()->animationDuration};
+    if (shrink)
       percent = 1.0f - percent;
     int nextRadius{(int)(radius * percent)};
     if (nextRadius != currentRadius) {
       currentRadius = nextRadius;
-      for (int x{}; x < canvas->getWidth(); x++) {
-        for (int y{}; y < canvas->getHeight(); y++) {
-          int xCentered{x - centerX};
-          int yCentered{y - centerY};
-          int distanceSquared{xCentered * xCentered + yCentered * yCentered};
-          int squaredRadius{currentRadius * currentRadius};
-          if ((distanceSquared > squaredRadius && this->shrink) ||
-              (distanceSquared < squaredRadius && !this->shrink)) {
-            canvas->setPixel(x, y, color);
-          }
-        }
+      for (int i{}; i < (getConfig()->fading ? 11 : 1); i++) {
+        // TODO: Test this works
+        float fade{1.0f - (0.1f * i)};
+        canvas->drawCircle(centerX, centerY, currentRadius - i * shrink,
+                           color * fade, true);
       }
     }
   }
+
   ++loopCount;
   return 1000;
 }
