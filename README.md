@@ -18,7 +18,7 @@ A simple C++ script that allows you to control a led matrix with a bunch of diff
 - [ ] Arbitrary images
 - [ ] Arbitrary videos
 - [ ] Arbitrary text
-
+- [ ] Arbitrary drawings
 
 
 # Usage
@@ -47,7 +47,7 @@ must be run with `sudo`
 `led-matrix` runs using flags and the command line, it should hopefully give you a self explanatory "usage" message if 
 you just run `sudo led-matrix`
 
-`led-matrix-manager` can be controlled through a linux FIFO, for IPC
+`led-matrix-manager` works similarly, but receives the command line arguments from a fifo, allowing it to be controlled through IPC
 
 # Fonts
 

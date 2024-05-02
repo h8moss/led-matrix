@@ -1,5 +1,7 @@
 #include "modules/time-date/time_date_configuration.hpp"
 #include "common/util/array_to_vector.hpp"
+#include "common/util/debug_log.hpp"
+#include "common/util/split_string.hpp"
 #include "modules/module_configuration.hpp"
 
 #include <string>
@@ -33,6 +35,20 @@ void TimeDate::Configuration::parseArguments(char **argv, int argc) {
     } else if (arg == "--help") {
       showHelp = true;
       return;
+    }
+  }
+}
+
+void TimeDate::Configuration::parseData(std::string data) {
+  std::vector<std::string> arguments{split(data, " ")};
+
+  while (arguments.size() > 0) {
+    std::vector<std::string> arg{split(arguments[0], ":")};
+    arguments.erase(arguments.begin());
+
+    if (arg.size() < 2) {
+      dLog("Warning: Argument mismatch for " + arg[0]);
+      continue;
     }
   }
 }

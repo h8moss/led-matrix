@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 class ModuleConfiguration {
 public:
@@ -8,6 +9,8 @@ public:
 
   virtual const char *getHelp() const = 0;
   virtual void parseArguments(char **argv, int argc) = 0;
+
+  virtual void parseData(std::string data) = 0;
 
   virtual ~ModuleConfiguration();
 };

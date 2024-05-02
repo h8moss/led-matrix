@@ -39,3 +39,11 @@ Colors::ColorsModule::~ColorsModule() { delete renderer; }
 Colors::ConfigurationWithAnimation *Colors::ColorsModule::getConfig() const {
   return static_cast<Colors::ConfigurationWithAnimation *>(configuration);
 }
+
+void Colors::ColorsModule::createConfiguration() {
+  if (configuration != nullptr) {
+    delete configuration;
+  }
+
+  configuration = new Colors::ConfigurationWithAnimation();
+}

@@ -19,6 +19,8 @@ public:
 
   GameOfLife::Configuration *getConfig() const;
 
+  virtual void createConfiguration() override;
+
   ~GOLModule();
 
 private:

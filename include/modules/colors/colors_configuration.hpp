@@ -16,6 +16,7 @@ public:
 
   virtual const char *getHelp() const override;
   virtual void parseArguments(char **argv, int argc) override;
+  virtual void parseData(std::string data) override;
 
   ColorGenerationStrategy colorGenerationStrategy;
   std::vector<Color> colors;
@@ -32,6 +33,7 @@ public:
   ConfigurationWithAnimation();
 
   virtual void parseArguments(char **argv, int argc) override;
+  virtual void parseData(std::string data) override;
 
   Animation animation;
 

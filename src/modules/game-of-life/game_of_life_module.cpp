@@ -109,10 +109,18 @@ long int GameOfLife::GOLModule::render() {
   return getConfig()->duration * 1000;
 }
 
-void GameOfLife::GOLModule::teardown() {}
+void GameOfLife::GOLModule::teardown() { canvas->clear(); }
 
 GameOfLife::GOLModule::~GOLModule() { teardown(); }
 
 GameOfLife::Configuration *GameOfLife::GOLModule::getConfig() const {
   return static_cast<GameOfLife::Configuration *>(configuration);
+}
+
+void GameOfLife::GOLModule::createConfiguration() {
+  if (configuration != nullptr) {
+    delete configuration;
+  }
+
+  configuration = new GameOfLife::Configuration();
 }

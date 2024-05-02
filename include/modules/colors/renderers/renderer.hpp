@@ -10,6 +10,8 @@ public:
   Renderer(BetterCanvas *canvas);
 
   Colors::Configuration *getConfig() const;
+
+  virtual void createConfiguration() override;
 };
 
 } // namespace Colors
