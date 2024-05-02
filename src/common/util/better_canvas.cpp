@@ -1,4 +1,7 @@
 #include "common/util/better_canvas.hpp"
+#include "common/models/colored_text.hpp"
+
+#include "graphics.h"
 #include "led-matrix.h"
 
 BetterCanvas::BetterCanvas(int argc, char **argv,
@@ -99,4 +102,25 @@ rgb_matrix::Font *BetterCanvas::getFont() {
   }
 
   return font;
+}
+
+void BetterCanvas::drawText(std::vector<ColoredText> text, int initialX) {
+  rgb_matrix::Font *font{getFont()};
+  Color c{};
+  int x{initialX};
+  int y{2 + font->height()};
+  for (ColoredText t : text) {
+    c = t.color;
+    int len{x};
+    for (char c : t.text) {
+      len += font->CharacterWidth((unsigned int)c);
+    }
+    if (len > getWidth()) {
+      y += 2 + font->height();
+      x = initialX;
+    }
+
+    x += rgb_matrix::DrawText(canvas, *font, x, y, c.toRGBMatrixColor(),
+                              nullptr, t.text.c_str());
+  }
 }
