@@ -4,6 +4,9 @@
 #include "modules/module_configuration.hpp"
 
 namespace GameOfLife {
+
+enum StagnationBehaviour { reset, ignore, quit };
+
 class Configuration : public ModuleConfiguration {
 public:
   Configuration();
@@ -17,6 +20,6 @@ public:
   bool generateColor;
   bool fade;
   float fadeSpeed;
-  bool restartOnStagnation;
+  StagnationBehaviour onStagnation;
 };
 } // namespace GameOfLife

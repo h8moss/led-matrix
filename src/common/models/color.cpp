@@ -44,6 +44,7 @@ std::map<char, int> hexValues{
 };
 
 Color Color::fromHex(std::string hex) {
+  // Get rid of #
   if (hex[0] == '#') {
     hex = hex.substr(1);
   }
