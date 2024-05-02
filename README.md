@@ -49,3 +49,8 @@ you just run `sudo led-matrix`
 
 `led-matrix-manager` works similarly, but receives the command line arguments from a fifo, allowing it to be controlled through IPC
 
+# Fonts
+
+The time-date module (and one day, the text module) displays text and thus, needs a font, rpi-rgb-led-matrix comes with a bunch of default fonts for simple usage, once the project has been built, the list of fonts can be found on:
+`led-matrix/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/fonts`
+Here, you may add your own font files, as long as they are in .bdf format, it is not hard to find online converters from other formats into this one

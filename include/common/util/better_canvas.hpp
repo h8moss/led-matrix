@@ -8,7 +8,8 @@
 
 class BetterCanvas {
 public:
-  BetterCanvas(int argc, char **argv, rgb_matrix::RGBMatrix::Options options);
+  BetterCanvas(int argc, char **argv, rgb_matrix::RGBMatrix::Options options,
+               std::string fontName = "");
   BetterCanvas(const BetterCanvas &canvas);
 
   BetterCanvas operator=(const BetterCanvas &canvas);
@@ -25,12 +26,13 @@ public:
   int getWidth() const;
   int getHeight() const;
 
+  std::string fontName;
+
   ~BetterCanvas();
 
 private:
   rgb_matrix::Canvas *canvas;
 
   rgb_matrix::Font *font;
-
   rgb_matrix::Font *getFont();
 };
