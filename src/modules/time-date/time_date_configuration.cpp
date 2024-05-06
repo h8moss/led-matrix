@@ -28,6 +28,7 @@ void TimeDate::Configuration::parseArguments(char **argv, int argc) {
     if (arg == "--font" || arg == "-f") {
       if (arguments.size() > 0) {
         std::string value{arguments[0]};
+        arguments.erase(arguments.begin());
         this->font = value;
       } else {
         throw "Missing value for --font flag";
