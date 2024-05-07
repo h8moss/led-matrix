@@ -34,6 +34,9 @@ include_directories(
 # Add link for rpi-rgb-led-matrix
 link_directories(${CMAKE_BINARY_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/lib)
 
+# Add CLI11
+add_subdirectory(CLI11)
+
 # Font directory
 set(FONT_DIR "\\\"${CMAKE_SOURCE_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/fonts/\\\"")
 
@@ -76,5 +79,5 @@ add_dependencies(led-matrix rpi-rgb-led-matrix)
 add_dependencies(led-matrix-manager rpi-rgb-led-matrix)
 
 # Link the executables
-target_link_libraries(led-matrix PRIVATE  rt m pthread led-matrix-lib)
-target_link_libraries(led-matrix-manager PRIVATE  rt m pthread led-matrix-lib)
+target_link_libraries(led-matrix PRIVATE  rt m pthread led-matrix-lib CLI11::CLI11)
+target_link_libraries(led-matrix-manager PRIVATE  rt m pthread led-matrix-lib CLI11::CLI11)
