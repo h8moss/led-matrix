@@ -10,19 +10,19 @@ class TimeDateModule : public Module {
 public:
   TimeDateModule(BetterCanvas *_canvas);
 
-  virtual void setup() override;
-  virtual long int render() override;
-  virtual void teardown() override;
+  void setup() override;
+  long int render() override;
+  void teardown() override;
 
-  TimeDate::Configuration *getConfig() const;
+  void addFlags(CLI::App *app) override;
 
-  virtual void createConfiguration() override;
-
-  virtual ~TimeDateModule();
+  ~TimeDateModule();
 
 protected:
   std::string hours;
   std::string minutes;
   std::string seconds;
+
+  TimeDate::Configuration config;
 };
 } // namespace TimeDate
