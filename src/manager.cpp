@@ -79,8 +79,9 @@ int main(int argc, char **argv) {
               module->teardown();
             }
             module = mod;
-            module->createConfiguration();
-            module->configuration->parseData(instruction);
+            // TODO: Parse configuration
+            // module->createConfiguration();
+            // module->configuration->parseData(instruction);
             module->setup();
           }
         }
