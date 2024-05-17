@@ -63,7 +63,6 @@ set(SHARED_SOURCES
 	${CMAKE_SOURCE_DIR}/src/modules/game-of-life/game_of_life_module.cpp
 	${CMAKE_SOURCE_DIR}/src/modules/time-date/time_date_configuration.cpp
 	${CMAKE_SOURCE_DIR}/src/modules/time-date/time_date_module.cpp
-	${CMAKE_SOURCE_DIR}/src/modules/module_configuration.cpp
 )
 
 # Sources for the two different executables
