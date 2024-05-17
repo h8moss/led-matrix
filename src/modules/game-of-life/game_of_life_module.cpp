@@ -1,4 +1,5 @@
 #include "modules/game-of-life/game_of_life_module.hpp"
+#include "CLI/CLI.hpp"
 #include "common/models/fade_data.hpp"
 #include "common/util/better_canvas.hpp"
 #include "modules/game-of-life/game_of_life_board.hpp"
@@ -8,8 +9,8 @@
 #include <ctime>
 
 GameOfLife::GOLModule::GOLModule(BetterCanvas *canvas)
-    : Module(canvas, new GameOfLife::Configuration()), w{}, h{}, board{0, 0},
-      changes{0, 0}, fadeData{}, stateHashes{} {
+    : Module(canvas), config{GameOfLife::Configuration::defaults}, w{}, h{},
+      board{0, 0}, changes{0, 0}, fadeData{}, stateHashes{} {
   this->name = "game-of-life";
   this->description = "Plays Connway's game of life on the screen";
 }
@@ -25,11 +26,11 @@ void GameOfLife::GOLModule::setup() {
   fadeData = std::vector<FadeData>(w * h);
   stateHashes = std::unordered_set<std::string>();
 
-  if (getConfig()->generateColor) {
+  if (config.generateColor) {
     srand(time(nullptr));
     int h{rand() % 360};
     Color c{Color::fromHSL(h, 1.0f, 0.5f)};
-    getConfig()->color = c;
+    config.color = c;
   }
 
   for (int x{}; x < w; x++) {
@@ -38,22 +39,22 @@ void GameOfLife::GOLModule::setup() {
       board.set(x, y, value);
 
       if (value)
-        canvas->setPixel(x, y, getConfig()->color);
+        canvas->setPixel(x, y, config.color);
     }
   }
 }
 
 long int GameOfLife::GOLModule::render() {
 
-  if (getConfig()->onStagnation != StagnationBehaviour::ignore) {
+  if (config.onStagnation != StagnationBehaviour::ignore) {
     std::string hash{board.getHash()};
 
     if (stateHashes.count(hash) > 0) {
-      if (getConfig()->onStagnation == StagnationBehaviour::reset) {
+      if (config.onStagnation == StagnationBehaviour::reset) {
         teardown();
         setup();
-        return getConfig()->duration * 1000;
-      } else if (getConfig()->onStagnation == StagnationBehaviour::quit) {
+        return config.duration * 1000;
+      } else if (config.onStagnation == StagnationBehaviour::quit) {
         return -1;
       }
     }
@@ -81,9 +82,9 @@ long int GameOfLife::GOLModule::render() {
         if (!board.get(x, y)) {
           fadeData.push_back({.x{x}, .y{y}, .fade{1.0f}});
         } else {
-          canvas->setPixel(x, y, getConfig()->color);
+          canvas->setPixel(x, y, config.color);
         }
-        Color c{board.get(x, y) ? getConfig()->color : Color::black};
+        Color c{board.get(x, y) ? config.color : Color::black};
         canvas->setPixel(x, y, c);
         changes.set(x, y, false);
       }
@@ -91,8 +92,8 @@ long int GameOfLife::GOLModule::render() {
   }
 
   for (size_t i{}; i < fadeData.size(); i++) {
-    if (getConfig()->fade) {
-      fadeData[i].fade -= getConfig()->fadeSpeed;
+    if (config.fade) {
+      fadeData[i].fade -= config.fadeSpeed;
     } else {
       fadeData[i].fade = 0.0f;
     }
@@ -100,7 +101,7 @@ long int GameOfLife::GOLModule::render() {
     canvas->setPixel(fadeData[i].x, fadeData[i].y,
                      fadeData[i].fade < 0.05f
                          ? Color::black
-                         : getConfig()->color * fadeData[i].fade);
+                         : config.color * fadeData[i].fade);
   }
 
   // Remove fadeData
@@ -109,21 +110,29 @@ long int GameOfLife::GOLModule::render() {
                      [](const FadeData &d) { return d.fade < 0.12f; }),
       fadeData.end());
 
-  return getConfig()->duration * 1000;
+  return config.duration * 1000;
 }
 
 void GameOfLife::GOLModule::teardown() { canvas->clear(); }
 
+void GameOfLife::GOLModule::addFlags(CLI::App *app) {
+  CLI::App *cmd = app->add_subcommand(this->name, this->description);
+
+  cmd->add_option(
+      "--duration,-d", config.duration,
+      "The amount of time, in miliseconds, that a round should last");
+  auto fadeOpt = cmd->add_flag("--fade,-f", config.fade,
+                               "Pass it to add a fading effect to dying cells");
+  cmd->add_option("--color,-c", config.color,
+                  "The color you want the game to be, in HEX");
+  cmd->add_option("--fade-speed,-s", config.fade,
+                  "Speed at which the fading effect occurs, ignored if --fade "
+                  "is not passed")
+      ->needs(fadeOpt);
+  cmd->add_option("--stagnation", config.onStagnation,
+                  "What the game should do if it encounters stagnation")
+      ->transform(CLI::CheckedTransformer(
+          GameOfLife::Configuration::stagnationBehaviourMap, CLI::ignore_case));
+}
+
 GameOfLife::GOLModule::~GOLModule() { teardown(); }
-
-GameOfLife::Configuration *GameOfLife::GOLModule::getConfig() const {
-  return static_cast<GameOfLife::Configuration *>(configuration);
-}
-
-void GameOfLife::GOLModule::createConfiguration() {
-  if (configuration != nullptr) {
-    delete configuration;
-  }
-
-  configuration = new GameOfLife::Configuration();
-}

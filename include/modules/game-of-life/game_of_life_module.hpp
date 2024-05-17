@@ -1,10 +1,9 @@
 #pragma once
 
+#include "common/models/fade_data.hpp"
 #include "modules/game-of-life/game_of_life_board.hpp"
 #include "modules/game-of-life/game_of_life_configuration.hpp"
 #include "modules/module.hpp"
-
-#include "common/models/fade_data.hpp"
 
 #include <unordered_set>
 
@@ -17,9 +16,7 @@ public:
   long int render() override;
   void teardown() override;
 
-  GameOfLife::Configuration *getConfig() const;
-
-  virtual void createConfiguration() override;
+  void addFlags(CLI::App *app) override;
 
   ~GOLModule();
 
@@ -32,5 +29,7 @@ private:
   std::vector<FadeData> fadeData;
 
   std::unordered_set<std::string> stateHashes;
+
+  GameOfLife::Configuration config;
 };
 } // namespace GameOfLife
