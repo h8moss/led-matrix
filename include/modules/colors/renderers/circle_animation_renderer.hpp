@@ -2,18 +2,19 @@
 
 #include "common/models/color.hpp"
 #include "common/util/better_canvas.hpp"
+#include "modules/colors/colors_configuration.hpp"
 #include "modules/colors/renderers/renderer.hpp"
 
 namespace Colors {
 
 class CircleAnimationRenderer : public Renderer {
 public:
-  CircleAnimationRenderer(BetterCanvas *canvas, bool _shrink = false);
-  virtual ~CircleAnimationRenderer();
+  CircleAnimationRenderer(BetterCanvas *canvas, Colors::Configuration config,
+                          bool _shrink = false);
 
-  virtual long int render() override;
-  virtual void setup() override;
-  virtual void teardown() override;
+  long int render() override;
+  void setup() override;
+  void teardown() override;
 
 private:
   int radius;

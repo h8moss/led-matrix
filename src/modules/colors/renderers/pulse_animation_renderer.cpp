@@ -1,21 +1,20 @@
 #include "modules/colors/renderers/pulse_animation_renderer.hpp"
 #include "modules/colors/colors_configuration.hpp"
-#include "modules/colors/renderers/circle_animation_renderer.hpp"
 
-Colors::PulseAnimationRenderer::PulseAnimationRenderer(BetterCanvas *canvas)
-    : Renderer(canvas), currentColor{}, animationSplits{}, loopCount{} {}
+Colors::PulseAnimationRenderer::PulseAnimationRenderer(
+    BetterCanvas *canvas, Colors::Configuration config)
+    : Renderer(canvas, config), currentColor{}, animationSplits{}, loopCount{} {
+}
 
 void Colors::PulseAnimationRenderer::setup() {
   canvas->clear();
-  currentColor = getConfig()->getColor();
+  currentColor = config.getColor();
 
-  animationSplits[0] = (int)(getConfig()->animationDuration / 2.0f);
+  animationSplits[0] = (int)(config.animationDuration / 2.0f);
   animationSplits[1] =
-      (int)((getConfig()->animationDuration + getConfig()->duration) / 2.0f);
-  animationSplits[2] =
-      (int)(getConfig()->animationDuration / 2.0f + getConfig()->duration);
-  animationSplits[3] =
-      (int)(getConfig()->animationDuration + getConfig()->duration);
+      (int)((config.animationDuration + config.duration) / 2.0f);
+  animationSplits[2] = (int)(config.animationDuration / 2.0f + config.duration);
+  animationSplits[3] = (int)(config.animationDuration + config.duration);
 
   loopCount = 0;
 }
@@ -32,13 +31,12 @@ long int Colors::PulseAnimationRenderer::render() {
                    (float)(animationSplits[2] - animationSplits[1])};
     canvas->fill(currentColor * progress);
   } else if (animationProgress < animationSplits[3]) {
-    // TODO: Check this works!
-    if (getConfig()->runOnce)
+    if (config.runOnce)
       return -1;
 
     // stay black
     if (animationProgress - animationSplits[3] - 1 < 1) {
-      currentColor = getConfig()->getColor(currentColor);
+      currentColor = config.getColor(currentColor);
     }
   }
 

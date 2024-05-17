@@ -8,17 +8,17 @@ namespace Colors {
 class ColorsModule : public Module {
 public:
   ColorsModule(BetterCanvas *canvas);
-  virtual ~ColorsModule();
+  ~ColorsModule();
 
-  virtual void setup() override;
-  virtual long int render() override;
-  virtual void teardown() override;
+  void setup() override;
+  long int render() override;
+  void teardown() override;
 
-  Colors::ConfigurationWithAnimation *getConfig() const;
-
-  virtual void createConfiguration() override;
+  void addFlags(CLI::App *app) override;
 
 private:
   Module *renderer;
+
+  Colors::ConfigurationWithAnimation config;
 };
 } // namespace Colors

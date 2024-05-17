@@ -2,17 +2,9 @@
 #include "common/util/better_canvas.hpp"
 #include "modules/colors/colors_configuration.hpp"
 
-Colors::Renderer::Renderer(BetterCanvas *canvas)
-    : Module(canvas, new Colors::Configuration()) {}
+#include "CLI/CLI.hpp"
 
-Colors::Configuration *Colors::Renderer::getConfig() const {
-  return static_cast<Colors::Configuration *>(configuration);
-}
+Colors::Renderer::Renderer(BetterCanvas *canvas, Colors::Configuration _config)
+    : Module(canvas), config{_config} {}
 
-void Colors::Renderer::createConfiguration() {
-  if (configuration != nullptr) {
-    delete configuration;
-  }
-
-  configuration = new Colors::Configuration();
-}
+void Colors::Renderer::addFlags(CLI::App *app) {}

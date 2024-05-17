@@ -1,4 +1,5 @@
 #include "modules/colors/colors_module.hpp"
+#include "CLI/CLI.hpp"
 #include "common/util/better_canvas.hpp"
 #include "modules/colors/colors_configuration.hpp"
 #include "modules/module.hpp"
@@ -8,25 +9,23 @@
 #include "modules/colors/renderers/pulse_animation_renderer.hpp"
 
 Colors::ColorsModule::ColorsModule(BetterCanvas *canvas)
-    : Module(canvas, new ConfigurationWithAnimation()) {
+    : Module(canvas), config{Colors::ConfigurationWithAnimation::defaults} {
   this->name = "colors";
   this->description = "Shows simple color animations";
 }
 
 void Colors::ColorsModule::setup() {
-  auto conf{getConfig()};
-  if (conf->animation == Animation::corners)
-    renderer = new CornersAnimationRenderer(canvas);
-  else if (conf->animation == Animation::grow)
-    renderer = new CircleAnimationRenderer(canvas);
-  else if (conf->animation == Animation::shrink)
-    renderer = new CircleAnimationRenderer(canvas, true);
-  else if (conf->animation == Animation::pulse)
-    renderer = new PulseAnimationRenderer(canvas);
+  if (config.animation == Animation::corners)
+    renderer = new CornersAnimationRenderer(canvas, config);
+  else if (config.animation == Animation::grow)
+    renderer = new CircleAnimationRenderer(canvas, config);
+  else if (config.animation == Animation::shrink)
+    renderer = new CircleAnimationRenderer(canvas, config, true);
+  else if (config.animation == Animation::pulse)
+    renderer = new PulseAnimationRenderer(canvas, config);
   else
     throw "Unknown Animation";
 
-  renderer->configuration = this->configuration;
   renderer->setup();
 }
 
@@ -36,14 +35,32 @@ void Colors::ColorsModule::teardown() { renderer->teardown(); }
 
 Colors::ColorsModule::~ColorsModule() { delete renderer; }
 
-Colors::ConfigurationWithAnimation *Colors::ColorsModule::getConfig() const {
-  return static_cast<Colors::ConfigurationWithAnimation *>(configuration);
-}
+void Colors::ColorsModule::addFlags(CLI::App *app) {
+  auto module = app->add_subcommand(this->name, this->description);
 
-void Colors::ColorsModule::createConfiguration() {
-  if (configuration != nullptr) {
-    delete configuration;
-  }
+  auto colorOpt = module->add_option(
+      "--color,-c", config.colors, "A color you want the animation to contain");
+  module->add_option(
+      "--duration,-d", config.duration,
+      "The amount of time, in miliseconds, a color should remain on screen");
 
-  configuration = new Colors::ConfigurationWithAnimation();
+  module
+      ->add_option("--animation, -a", config.animation, "The animation to show")
+      ->transform(CLI::CheckedTransformer(
+          Colors::ConfigurationWithAnimation::animationMap, CLI::ignore_case));
+
+  module->add_option("--animation-duration,--ad", config.animationDuration,
+                     "The amount of time, in miliseconds, tha transition "
+                     "between colors lasts");
+  module
+      ->add_flag("--true-random-colors", config.useTrueRandomColors,
+                 "Pass this flag if you want the colors to be fully random, "
+                 "even when the colors may be ugly")
+      ->excludes(colorOpt);
+
+  module->add_flag("--fade,-f", config.fading,
+                   "Make the colors fade to black as they're drawn (does "
+                   "nothing for pulse animation)");
+  module->add_flag("--once", config.runOnce,
+                   "The animation runs once and then it exits");
 }

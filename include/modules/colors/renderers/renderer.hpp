@@ -7,11 +7,12 @@
 namespace Colors {
 class Renderer : public Module {
 public:
-  Renderer(BetterCanvas *canvas);
+  Renderer(BetterCanvas *canvas, Colors::Configuration config);
 
-  Colors::Configuration *getConfig() const;
+  void addFlags(CLI::App *app) override;
 
-  virtual void createConfiguration() override;
+protected:
+  Colors::Configuration config;
 };
 
 } // namespace Colors

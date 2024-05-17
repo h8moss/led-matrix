@@ -1,17 +1,18 @@
 #pragma once
 #include <array>
 
+#include "modules/colors/colors_configuration.hpp"
 #include "modules/colors/renderers/renderer.hpp"
 
 namespace Colors {
 
 class PulseAnimationRenderer : public Renderer {
 public:
-  PulseAnimationRenderer(BetterCanvas *canvas);
+  PulseAnimationRenderer(BetterCanvas *canvas, Colors::Configuration config);
 
-  virtual long int render() override;
-  virtual void setup() override;
-  virtual void teardown() override;
+  long int render() override;
+  void setup() override;
+  void teardown() override;
 
 private:
   Color currentColor;

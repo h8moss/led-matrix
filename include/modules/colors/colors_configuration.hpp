@@ -1,44 +1,30 @@
 #pragma once
 #include "common/models/color.hpp"
-#include "modules/module_configuration.hpp"
 
 #include <vector>
 
 namespace Colors {
 
-enum ColorGenerationStrategy { random, trueRandom, specific };
-
 enum Animation { pulse, corners, shrink, grow };
 
-class Configuration : public ModuleConfiguration {
-public:
-  Configuration();
-
-  virtual const char *getHelp() const override;
-  virtual void parseArguments(char **argv, int argc) override;
-  virtual void parseData(std::string data) override;
-
-  ColorGenerationStrategy colorGenerationStrategy;
+struct Configuration {
+  bool useTrueRandomColors;
   std::vector<Color> colors;
   float duration;
   float animationDuration;
   bool fading;
   bool runOnce;
 
-  Color getColor(Color lastColor = Color::black) const;
+  static Configuration defaults;
 
-  ~Configuration();
+  Color getColor(Color lastColor = Color::black) const;
 };
 
-class ConfigurationWithAnimation : public Configuration {
-public:
-  ConfigurationWithAnimation();
-
-  virtual void parseArguments(char **argv, int argc) override;
-  virtual void parseData(std::string data) override;
-
+struct ConfigurationWithAnimation : public Configuration {
   Animation animation;
 
-  ~ConfigurationWithAnimation();
+  static ConfigurationWithAnimation defaults;
+
+  static std::map<std::string, Animation> animationMap;
 };
 } // namespace Colors
