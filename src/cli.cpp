@@ -1,9 +1,12 @@
-#include "common/util/better_canvas.hpp"
-#include "led-matrix.h"
 #include "modules/colors/colors_module.hpp"
 #include "modules/game-of-life/game_of_life_module.hpp"
 #include "modules/module.hpp"
 #include "modules/time-date/time_date_module.hpp"
+
+#include "CLI/CLI.hpp"
+
+#include "common/util/better_canvas.hpp"
+#include "led-matrix.h"
 
 #include <iostream>
 #include <signal.h>
@@ -11,20 +14,19 @@
 #include <unistd.h>
 #include <vector>
 
+#include "CLI/CLI.hpp"
+
 volatile bool interruptReceived = false;
+
 static void Interrupt(int signo) { interruptReceived = true; }
 
-static void printUsage(std::vector<Module *> modules) {
-  std::cout << "Usage:\n";
-  std::cout << "\tled-matrix <MODE> [Options]\n";
-  std::cout << "\tFunctions:\n";
-  for (auto mod : modules) {
-    std::cout << "\t\t" << mod->name << '\n';
-  }
-}
-
 int main(int argc, char **argv) {
+  CLI::App app{"Led matrix"};
+  argv = app.ensure_utf8(argv);
+  app.require_subcommand(1);
+
   try {
+
     rgb_matrix::RGBMatrix::Options defaults;
     defaults.hardware_mapping = "regular";
     defaults.rows = 64;
@@ -40,10 +42,11 @@ int main(int argc, char **argv) {
         new TimeDate::TimeDateModule(canvas),
     };
 
-    if (argc < 2) {
-      printUsage(modules);
-      return 1;
+    for (auto mod : modules) {
+      mod->addFlags(&app);
     }
+
+    app.parse(argc, argv);
 
     signal(SIGTERM, Interrupt);
     signal(SIGINT, Interrupt);
@@ -55,20 +58,14 @@ int main(int argc, char **argv) {
 
     Module *module{nullptr};
     for (auto mod : modules) {
-      if (mod->name == argv[1]) {
+      if (app.got_subcommand(mod->name)) {
         module = mod;
         break;
       }
     }
 
     if (module == nullptr) {
-      printUsage(modules);
-      return 1;
-    }
-
-    module->configuration->parseArguments(argv, argc);
-    if (module->configuration->showHelp) {
-      std::cout << module->configuration->getHelp();
+      std::cout << app.help() << std::endl;
       return 1;
     }
 
@@ -97,6 +94,9 @@ int main(int argc, char **argv) {
     for (auto mod : modules) {
       delete mod;
     }
+
+  } catch (const CLI::ParseError &err) {
+    return app.exit(err);
   } catch (const char *err) {
     std::cerr << err << std::endl;
     return 1;
@@ -107,4 +107,5 @@ int main(int argc, char **argv) {
     std::cerr << "Something went wrong!" << '\n';
     std::cerr << err.what() << std::endl;
   }
+  return 0;
 }
