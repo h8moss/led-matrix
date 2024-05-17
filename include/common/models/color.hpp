@@ -32,3 +32,5 @@ public:
   static const Color green;
   static const Color blue;
 };
+
+bool lexical_cast(const std::string &input, Color &v);
