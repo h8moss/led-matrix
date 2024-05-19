@@ -16,7 +16,6 @@ GameOfLife::GOLModule::GOLModule(BetterCanvas *canvas)
 }
 
 void GameOfLife::GOLModule::setup() {
-  srand((unsigned int)time(nullptr));
 
   canvas->clear();
   w = canvas->getWidth();
@@ -27,7 +26,6 @@ void GameOfLife::GOLModule::setup() {
   stateHashes = std::unordered_set<std::string>();
 
   if (config.generateColor) {
-    srand(time(nullptr));
     int h{rand() % 360};
     Color c{Color::fromHSL(h, 1.0f, 0.5f)};
     config.color = c;
