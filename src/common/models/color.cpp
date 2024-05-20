@@ -2,6 +2,7 @@
 #include "common/util/debug_log.hpp"
 
 #include <map>
+#include <sstream>
 
 float hueToRGB(float p, float q, float t) {
   if (t < 0)
@@ -19,6 +20,12 @@ float hueToRGB(float p, float q, float t) {
 
 Color::Color(int _r, int _g, int _b) : r{_r}, g{_g}, b{_b} {}
 Color::Color() : Color(0, 0, 0) {}
+
+const std::string Color::string() const {
+  std::stringstream ss;
+  ss << "(" << r << ", " << g << ", " << b << ")";
+  return ss.str();
+}
 
 Color Color::fromHSL(int h, float s, float l) {
   int r{}, g{}, b{};
