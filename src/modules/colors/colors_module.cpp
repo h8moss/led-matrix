@@ -18,7 +18,7 @@ Colors::ColorsModule::ColorsModule(BetterCanvas *canvas)
 void Colors::ColorsModule::setup() {
 
   dLog(config.animation);
-  dLog(config.colors);
+  dLog(config.colors.size());
   dLog(config.fading);
   dLog(config.runOnce);
   dLog(config.duration);
