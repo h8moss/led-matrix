@@ -26,8 +26,6 @@ std::map<std::string, Colors::Animation>
         {"corners", Colors::Animation::corners}};
 
 Color Colors::Configuration::getColor(Color lastColor) const {
-  dLog("checking rand");
-  dLog(rand());
   Color newColor{lastColor};
   while (newColor == lastColor) {
     if (!useTrueRandomColors && colors.size() == 0) {
