@@ -1,14 +1,13 @@
 #include "modules/game-of-life/game_of_life_module.hpp"
 #include "CLI/CLI.hpp"
 #include "common/models/fade_data.hpp"
-#include "common/util/better_canvas.hpp"
 #include "modules/game-of-life/game_of_life_board.hpp"
 #include "modules/game-of-life/game_of_life_configuration.hpp"
 
 #include <algorithm>
 #include <ctime>
 
-GameOfLife::GOLModule::GOLModule(BetterCanvas *canvas)
+GameOfLife::GOLModule::GOLModule(ICanvas *canvas)
     : Module(canvas, "game-of-life",
              "Plays Connway's game of life on the screen"),
       config{GameOfLife::Configuration::defaults}, w{}, h{}, board{0, 0},

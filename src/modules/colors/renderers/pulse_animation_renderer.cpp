@@ -1,9 +1,9 @@
 #include "modules/colors/renderers/pulse_animation_renderer.hpp"
-#include "common/util/debug_log.hpp"
+#include "common/canvas/icanvas.hpp"
 #include "modules/colors/colors_configuration.hpp"
 
 Colors::PulseAnimationRenderer::PulseAnimationRenderer(
-    BetterCanvas *canvas, Colors::Configuration config)
+    ICanvas *canvas, Colors::Configuration config)
     : Renderer(canvas, config), currentColor{}, animationSplits{}, loopCount{} {
 }
 

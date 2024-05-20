@@ -1,5 +1,5 @@
 #pragma once
-#include "common/util/better_canvas.hpp"
+#include "common/canvas/icanvas.hpp"
 
 #include "CLI/CLI.hpp"
 
@@ -7,7 +7,7 @@
 
 class Module {
 public:
-  Module(BetterCanvas *_canvas, std::string _name, std::string _description)
+  Module(ICanvas *_canvas, std::string _name, std::string _description)
       : canvas{_canvas}, name{_name}, description{_description} {}
 
   std::string name;
@@ -26,5 +26,5 @@ public:
   }
 
 protected:
-  BetterCanvas *canvas = nullptr;
+  ICanvas *canvas = nullptr;
 };
