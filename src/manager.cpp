@@ -2,7 +2,7 @@
 #include <iostream>
 #include <unistd.h>
 
-#include "common/util/better_canvas.hpp"
+#include "common/canvas/better_canvas.hpp"
 #include "common/util/debug_log.hpp"
 #include "common/util/starts_with.hpp"
 #include "modules/colors/colors_module.hpp"
