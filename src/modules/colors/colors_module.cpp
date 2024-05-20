@@ -17,15 +17,6 @@ Colors::ColorsModule::ColorsModule(BetterCanvas *canvas)
 }
 
 void Colors::ColorsModule::setup() {
-
-  dLog(config.animation);
-  dLog(config.colors.size());
-  dLog(config.fading);
-  dLog(config.runOnce);
-  dLog(config.duration);
-  dLog(config.animationDuration);
-  dLog(config.useTrueRandomColors);
-
   if (config.animation == Animation::corners)
     renderer = new CornersAnimationRenderer(canvas, config);
   else if (config.animation == Animation::grow)
