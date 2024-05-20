@@ -10,7 +10,8 @@
 #include "CLI/CLI.hpp"
 
 Colors::ColorsModule::ColorsModule(BetterCanvas *canvas)
-    : Module(canvas), config{Colors::ConfigurationWithAnimation::defaults} {
+    : Module(canvas), config{Colors::ConfigurationWithAnimation::defaults},
+      renderer{} {
   this->name = "colors";
   this->description = "Shows simple color animations";
 }
