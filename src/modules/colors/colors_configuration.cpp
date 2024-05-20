@@ -26,25 +26,25 @@ std::map<std::string, Colors::Animation>
         {"corners", Colors::Animation::corners}};
 
 Color Colors::Configuration::getColor(Color lastColor) const {
-  if (!useTrueRandomColors && colors.size() == 0) {
-    int hue{rand() % 360};
-    return Color::fromHSL(hue, 1.0f, 0.5f);
-  } else if (colors.size() != 0) {
-    int index{};
-    Color color{colors[index]};
-    while (colors.size() != 1 && color.r == lastColor.r &&
-           color.g == lastColor.g && color.b == lastColor.b) {
+  dLog("checking rand");
+  dLog(rand());
+  Color newColor{lastColor};
+  while (newColor == lastColor) {
+    if (!useTrueRandomColors && colors.size() == 0) {
+      int hue{rand() % 360};
+      newColor = Color::fromHSL(hue, 1.0f, 0.5f);
+    } else if (colors.size() != 0) {
+      int index{};
       index = rand() % colors.size();
-      color = colors[index];
-    }
-    return color;
-  } else if (useTrueRandomColors) {
-    int r{rand() % 255};
-    int g{rand() % 255};
-    int b{rand() % 255};
+      newColor = colors[index];
+    } else if (useTrueRandomColors) {
+      int r{rand() % 255};
+      int g{rand() % 255};
+      int b{rand() % 255};
 
-    return Color{r, g, b};
+      newColor = {r, g, b};
+    }
   }
 
-  return Color::white;
+  return newColor;
 }
