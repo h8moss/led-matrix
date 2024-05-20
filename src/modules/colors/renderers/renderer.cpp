@@ -5,6 +5,8 @@
 #include "CLI/CLI.hpp"
 
 Colors::Renderer::Renderer(BetterCanvas *canvas, Colors::Configuration _config)
-    : Module(canvas), config{_config} {}
+    : Module(canvas, "renderer",
+             "A renderer, this text is not meant to be seen"),
+      config{_config} {}
 
 void Colors::Renderer::addFlags(CLI::App *app) {}
