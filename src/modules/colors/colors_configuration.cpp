@@ -1,4 +1,5 @@
 #include "modules/colors/colors_configuration.hpp"
+#include "common/util/debug_log.hpp"
 
 Colors::Configuration Colors::Configuration::defaults = {
     .useTrueRandomColors = false,
@@ -13,6 +14,10 @@ static Colors::ConfigurationWithAnimation _createConfigurationWithAnimation() {
 
   static_cast<Colors::Configuration>(defaults) =
       Colors::Configuration::defaults;
+
+  dLog("Logging defaults");
+  dLog(defaults.duration);
+  dLog(Colors::Configuration::defaults.duration);
 
   defaults.animation = Colors::Animation::pulse;
 
