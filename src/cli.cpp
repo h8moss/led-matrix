@@ -92,10 +92,15 @@ int main(int argc, char **argv) {
 
     module->teardown();
     std::cout << "Ctrl-C received, Exiting" << std::endl;
+    module = nullptr;
 
-    for (auto mod : modules) {
-      delete mod;
+    for (int i{}; i < modules.size(); i++) {
+      delete modules[i];
+      modules[i] = nullptr;
     }
+
+    delete canvas;
+    canvas = nullptr;
 
   } catch (const CLI::ParseError &err) {
     return app.exit(err);
