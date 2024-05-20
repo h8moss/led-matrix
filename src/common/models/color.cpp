@@ -87,14 +87,16 @@ Color operator*(const Color &c1, float value) {
   );
 }
 
+bool Color::operator==(const Color &c) const {
+  return r == c.r && g == c.g && b == c.b;
+}
+
 rgb_matrix::Color Color::toRGBMatrixColor() {
   return rgb_matrix::Color((uint8_t)r, (uint8_t)g, (uint8_t)b);
 }
 
 // ----- CLI11 Lexical cast -----
 bool lexical_cast(const std::string &input, Color &v) {
-  dLog("USING LEXICAL CAST IN " + input);
-
   v = Color::fromHex(input);
 
   return true;

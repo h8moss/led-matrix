@@ -4,8 +4,7 @@
 
 #include "graphics.h"
 
-class Color {
-public:
+struct Color {
   int r;
   int g;
   int b;
@@ -23,6 +22,8 @@ public:
   static Color fromHex(std::string hex);
 
   friend Color operator*(const Color &c1, float value);
+
+  bool operator==(const Color &color) const;
 
   rgb_matrix::Color toRGBMatrixColor();
 
