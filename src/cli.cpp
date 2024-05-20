@@ -1,3 +1,4 @@
+#include "common/canvas/better_canvas.hpp"
 #include "modules/colors/colors_module.hpp"
 #include "modules/game-of-life/game_of_life_module.hpp"
 #include "modules/module.hpp"
@@ -5,7 +6,6 @@
 
 #include "CLI/CLI.hpp"
 
-#include "common/util/better_canvas.hpp"
 #include "led-matrix.h"
 
 #include <iostream>
@@ -94,9 +94,8 @@ int main(int argc, char **argv) {
     std::cout << "Ctrl-C received, Exiting" << std::endl;
     module = nullptr;
 
-    for (int i{}; i < modules.size(); i++) {
-      delete modules[i];
-      modules[i] = nullptr;
+    for (auto mod : modules) {
+      delete mod;
     }
 
     delete canvas;
