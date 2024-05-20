@@ -24,7 +24,7 @@ long int Colors::PulseAnimationRenderer::render() {
   int animationProgress = loopCount % animationSplits[3];
   if (animationProgress < animationSplits[0]) {
     // animate color in
-    float progress{(float)animationProgress / animationSplits[0]};
+    float progress{(float)animationProgress / (float)animationSplits[0]};
     canvas->fill(currentColor * progress);
   } else if (animationProgress < animationSplits[1]) {
   } else if (animationProgress < animationSplits[2]) {
