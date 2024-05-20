@@ -21,6 +21,8 @@ struct Configuration {
 };
 
 struct ConfigurationWithAnimation : public Configuration {
+  ConfigurationWithAnimation(Configuration config, Animation anim);
+
   Animation animation;
 
   static ConfigurationWithAnimation defaults;

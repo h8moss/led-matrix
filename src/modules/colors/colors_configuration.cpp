@@ -1,6 +1,10 @@
 #include "modules/colors/colors_configuration.hpp"
 #include "common/util/debug_log.hpp"
 
+Colors::ConfigurationWithAnimation::ConfigurationWithAnimation(
+    Configuration config, Animation anim)
+    : Configuration{config}, animation{anim} {}
+
 Colors::Configuration Colors::Configuration::defaults = {
     .useTrueRandomColors = false,
     .colors = {},
@@ -9,24 +13,10 @@ Colors::Configuration Colors::Configuration::defaults = {
     .fading = false,
     .runOnce = false};
 
-static Colors::ConfigurationWithAnimation _createConfigurationWithAnimation() {
-  Colors::ConfigurationWithAnimation defaults{};
-
-  static_cast<Colors::Configuration>(defaults) =
-      Colors::Configuration::defaults;
-
-  dLog("Logging defaults");
-  dLog(defaults.duration);
-  dLog(Colors::Configuration::defaults.duration);
-
-  defaults.animation = Colors::Animation::pulse;
-
-  return static_cast<Colors::ConfigurationWithAnimation>(defaults);
-}
-
 Colors::ConfigurationWithAnimation
     Colors::ConfigurationWithAnimation::defaults =
-        _createConfigurationWithAnimation();
+        Colors::ConfigurationWithAnimation(Colors::Configuration::defaults,
+                                           Colors::Animation::pulse);
 
 std::map<std::string, Colors::Animation>
     Colors::ConfigurationWithAnimation::animationMap = {
