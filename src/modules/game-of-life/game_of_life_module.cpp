@@ -121,7 +121,7 @@ void GameOfLife::GOLModule::addFlags(CLI::App *app) {
                                "Pass it to add a fading effect to dying cells");
   cmd->add_option("--color,-c", config.color,
                   "The color you want the game to be, in HEX");
-  cmd->add_option("--fade-speed,-s", config.fade,
+  cmd->add_option("--fade-speed,-s", config.fadeSpeed,
                   "Speed at which the fading effect occurs, ignored if --fade "
                   "is not passed")
       ->needs(fadeOpt);
