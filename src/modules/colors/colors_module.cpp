@@ -32,7 +32,10 @@ long int Colors::ColorsModule::render() { return renderer->render(); }
 
 void Colors::ColorsModule::teardown() { renderer->teardown(); }
 
-Colors::ColorsModule::~ColorsModule() { delete renderer; }
+Colors::ColorsModule::~ColorsModule() {
+  delete renderer;
+  renderer = nullptr;
+}
 
 void Colors::ColorsModule::addFlags(CLI::App *app) {
   auto module = app->add_subcommand(this->name, this->description);
