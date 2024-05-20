@@ -27,8 +27,11 @@ set_property(TARGET led-matrix-lib PROPERTY IMPORTED_LOCATION ${BINARY_DIR}/libr
 
 # Include rpi-rgb-led-matrix/include/ and include/
 include_directories(
-	${CMAKE_SOURCE_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/include
 	${CMAKE_SOURCE_DIR}/include
+)
+
+include_directories(SYSTEM
+	${CMAKE_SOURCE_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/include
 )
 
 # Add link for rpi-rgb-led-matrix
