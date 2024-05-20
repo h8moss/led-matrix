@@ -132,4 +132,4 @@ void GameOfLife::GOLModule::addFlags(CLI::App *app) {
           GameOfLife::Configuration::stagnationBehaviourMap, CLI::ignore_case));
 }
 
-GameOfLife::GOLModule::~GOLModule() { teardown(); }
+GameOfLife::GOLModule::~GOLModule() {}

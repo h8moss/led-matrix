@@ -23,10 +23,7 @@ BetterCanvas BetterCanvas::operator=(const BetterCanvas &canvas1) {
   this->fontName = canvas1.fontName;
 }
 
-BetterCanvas::~BetterCanvas() {
-  this->canvas->Clear();
-  delete this->canvas;
-}
+BetterCanvas::~BetterCanvas() { delete this->canvas; }
 
 void BetterCanvas::setPixel(int x, int y, Color c) {
   canvas->SetPixel(x, y, (unsigned char)c.r, (unsigned char)c.g,
