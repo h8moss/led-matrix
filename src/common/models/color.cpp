@@ -1,4 +1,5 @@
 #include "common/models/color.hpp"
+#include "common/util/debug_log.hpp"
 
 #include <map>
 
@@ -92,6 +93,8 @@ rgb_matrix::Color Color::toRGBMatrixColor() {
 
 // ----- CLI11 Lexical cast -----
 bool lexical_cast(const std::string &input, Color &v) {
+  dLog("USING LEXICAL CAST IN " + input);
+
   v = Color::fromHex(input);
 
   return true;
