@@ -46,6 +46,15 @@ void Colors::ColorsModule::teardown() { renderer->teardown(); }
 Colors::ColorsModule::~ColorsModule() { delete renderer; }
 
 void Colors::ColorsModule::addFlags(CLI::App *app) {
+
+  dLog(config.animation);
+  dLog(config.colors.size());
+  dLog(config.fading);
+  dLog(config.runOnce);
+  dLog(config.duration);
+  dLog(config.animationDuration);
+  dLog(config.useTrueRandomColors);
+
   auto module = app->add_subcommand(this->name, this->description);
 
   dLog("adding color opt");
