@@ -43,8 +43,14 @@ add_subdirectory(CLI11)
 # Font directory
 set(FONT_DIR "\\\"${CMAKE_SOURCE_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/fonts/\\\"")
 
+if(DEFINED DEVLAPTOP)
+	set(DEVLAPTOPFLAG "-DDEVLAPTOP=1")
+else()
+	set(DEVLAPTOPFLAG "")
+endif()
+
 # Add warnings to compilation
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DFONT_DIR=${FONT_DIR}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DEVLAPTOPFLAG} -DFONT_DIR=${FONT_DIR}")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -DDEBUG -DFONT_DIR=${FONT_DIR} -Wall -Weffc++ -Wextra -Wconversion -Wsign-conversion")
 
 # All sources
