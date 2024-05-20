@@ -19,11 +19,7 @@ public:
 
   virtual void addFlags(CLI::App *app) = 0;
 
-  virtual ~Module() {
-    delete canvas;
-
-    canvas = nullptr;
-  }
+  virtual ~Module() {}
 
 protected:
   ICanvas *canvas = nullptr;
