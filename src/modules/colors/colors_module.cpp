@@ -10,11 +10,8 @@
 #include "CLI/CLI.hpp"
 
 Colors::ColorsModule::ColorsModule(BetterCanvas *canvas)
-    : Module(canvas), config{Colors::ConfigurationWithAnimation::defaults},
-      renderer{} {
-  this->name = "colors";
-  this->description = "Shows simple color animations";
-}
+    : Module(canvas, "colors", "Shows simple color animations"),
+      config{Colors::ConfigurationWithAnimation::defaults}, renderer{} {}
 
 void Colors::ColorsModule::setup() {
   if (config.animation == Animation::corners)
@@ -38,15 +35,6 @@ void Colors::ColorsModule::teardown() { renderer->teardown(); }
 Colors::ColorsModule::~ColorsModule() { delete renderer; }
 
 void Colors::ColorsModule::addFlags(CLI::App *app) {
-
-  dLog(config.animation);
-  dLog(config.colors.size());
-  dLog(config.fading);
-  dLog(config.runOnce);
-  dLog(config.duration);
-  dLog(config.animationDuration);
-  dLog(config.useTrueRandomColors);
-
   auto module = app->add_subcommand(this->name, this->description);
 
   dLog("adding color opt");

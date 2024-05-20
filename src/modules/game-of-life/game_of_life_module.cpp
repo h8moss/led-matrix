@@ -9,11 +9,10 @@
 #include <ctime>
 
 GameOfLife::GOLModule::GOLModule(BetterCanvas *canvas)
-    : Module(canvas), config{GameOfLife::Configuration::defaults}, w{}, h{},
-      board{0, 0}, changes{0, 0}, fadeData{}, stateHashes{} {
-  this->name = "game-of-life";
-  this->description = "Plays Connway's game of life on the screen";
-}
+    : Module(canvas, "game-of-life",
+             "Plays Connway's game of life on the screen"),
+      config{GameOfLife::Configuration::defaults}, w{}, h{}, board{0, 0},
+      changes{0, 0}, fadeData{}, stateHashes{} {}
 
 void GameOfLife::GOLModule::setup() {
 

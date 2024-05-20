@@ -7,10 +7,8 @@
 #include <string>
 
 TimeDate::TimeDateModule::TimeDateModule(BetterCanvas *_canvas)
-    : Module(_canvas), config{TimeDate::Configuration::defaults} {
-  this->name = "time-date";
-  this->description = "Shows the current time and date";
-}
+    : Module(_canvas, "time-date", "Shows the current time and date"), hours{},
+      minutes{}, seconds{}, config{TimeDate::Configuration::defaults} {}
 
 void TimeDate::TimeDateModule::setup() {
   canvas->clear();

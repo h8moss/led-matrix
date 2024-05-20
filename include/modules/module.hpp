@@ -7,7 +7,8 @@
 
 class Module {
 public:
-  Module(BetterCanvas *_canvas) : canvas{_canvas} {}
+  Module(BetterCanvas *_canvas, std::string _name, std::string _description)
+      : canvas{_canvas}, name{_name}, description{_description} {}
 
   std::string name;
   std::string description;
