@@ -1,4 +1,5 @@
 #include "modules/colors/renderers/pulse_animation_renderer.hpp"
+#include "common/util/debug_log.hpp"
 #include "modules/colors/colors_configuration.hpp"
 
 Colors::PulseAnimationRenderer::PulseAnimationRenderer(
@@ -36,6 +37,7 @@ long int Colors::PulseAnimationRenderer::render() {
 
     // stay black
     if (animationProgress - animationSplits[3] - 1 < 1) {
+      dLog(animationProgress - animationSplits[3] - 1 < 1);
       currentColor = config.getColor(currentColor);
     }
   }
