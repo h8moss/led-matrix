@@ -1,12 +1,11 @@
 #include "modules/time-date/time_date_module.hpp"
-#include "common/util/better_canvas.hpp"
 #include "common/util/pad_zeros.hpp"
 #include "modules/time-date/time_date_configuration.hpp"
 
 #include <chrono>
 #include <string>
 
-TimeDate::TimeDateModule::TimeDateModule(BetterCanvas *_canvas)
+TimeDate::TimeDateModule::TimeDateModule(ICanvas *_canvas)
     : Module(_canvas, "time-date", "Shows the current time and date"), hours{},
       minutes{}, seconds{}, config{TimeDate::Configuration::defaults} {}
 

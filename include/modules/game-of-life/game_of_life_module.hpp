@@ -1,5 +1,6 @@
 #pragma once
 
+#include "common/canvas/icanvas.hpp"
 #include "common/models/fade_data.hpp"
 #include "modules/game-of-life/game_of_life_board.hpp"
 #include "modules/game-of-life/game_of_life_configuration.hpp"
@@ -10,7 +11,7 @@
 namespace GameOfLife {
 class GOLModule : public Module {
 public:
-  GOLModule(BetterCanvas *canvas);
+  GOLModule(ICanvas *canvas);
 
   void setup() override;
   long int render() override;

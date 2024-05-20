@@ -1,7 +1,8 @@
 #include "modules/colors/renderers/corners_animation_renderer.hpp"
+#include "common/canvas/icanvas.hpp"
 
 Colors::CornersAnimationRenderer::CornersAnimationRenderer(
-    BetterCanvas *canvas, Colors::Configuration config)
+    ICanvas *canvas, Colors::Configuration config)
     : Renderer(canvas, config), currentColor{}, totalDiagonals{}, loopCount{},
       fullDuration{} {}
 

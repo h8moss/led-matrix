@@ -1,13 +1,12 @@
-#include "common/util/better_canvas.hpp"
+#include "common/canvas/better_canvas.hpp"
 #include "common/models/colored_text.hpp"
 
 #include "graphics.h"
 #include "led-matrix.h"
 
 BetterCanvas::BetterCanvas(int argc, char **argv,
-                           rgb_matrix::RGBMatrix::Options options,
-                           std::string _fontName)
-    : canvas{nullptr}, fontName{_fontName} {
+                           rgb_matrix::RGBMatrix::Options options)
+    : canvas{nullptr} {
   canvas = rgb_matrix::RGBMatrix::CreateFromFlags(&argc, &argv, &options);
   if (canvas == nullptr) {
     throw "Error creating canvas!";
@@ -26,6 +25,11 @@ BetterCanvas BetterCanvas::operator=(const BetterCanvas &canvas1) {
 BetterCanvas::~BetterCanvas() {
   delete this->canvas;
   this->canvas = nullptr;
+
+  if (font != nullptr) {
+    delete font;
+    font = nullptr;
+  }
 }
 
 void BetterCanvas::setPixel(int x, int y, Color c) {

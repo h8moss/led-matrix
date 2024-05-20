@@ -1,5 +1,5 @@
 #pragma once
-#include "common/util/better_canvas.hpp"
+#include "common/canvas/icanvas.hpp"
 #include "modules/module.hpp"
 #include "modules/time-date/time_date_configuration.hpp"
 
@@ -8,7 +8,7 @@
 namespace TimeDate {
 class TimeDateModule : public Module {
 public:
-  TimeDateModule(BetterCanvas *_canvas);
+  TimeDateModule(ICanvas *_canvas);
 
   void setup() override;
   long int render() override;

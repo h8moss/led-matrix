@@ -1,11 +1,11 @@
+#include "common/canvas/better_canvas.hpp"
+#include "common/canvas/debug_canvas.hpp"
 #include "modules/colors/colors_module.hpp"
 #include "modules/game-of-life/game_of_life_module.hpp"
 #include "modules/module.hpp"
 #include "modules/time-date/time_date_module.hpp"
 
 #include "CLI/CLI.hpp"
-
-#include "common/util/better_canvas.hpp"
 #include "led-matrix.h"
 
 #include <iostream>
@@ -28,6 +28,13 @@ int main(int argc, char **argv) {
   srand((unsigned int)time(nullptr));
 
   try {
+    ICanvas *canvas;
+
+#ifdef DEVLAPTOP
+
+    canvas = new DebugCanvas();
+
+#else
 
     rgb_matrix::RGBMatrix::Options defaults;
     defaults.hardware_mapping = "regular";
@@ -36,7 +43,9 @@ int main(int argc, char **argv) {
     defaults.chain_length = 1;
     defaults.parallel = 1;
     defaults.show_refresh_rate = false;
-    BetterCanvas *canvas = new BetterCanvas(argc, argv, defaults);
+    canvas = new BetterCanvas(argc, argv, defaults);
+
+#endif
 
     std::vector<Module *> modules{
         new Colors::ColorsModule(canvas),
@@ -72,7 +81,7 @@ int main(int argc, char **argv) {
     }
 
     module->setup();
-    std::cout << "Press Ctrl-C to stop" << std::endl;
+    std::cout << "Press Ctrl-C to stop :)" << std::endl;
 
     while (!interruptReceived) {
       long int sleepTime{module->render()};
@@ -94,9 +103,8 @@ int main(int argc, char **argv) {
     std::cout << "Ctrl-C received, Exiting" << std::endl;
     module = nullptr;
 
-    for (int i{}; i < modules.size(); i++) {
-      delete modules[i];
-      modules[i] = nullptr;
+    for (auto mod : modules) {
+      delete mod;
     }
 
     delete canvas;

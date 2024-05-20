@@ -1,7 +1,7 @@
 #pragma once
 
+#include "common/canvas/icanvas.hpp"
 #include "common/models/color.hpp"
-#include "common/util/better_canvas.hpp"
 #include "modules/colors/colors_configuration.hpp"
 #include "modules/colors/renderers/renderer.hpp"
 
@@ -9,7 +9,7 @@ namespace Colors {
 
 class CornersAnimationRenderer : public Renderer {
 public:
-  CornersAnimationRenderer(BetterCanvas *canvas, Colors::Configuration config);
+  CornersAnimationRenderer(ICanvas *canvas, Colors::Configuration config);
 
   long int render() override;
   void setup() override;

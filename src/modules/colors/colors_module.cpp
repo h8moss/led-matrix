@@ -1,5 +1,4 @@
 #include "modules/colors/colors_module.hpp"
-#include "common/util/better_canvas.hpp"
 #include "common/util/debug_log.hpp"
 #include "modules/colors/colors_configuration.hpp"
 #include "modules/colors/renderers/circle_animation_renderer.hpp"
@@ -9,7 +8,7 @@
 
 #include "CLI/CLI.hpp"
 
-Colors::ColorsModule::ColorsModule(BetterCanvas *canvas)
+Colors::ColorsModule::ColorsModule(ICanvas *canvas)
     : Module(canvas, "colors", "Shows simple color animations"),
       config{Colors::ConfigurationWithAnimation::defaults}, renderer{} {}
 

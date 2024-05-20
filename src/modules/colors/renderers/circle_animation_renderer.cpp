@@ -1,11 +1,11 @@
 #include "modules/colors/renderers/circle_animation_renderer.hpp"
-#include "common/util/better_canvas.hpp"
+#include "common/canvas/icanvas.hpp"
 #include "modules/colors/colors_configuration.hpp"
 
 #include <cmath>
 
 Colors::CircleAnimationRenderer::CircleAnimationRenderer(
-    BetterCanvas *canvas, Colors::Configuration config, bool _shrink)
+    ICanvas *canvas, Colors::Configuration config, bool _shrink)
     : Renderer(canvas, config), radius{}, currentRadius{}, centerX{}, centerY{},
       color{}, loopCount{}, shrink{_shrink} {}
 

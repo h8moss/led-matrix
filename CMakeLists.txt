@@ -43,15 +43,22 @@ add_subdirectory(CLI11)
 # Font directory
 set(FONT_DIR "\\\"${CMAKE_SOURCE_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/fonts/\\\"")
 
+if(DEFINED DEVLAPTOP)
+	set(DEVLAPTOPFLAG "-DDEVLAPTOP=1")
+else()
+	set(DEVLAPTOPFLAG "")
+endif()
+
 # Add warnings to compilation
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DFONT_DIR=${FONT_DIR}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DEVLAPTOPFLAG} -DFONT_DIR=${FONT_DIR}")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -DDEBUG -DFONT_DIR=${FONT_DIR} -Wall -Weffc++ -Wextra -Wconversion -Wsign-conversion")
 
 # All sources
 set(SHARED_SOURCES
+	${CMAKE_SOURCE_DIR}/src/common/canvas/better_canvas.cpp
+	${CMAKE_SOURCE_DIR}/src/common/canvas/debug_canvas.cpp
 	${CMAKE_SOURCE_DIR}/src/common/models/color.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/array_to_vector.cpp
-	${CMAKE_SOURCE_DIR}/src/common/util/better_canvas.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/pad_zeros.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/split_string.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/starts_with.cpp

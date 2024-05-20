@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 
+#include "common/canvas/icanvas.hpp"
 #include "modules/colors/colors_configuration.hpp"
 #include "modules/colors/renderers/renderer.hpp"
 
@@ -8,7 +9,7 @@ namespace Colors {
 
 class PulseAnimationRenderer : public Renderer {
 public:
-  PulseAnimationRenderer(BetterCanvas *canvas, Colors::Configuration config);
+  PulseAnimationRenderer(ICanvas *canvas, Colors::Configuration config);
 
   long int render() override;
   void setup() override;

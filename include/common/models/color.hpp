@@ -12,6 +12,8 @@ struct Color {
   Color(int _r, int _g, int _b);
   Color();
 
+  const std::string string() const;
+
   /// @brief  Generates a color from HSL values
   /// @param h The hue of the color (0-360)
   /// @param s The saturation of the color (0-1)
