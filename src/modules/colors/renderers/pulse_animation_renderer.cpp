@@ -37,7 +37,7 @@ long int Colors::PulseAnimationRenderer::render() {
 
     // stay black
     if (animationProgress - animationSplits[3] - 1 < 1) {
-      dLog(animationProgress - animationSplits[3] - 1 < 1);
+      dLog(animationProgress - animationSplits[3] - 1);
       currentColor = config.getColor(currentColor);
     }
   }
