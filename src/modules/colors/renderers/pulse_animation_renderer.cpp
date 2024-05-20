@@ -21,7 +21,7 @@ void Colors::PulseAnimationRenderer::setup() {
 }
 
 long int Colors::PulseAnimationRenderer::render() {
-  int animationProgress = loopCount % (int)animationSplits[3];
+  int animationProgress = loopCount % animationSplits[3];
   if (animationProgress < animationSplits[0]) {
     // animate color in
     float progress{(float)animationProgress / animationSplits[0]};
@@ -36,8 +36,7 @@ long int Colors::PulseAnimationRenderer::render() {
       return -1;
 
     // stay black
-    if (animationProgress - animationSplits[3] - 1 < 1) {
-      dLog(animationProgress - animationSplits[3] - 1);
+    if (animationProgress == animationSplits[3] - 1) {
       currentColor = config.getColor(currentColor);
     }
   }
