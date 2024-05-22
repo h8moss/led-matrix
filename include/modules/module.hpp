@@ -3,6 +3,7 @@
 
 #include "CLI/CLI.hpp"
 
+#include <map>
 #include <string>
 
 class Module {
@@ -18,6 +19,8 @@ public:
   virtual void teardown() = 0;
 
   virtual void addFlags(CLI::App *app) = 0;
+  virtual void
+  readArguments(std::map<std::string, std::vector<std::string>> args);
 
   virtual ~Module() {}
 
