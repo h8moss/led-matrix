@@ -1,11 +1,13 @@
 #include "modules/game-of-life/game_of_life_module.hpp"
 #include "CLI/CLI.hpp"
 #include "common/models/fade_data.hpp"
+#include "common/util/arg_parser.hpp"
 #include "modules/game-of-life/game_of_life_board.hpp"
 #include "modules/game-of-life/game_of_life_configuration.hpp"
 
 #include <algorithm>
 #include <ctime>
+#include <stdexcept>
 
 GameOfLife::GOLModule::GOLModule(ICanvas *canvas)
     : Module(canvas, "game-of-life",
@@ -120,7 +122,9 @@ void GameOfLife::GOLModule::addFlags(CLI::App *app) {
   auto fadeOpt = cmd->add_flag("--fade,-f", config.fade,
                                "Pass it to add a fading effect to dying cells");
   cmd->add_option("--color,-c", config.color,
-                  "The color you want the game to be, in HEX");
+                  "The color you want the game to be, in HEX")
+      ->each([this](std::string opt) { config.generateColor = false; });
+
   cmd->add_option("--fade-speed,-s", config.fadeSpeed,
                   "Speed at which the fading effect occurs, ignored if --fade "
                   "is not passed")
@@ -129,6 +133,34 @@ void GameOfLife::GOLModule::addFlags(CLI::App *app) {
                   "What the game should do if it encounters stagnation")
       ->transform(CLI::CheckedTransformer(
           GameOfLife::Configuration::stagnationBehaviourMap, CLI::ignore_case));
+}
+
+void GameOfLife::GOLModule::readArguments(
+    std::map<std::string, std::vector<std::string>> map) {
+  config = GameOfLife::Configuration::defaults;
+  if (map.count("duration")) {
+    std::string value{ArgParser::ensureSingle(map, "duration")};
+    try {
+      config.duration = std::stof(value);
+    } catch (std::invalid_argument) {
+      throw "Invalid argument for duration flag";
+    }
+  }
+  if (map.count("fade")) {
+    config.fade = ArgParser::ensureBoolean(map, "fade");
+  }
+  if (map.count("color")) {
+    config.color = Color::fromHex(ArgParser::ensureSingle(map, "color"));
+    config.generateColor = false;
+  }
+  if (map.count("fade-speed")) {
+    auto value = ArgParser::ensureSingle(map, "fade-speed");
+    try {
+      config.fadeSpeed = std::stof(value);
+    } catch (std::invalid_argument) {
+      throw "Invalid argument for fade-speed flag";
+    }
+  }
 }
 
 GameOfLife::GOLModule::~GOLModule() {}
