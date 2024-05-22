@@ -1,9 +1,12 @@
-#include "common/util/better_canvas.hpp"
-#include "led-matrix.h"
+#include "common/canvas/better_canvas.hpp"
+#include "common/canvas/debug_canvas.hpp"
 #include "modules/colors/colors_module.hpp"
 #include "modules/game-of-life/game_of_life_module.hpp"
 #include "modules/module.hpp"
 #include "modules/time-date/time_date_module.hpp"
+
+#include "CLI/CLI.hpp"
+#include "led-matrix.h"
 
 #include <iostream>
 #include <signal.h>
@@ -11,20 +14,28 @@
 #include <unistd.h>
 #include <vector>
 
+#include "CLI/CLI.hpp"
+
 volatile bool interruptReceived = false;
+
 static void Interrupt(int signo) { interruptReceived = true; }
 
-static void printUsage(std::vector<Module *> modules) {
-  std::cout << "Usage:\n";
-  std::cout << "\tled-matrix <MODE> [Options]\n";
-  std::cout << "\tFunctions:\n";
-  for (auto mod : modules) {
-    std::cout << "\t\t" << mod->name << '\n';
-  }
-}
-
 int main(int argc, char **argv) {
+  CLI::App app{"Led matrix"};
+  argv = app.ensure_utf8(argv);
+  app.require_subcommand(1);
+
+  srand((unsigned int)time(nullptr));
+
   try {
+    ICanvas *canvas;
+
+#ifdef DEVLAPTOP
+
+    canvas = new DebugCanvas();
+
+#else
+
     rgb_matrix::RGBMatrix::Options defaults;
     defaults.hardware_mapping = "regular";
     defaults.rows = 64;
@@ -32,7 +43,9 @@ int main(int argc, char **argv) {
     defaults.chain_length = 1;
     defaults.parallel = 1;
     defaults.show_refresh_rate = false;
-    BetterCanvas *canvas = new BetterCanvas(argc, argv, defaults);
+    canvas = new BetterCanvas(argc, argv, defaults);
+
+#endif
 
     std::vector<Module *> modules{
         new Colors::ColorsModule(canvas),
@@ -40,10 +53,11 @@ int main(int argc, char **argv) {
         new TimeDate::TimeDateModule(canvas),
     };
 
-    if (argc < 2) {
-      printUsage(modules);
-      return 1;
+    for (auto mod : modules) {
+      mod->addFlags(&app);
     }
+
+    app.parse(argc, argv);
 
     signal(SIGTERM, Interrupt);
     signal(SIGINT, Interrupt);
@@ -55,25 +69,19 @@ int main(int argc, char **argv) {
 
     Module *module{nullptr};
     for (auto mod : modules) {
-      if (mod->name == argv[1]) {
+      if (app.got_subcommand(mod->name)) {
         module = mod;
         break;
       }
     }
 
     if (module == nullptr) {
-      printUsage(modules);
-      return 1;
-    }
-
-    module->configuration->parseArguments(argv, argc);
-    if (module->configuration->showHelp) {
-      std::cout << module->configuration->getHelp();
+      std::cout << app.help() << std::endl;
       return 1;
     }
 
     module->setup();
-    std::cout << "Press Ctrl-C to stop" << std::endl;
+    std::cout << "Press Ctrl-C to stop :)" << std::endl;
 
     while (!interruptReceived) {
       long int sleepTime{module->render()};
@@ -93,10 +101,17 @@ int main(int argc, char **argv) {
 
     module->teardown();
     std::cout << "Ctrl-C received, Exiting" << std::endl;
+    module = nullptr;
 
     for (auto mod : modules) {
       delete mod;
     }
+
+    delete canvas;
+    canvas = nullptr;
+
+  } catch (const CLI::ParseError &err) {
+    return app.exit(err);
   } catch (const char *err) {
     std::cerr << err << std::endl;
     return 1;
@@ -107,4 +122,5 @@ int main(int argc, char **argv) {
     std::cerr << "Something went wrong!" << '\n';
     std::cerr << err.what() << std::endl;
   }
+  return 0;
 }

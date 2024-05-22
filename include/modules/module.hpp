@@ -1,32 +1,29 @@
 #pragma once
-#include "common/util/better_canvas.hpp"
-#include "modules/module_configuration.hpp"
+#include "common/canvas/icanvas.hpp"
 
+#include "CLI/CLI.hpp"
+
+#include <map>
 #include <string>
 
 class Module {
 public:
-  Module(BetterCanvas *_canvas, ModuleConfiguration *config)
-      : configuration{config}, canvas{_canvas} {}
+  Module(ICanvas *_canvas, std::string _name, std::string _description)
+      : canvas{_canvas}, name{_name}, description{_description} {}
 
   std::string name;
-  std::string description; // TODO: What is this even for??? REMOVE IT
+  std::string description;
 
   virtual void setup() = 0;
   virtual long int render() = 0;
   virtual void teardown() = 0;
-  ModuleConfiguration *configuration;
 
-  virtual void createConfiguration() = 0;
+  virtual void addFlags(CLI::App *app) = 0;
+  virtual void
+  readArguments(std::map<std::string, std::vector<std::string>> args);
 
-  virtual ~Module() {
-    delete canvas;
-    delete configuration;
-
-    canvas = nullptr;
-    configuration = nullptr;
-  }
+  virtual ~Module() {}
 
 protected:
-  BetterCanvas *canvas = nullptr;
+  ICanvas *canvas = nullptr;
 };

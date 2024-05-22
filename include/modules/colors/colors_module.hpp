@@ -1,24 +1,26 @@
 #pragma once
 
-#include "common/util/better_canvas.hpp"
+#include "common/canvas/icanvas.hpp"
 #include "modules/colors/colors_configuration.hpp"
 #include "modules/module.hpp"
 
 namespace Colors {
 class ColorsModule : public Module {
 public:
-  ColorsModule(BetterCanvas *canvas);
-  virtual ~ColorsModule();
+  ColorsModule(ICanvas *canvas);
+  ~ColorsModule();
 
-  virtual void setup() override;
-  virtual long int render() override;
-  virtual void teardown() override;
+  void setup() override;
+  long int render() override;
+  void teardown() override;
 
-  Colors::ConfigurationWithAnimation *getConfig() const;
-
-  virtual void createConfiguration() override;
+  void addFlags(CLI::App *app) override;
+  void
+  readArguments(std::map<std::string, std::vector<std::string>> args) override;
 
 private:
   Module *renderer;
+
+  Colors::ConfigurationWithAnimation config;
 };
 } // namespace Colors

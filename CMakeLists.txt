@@ -27,25 +27,38 @@ set_property(TARGET led-matrix-lib PROPERTY IMPORTED_LOCATION ${BINARY_DIR}/libr
 
 # Include rpi-rgb-led-matrix/include/ and include/
 include_directories(
-	${CMAKE_SOURCE_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/include
 	${CMAKE_SOURCE_DIR}/include
+)
+
+include_directories(SYSTEM
+	${CMAKE_SOURCE_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/include
 )
 
 # Add link for rpi-rgb-led-matrix
 link_directories(${CMAKE_BINARY_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/lib)
 
+# Add CLI11
+add_subdirectory(CLI11)
+
 # Font directory
 set(FONT_DIR "\\\"${CMAKE_SOURCE_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/fonts/\\\"")
 
+if(DEFINED DEVLAPTOP)
+	set(DEVLAPTOPFLAG "-DDEVLAPTOP=1")
+else()
+	set(DEVLAPTOPFLAG "")
+endif()
+
 # Add warnings to compilation
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DFONT_DIR=${FONT_DIR}")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG -DFONT_DIR=${FONT_DIR} -Wall -Weffc++ -Wextra -Wconversion -Wsign-conversion")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DEVLAPTOPFLAG} -DFONT_DIR=${FONT_DIR}")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -DDEBUG -DFONT_DIR=${FONT_DIR} -Wall -Weffc++ -Wextra -Wconversion -Wsign-conversion")
 
 # All sources
 set(SHARED_SOURCES
+	${CMAKE_SOURCE_DIR}/src/common/canvas/better_canvas.cpp
+	${CMAKE_SOURCE_DIR}/src/common/canvas/debug_canvas.cpp
 	${CMAKE_SOURCE_DIR}/src/common/models/color.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/array_to_vector.cpp
-	${CMAKE_SOURCE_DIR}/src/common/util/better_canvas.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/pad_zeros.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/split_string.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/starts_with.cpp
@@ -60,7 +73,6 @@ set(SHARED_SOURCES
 	${CMAKE_SOURCE_DIR}/src/modules/game-of-life/game_of_life_module.cpp
 	${CMAKE_SOURCE_DIR}/src/modules/time-date/time_date_configuration.cpp
 	${CMAKE_SOURCE_DIR}/src/modules/time-date/time_date_module.cpp
-	${CMAKE_SOURCE_DIR}/src/modules/module_configuration.cpp
 )
 
 # Sources for the two different executables
@@ -76,5 +88,5 @@ add_dependencies(led-matrix rpi-rgb-led-matrix)
 add_dependencies(led-matrix-manager rpi-rgb-led-matrix)
 
 # Link the executables
-target_link_libraries(led-matrix PRIVATE  rt m pthread led-matrix-lib)
-target_link_libraries(led-matrix-manager PRIVATE  rt m pthread led-matrix-lib)
+target_link_libraries(led-matrix PRIVATE  rt m pthread led-matrix-lib CLI11::CLI11)
+target_link_libraries(led-matrix-manager PRIVATE  rt m pthread led-matrix-lib CLI11::CLI11)

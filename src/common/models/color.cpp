@@ -1,6 +1,8 @@
 #include "common/models/color.hpp"
+#include "common/util/debug_log.hpp"
 
 #include <map>
+#include <sstream>
 
 float hueToRGB(float p, float q, float t) {
   if (t < 0)
@@ -18,6 +20,12 @@ float hueToRGB(float p, float q, float t) {
 
 Color::Color(int _r, int _g, int _b) : r{_r}, g{_g}, b{_b} {}
 Color::Color() : Color(0, 0, 0) {}
+
+const std::string Color::string() const {
+  std::stringstream ss;
+  ss << "(" << r << ", " << g << ", " << b << ")";
+  return ss.str();
+}
 
 Color Color::fromHSL(int h, float s, float l) {
   int r{}, g{}, b{};
@@ -86,6 +94,17 @@ Color operator*(const Color &c1, float value) {
   );
 }
 
+bool Color::operator==(const Color &c) const {
+  return r == c.r && g == c.g && b == c.b;
+}
+
 rgb_matrix::Color Color::toRGBMatrixColor() {
   return rgb_matrix::Color((uint8_t)r, (uint8_t)g, (uint8_t)b);
+}
+
+// ----- CLI11 Lexical cast -----
+bool lexical_cast(const std::string &input, Color &v) {
+  v = Color::fromHex(input);
+
+  return true;
 }

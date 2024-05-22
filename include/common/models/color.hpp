@@ -4,14 +4,15 @@
 
 #include "graphics.h"
 
-class Color {
-public:
+struct Color {
   int r;
   int g;
   int b;
 
   Color(int _r, int _g, int _b);
   Color();
+
+  const std::string string() const;
 
   /// @brief  Generates a color from HSL values
   /// @param h The hue of the color (0-360)
@@ -24,6 +25,8 @@ public:
 
   friend Color operator*(const Color &c1, float value);
 
+  bool operator==(const Color &color) const;
+
   rgb_matrix::Color toRGBMatrixColor();
 
   static const Color white;
@@ -32,3 +35,5 @@ public:
   static const Color green;
   static const Color blue;
 };
+
+bool lexical_cast(const std::string &input, Color &v);
