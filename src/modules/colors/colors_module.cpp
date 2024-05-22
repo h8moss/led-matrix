@@ -1,5 +1,5 @@
 #include "modules/colors/colors_module.hpp"
-#include "common/util/debug_log.hpp"
+#include "common/util/arg_parser.hpp"
 #include "modules/colors/colors_configuration.hpp"
 #include "modules/colors/renderers/circle_animation_renderer.hpp"
 #include "modules/colors/renderers/corners_animation_renderer.hpp"
@@ -7,6 +7,8 @@
 #include "modules/module.hpp"
 
 #include "CLI/CLI.hpp"
+#include <stdexcept>
+#include <string>
 
 Colors::ColorsModule::ColorsModule(ICanvas *canvas)
     : Module(canvas, "colors", "Shows simple color animations"),
@@ -67,4 +69,49 @@ void Colors::ColorsModule::addFlags(CLI::App *app) {
 
   module->add_flag("--once", config.runOnce,
                    "The animation runs once and then it exits");
+}
+
+void Colors::ColorsModule::readArguments(
+    std::map<std::string, std::vector<std::string>> map) {
+  config = Colors::ConfigurationWithAnimation::defaults;
+
+  if (map.count("run-once")) {
+    config.runOnce = ArgParser::ensureBoolean(map, "run-once");
+  }
+  if (map.count("animation")) {
+    std::string value = ArgParser::ensureSingle(map, "animation");
+    if (!ConfigurationWithAnimation::animationMap.count(value)) {
+      throw "Unrecognized animation: " + value;
+    }
+    config.animation = ConfigurationWithAnimation::animationMap[value];
+  }
+  if (map.count("color")) {
+    config.colors = {};
+    for (auto c : map["color"]) {
+      config.colors.push_back(Color::fromHex(c));
+    }
+  }
+  if (map.count("fade")) {
+    config.fading = ArgParser::ensureBoolean(map, "fade");
+  }
+  if (map.count("duration")) {
+    std::string value = ArgParser::ensureSingle(map, "duration");
+    try {
+      config.duration = std::stof(value);
+    } catch (std::invalid_argument e) {
+      throw "Could not understand the value of duration";
+    }
+  }
+  if (map.count("animation-duration")) {
+    std::string value = ArgParser::ensureSingle(map, "animation-duration");
+    try {
+      config.animationDuration = std::stof(value);
+    } catch (std::invalid_argument e) {
+      throw "Could not understand the value of animation-duration";
+    }
+  }
+  if (map.count("true-random-colors")) {
+    config.useTrueRandomColors =
+        ArgParser::ensureBoolean(map, "true-random-colors");
+  }
 }
