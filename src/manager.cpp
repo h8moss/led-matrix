@@ -3,6 +3,7 @@
 #include <unistd.h>
 
 #include "common/canvas/better_canvas.hpp"
+#include "common/util/arg_parser.hpp"
 #include "common/util/debug_log.hpp"
 #include "common/util/starts_with.hpp"
 #include "modules/colors/colors_module.hpp"
@@ -61,11 +62,13 @@ int main(int argc, char **argv) {
         dLog("Received instructions: ");
         s[number] = '\0';
         std::string instruction{s};
+        ArgParser parser{ArgParser()};
+        parser.parse(instruction);
 
-        if (instruction == "die") {
+        if (parser.name == "die") {
           dLog("Received DEATH");
           break;
-        } else if (instruction == "off") {
+        } else if (parser.name == "off") {
           module->teardown();
           module = nullptr;
           continue;
@@ -73,16 +76,15 @@ int main(int argc, char **argv) {
 
         for (auto mod : modules) {
           dLog("CHECKING " + mod->name);
-          if (startsWith(instruction, mod->name)) {
+          if (parser.name == mod->name) {
             dLog("Initiating " + mod->name);
             if (module != nullptr) {
               module->teardown();
             }
             module = mod;
-            // TODO: Parse configuration
-            // module->createConfiguration();
-            // module->configuration->parseData(instruction);
+            module->readArguments(parser.values);
             module->setup();
+            break;
           }
         }
       } else {
