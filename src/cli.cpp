@@ -2,6 +2,7 @@
 #include "common/canvas/debug_canvas.hpp"
 #include "modules/colors/colors_module.hpp"
 #include "modules/game-of-life/game_of_life_module.hpp"
+#include "modules/images/images_module.hpp"
 #include "modules/module.hpp"
 #include "modules/time-date/time_date_module.hpp"
 
@@ -48,10 +49,8 @@ int main(int argc, char **argv) {
 #endif
 
     std::vector<Module *> modules{
-        new Colors::ColorsModule(canvas),
-        new GameOfLife::GOLModule(canvas),
-        new TimeDate::TimeDateModule(canvas),
-    };
+        new Colors::ColorsModule(canvas), new GameOfLife::GOLModule(canvas),
+        new TimeDate::TimeDateModule(canvas), new Images::ImagesModule(canvas)};
 
     for (auto mod : modules) {
       mod->addFlags(&app);
