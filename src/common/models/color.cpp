@@ -102,6 +102,10 @@ rgb_matrix::Color Color::toRGBMatrixColor() {
   return rgb_matrix::Color((uint8_t)r, (uint8_t)g, (uint8_t)b);
 }
 
+Color Color::fromMagickColor(Magick::Color c) {
+  return Color(c.redQuantum(), c.greenQuantum(), c.blueQuantum());
+}
+
 // ----- CLI11 Lexical cast -----
 bool lexical_cast(const std::string &input, Color &v) {
   v = Color::fromHex(input);

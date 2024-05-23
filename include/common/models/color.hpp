@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Magick++/Color.h>
 #include <string>
 
 #include "graphics.h"
@@ -22,6 +23,8 @@ struct Color {
   static Color fromHSL(int h, float s, float l);
 
   static Color fromHex(std::string hex);
+
+  static Color fromMagickColor(Magick::Color c);
 
   friend Color operator*(const Color &c1, float value);
 
