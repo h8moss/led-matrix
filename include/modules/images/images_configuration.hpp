@@ -1,33 +1,25 @@
 #pragma once
 
+#include <map>
 #include <string>
 #include <vector>
 
-#include "modules/module_configuration.hpp"
 namespace Images {
 
 enum ImageFit { stretch, crop, box };
 enum Alignment { leading, trailing, center };
 
-struct ImageData {
-public:
-  std::string path;
-  int duration;
-};
-
-class Configuration : public ModuleConfiguration {
-public:
-  Configuration();
-
-  virtual const char *getHelp() const override;
-  virtual void parseArguments(char **argv, int argc) override;
-  virtual void parseData(std::string data) override;
-
-  std::vector<ImageData> imageData;
+struct Configuration {
+  std::vector<std::string> images;
+  std::vector<int> durations;
   ImageFit fit;
   Alignment xAlignment;
   Alignment yAlignment;
   bool exitOnEnd;
   bool shuffleImages;
+
+  static Configuration defaults;
+  static std::map<std::string, Alignment> alignmentMap;
+  static std::map<std::string, ImageFit> imageFitMap;
 };
 } // namespace Images

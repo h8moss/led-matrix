@@ -1,20 +1,31 @@
 #pragma once
 
+#include "common/canvas/icanvas.hpp"
 #include "modules/images/images_configuration.hpp"
 #include "modules/module.hpp"
+
+#include <Magick++.h>
+#include <Magick++/Image.h>
 
 namespace Images {
 class ImagesModule : public Module {
 public:
-  ImagesModule(BetterCanvas *canvas);
-  virtual ~ImagesModule();
+  ImagesModule(ICanvas *canvas);
 
-  virtual void setup() override;
-  virtual long int render() override;
-  virtual void teardown() override;
+  void setup() override;
+  long int render() override;
+  void teardown() override;
 
-  Images::Configuration *getConfig() const;
+  void addFlags(CLI::App *app) override;
+  void
+  readArguments(std::map<std::string, std::vector<std::string>> args) override;
 
-  virtual void createConfiguration() override;
+  ~ImagesModule();
+
+private:
+  Images::Configuration config;
+
+  int currentImage;
+  std::vector<Magick::Image> images;
 };
 } // namespace Images
