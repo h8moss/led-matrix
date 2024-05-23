@@ -37,7 +37,7 @@ long int Images::ImagesModule::render() {
     duration = config.durations[index];
   }
 
-  return duration;
+  return duration * 1000;
 }
 
 void Images::ImagesModule::teardown() { canvas->clear(); }
