@@ -20,7 +20,7 @@ public:
 
   virtual void addFlags(CLI::App *app) = 0;
   virtual void
-  readArguments(std::map<std::string, std::vector<std::string>> args);
+  readArguments(std::map<std::string, std::vector<std::string>> args) = 0;
 
   virtual ~Module() {}
 
