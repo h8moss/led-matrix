@@ -16,6 +16,7 @@ void Images::ImagesModule::setup() {
 }
 
 long int Images::ImagesModule::render() {
+  canvas->clear();
   size_t index{(size_t)currentImage % images.size()};
   ++currentImage;
 
@@ -27,8 +28,16 @@ long int Images::ImagesModule::render() {
       canvas->setPixel(x, y, Color::fromMagickColor(image.pixelColor(x, y)));
     }
   }
+  int duration{1000};
+  if (config.durations.size() < index + 1) {
+    if (config.durations.size() > 1) {
+      duration = config.durations[config.durations.size() - 1];
+    }
+  } else {
+    duration = config.durations[index];
+  }
 
-  return config.durations[index];
+  return duration;
 }
 
 void Images::ImagesModule::teardown() { canvas->clear(); }
