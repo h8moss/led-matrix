@@ -1,8 +1,12 @@
 #include "common/models/color.hpp"
 #include "common/util/debug_log.hpp"
 
+#include <Magick++.h>
+#include <Magick++/Include.h>
 #include <map>
 #include <sstream>
+
+using Magick::Quantum;
 
 float hueToRGB(float p, float q, float t) {
   if (t < 0)
@@ -103,9 +107,13 @@ rgb_matrix::Color Color::toRGBMatrixColor() {
 }
 
 Color Color::fromMagickColor(Magick::Color c) {
-  return Color(c.redQuantum(), c.greenQuantum(), c.blueQuantum());
-}
 
+  float red{(float)c.redQuantum() / (float)MaxRGB};
+  float green{(float)c.greenQuantum() / (float)MaxRGB};
+  float blue{(float)c.blueQuantum() / (float)MaxRGB};
+
+  return Color{(int)(255 * red), (int)(255 * green), (int)(255 * blue)};
+}
 // ----- CLI11 Lexical cast -----
 bool lexical_cast(const std::string &input, Color &v) {
   v = Color::fromHex(input);
