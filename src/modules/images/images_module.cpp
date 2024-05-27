@@ -1,5 +1,7 @@
 #include "modules/images/images_module.hpp"
+#include "modules/images/images_configuration.hpp"
 
+#include <Magick++/Geometry.h>
 #include <cmath>
 
 Images::ImagesModule::ImagesModule(ICanvas *canvas)
@@ -13,6 +15,29 @@ void Images::ImagesModule::setup() {
   for (auto c : config.images) {
     Magick::Image img{};
     img.read(c);
+    unsigned long imgW{img.size().width()};
+    unsigned long imgH{img.size().height()};
+
+    if (config.fit == Images::ImageFit::crop) {
+      float ratioW{(float)imgW / (float)canvas->getWidth()};
+      float ratioH{(float)imgH / (float)canvas->getHeight()};
+      float finalRatio{std::min(ratioW, ratioH)};
+      img.scale(
+          Magick::Geometry((float)imgW / finalRatio, (float)imgH / finalRatio));
+    } else if (config.fit == Images::ImageFit::stretch) {
+      img.scale(Magick::Geometry(canvas->getWidth(), canvas->getHeight()));
+    } else if (config.fit == Images::ImageFit::place) {
+      // Do nothing
+    } else if (config.fit == Images::ImageFit::box) {
+      float ratioW{(float)imgW / (float)canvas->getWidth()};
+      float ratioH{(float)imgH / (float)canvas->getHeight()};
+      float finalRatio{std::max(ratioW, ratioH)};
+      img.scale(
+          Magick::Geometry((float)imgW / finalRatio, (float)imgH / finalRatio));
+
+    } else {
+      throw "Unkown fitting strategy";
+    }
     images.push_back(c);
   }
 }
@@ -24,12 +49,28 @@ long int Images::ImagesModule::render() {
 
   auto image{images[index]};
 
+  int xOffset{};
+  int yOffset{};
+
+  if (config.xAlignment == Images::Alignment::center) {
+    xOffset = (canvas->getWidth() - image.size().width()) / 2;
+  } else if (config.xAlignment == Images::Alignment::trailing) {
+    xOffset = (canvas->getWidth() - image.size().width());
+  }
+
+  if (config.yAlignment == Images::Alignment::center) {
+    yOffset = (canvas->getHeight() - image.size().height()) / 2;
+  } else if (config.yAlignment == Images::Alignment::trailing) {
+    yOffset = (canvas->getHeight() - image.size().height());
+  }
+
   // paint image
   for (int x{}; x < std::min(canvas->getWidth(), (int)image.size().width());
        x++) {
     for (int y{}; y < std::min(canvas->getHeight(), (int)image.size().height());
          y++) {
-      canvas->setPixel(x, y, Color::fromMagickColor(image.pixelColor(x, y)));
+      canvas->setPixel(x + xOffset, y + yOffset,
+                       Color::fromMagickColor(image.pixelColor(x, y)));
     }
   }
   int duration{1000};
