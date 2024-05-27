@@ -19,4 +19,5 @@ std::map<std::string, Images::Alignment> Images::Configuration::alignmentMap = {
 std::map<std::string, Images::ImageFit> Images::Configuration::imageFitMap = {
     {"stretch", Images::ImageFit::stretch},
     {"box", Images::ImageFit::box},
+    {"place", Images::ImageFit::place},
     {"crop", Images::ImageFit::crop}};
