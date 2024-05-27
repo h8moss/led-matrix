@@ -1,5 +1,7 @@
 #include "modules/images/images_module.hpp"
 
+#include <cmath>
+
 Images::ImagesModule::ImagesModule(ICanvas *canvas)
     : Module(canvas, "images", "Display images in the led matrix"),
       config{Images::Configuration::defaults}, currentImage{}, images{} {}
@@ -23,8 +25,10 @@ long int Images::ImagesModule::render() {
   auto image{images[index]};
 
   // paint image
-  for (int x{}; x < canvas->getWidth(); x++) {
-    for (int y{}; y < canvas->getHeight(); y++) {
+  for (int x{}; x < std::min(canvas->getWidth(), (int)image.size().width());
+       x++) {
+    for (int y{}; y < std::min(canvas->getHeight(), (int)image.size().height());
+         y++) {
       canvas->setPixel(x, y, Color::fromMagickColor(image.pixelColor(x, y)));
     }
   }
