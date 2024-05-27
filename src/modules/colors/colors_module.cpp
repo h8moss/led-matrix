@@ -1,5 +1,6 @@
 #include "modules/colors/colors_module.hpp"
 #include "common/util/arg_parser.hpp"
+#include "common/util/enum_checked_transformer.hpp"
 #include "modules/colors/colors_configuration.hpp"
 #include "modules/colors/renderers/circle_animation_renderer.hpp"
 #include "modules/colors/renderers/corners_animation_renderer.hpp"
@@ -50,8 +51,20 @@ void Colors::ColorsModule::addFlags(CLI::App *app) {
 
   module
       ->add_option("--animation, -a", config.animation, "The animation to show")
-      ->transform(CLI::CheckedTransformer(
-          Colors::ConfigurationWithAnimation::animationMap, CLI::ignore_case));
+      // ->transform(CLI::CheckedTransformer(
+      //     Colors::ConfigurationWithAnimation::animationMap,
+      //     CLI::ignore_case));
+      ->transform(EnumCheckedTransformer(
+          {{"pulse", Colors::Animation::pulse},
+           {"corners", Colors::Animation::corners},
+           {"grow", Colors::Animation::grow},
+           {"shrink", Colors::Animation::shrink}},
+          {{Colors::Animation::pulse, "A simple pulse animation"},
+           {Colors::Animation::corners,
+            "Colors rush from one corner to the other"},
+           {Colors::Animation::grow, "A circle of color grows from the center"},
+           {Colors::Animation::shrink,
+            "A circle of color shrinks into the center"}}));
 
   module->add_option("--animation-duration,--ad", config.animationDuration,
                      "The amount of time, in miliseconds, tha transition "
