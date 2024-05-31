@@ -117,7 +117,6 @@ Color Color::fromMagickColor(Magick::Color c) {
       c.greenQuantum(),
       c.blueQuantum(),
   }};
-  dLog(col.string());
   return col;
 }
 // ----- CLI11 Lexical cast -----
