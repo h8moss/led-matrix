@@ -60,11 +60,12 @@ void Images::ImagesModule::setup()
       throw "Unkown fitting strategy";
     }
 
-    for (size_t i{}; i < imgH; ++i)
+    for (size_t i{}; i < imgW; ++i)
     {
-      for (size_t j{}; j < imgW; ++j)
+      for (size_t j{}; j < imgH; ++j)
       {
         dLog("Buffer: " + std::to_string(i * imgW + j));
+        dLog("Out of " + std::to_string(imgW * imgH));
         auto color{img.pixelColor(j, i)};
         buffer[(i * imgW + j) * 3 + 0] = color.redQuantum();
         buffer[(i * imgW + j) * 3 + 1] = color.greenQuantum();
