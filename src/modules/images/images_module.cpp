@@ -70,15 +70,15 @@ long int Images::ImagesModule::render() {
     yOffset = (canvas->getHeight() - image.size().height());
   }
 
-  dLog("IZE");
-  dLog(image.size().width());
-  dLog(image.size().height());
-
   // paint image
   for (int x{}; x < std::min(canvas->getWidth(), (int)image.size().width());
        x++) {
     for (int y{}; y < std::min(canvas->getHeight(), (int)image.size().height());
          y++) {
+      if (x == 0) {
+        auto color{Color::fromMagickColor(image.pixelColor(x, y))};
+        dLog(color.string());
+      }
       canvas->setPixel(x + xOffset, y + yOffset,
                        Color::fromMagickColor(image.pixelColor(x, y)));
     }
