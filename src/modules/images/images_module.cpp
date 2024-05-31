@@ -1,4 +1,5 @@
 #include "modules/images/images_module.hpp"
+#include "common/util/debug_log.hpp"
 #include "modules/images/images_configuration.hpp"
 
 #include <Magick++/Geometry.h>
@@ -43,6 +44,11 @@ void Images::ImagesModule::setup() {
 }
 
 long int Images::ImagesModule::render() {
+  // If there is just one image and we already show it
+  if (currentImage != 0 && images.size() == 1) {
+    return 20000; // return 20ms
+  }
+
   canvas->clear();
   size_t index{(size_t)currentImage % images.size()};
   ++currentImage;
@@ -63,6 +69,9 @@ long int Images::ImagesModule::render() {
   } else if (config.yAlignment == Images::Alignment::trailing) {
     yOffset = (canvas->getHeight() - image.size().height());
   }
+
+  dLog(image.size().width());
+  dLog(image.size().height());
 
   // paint image
   for (int x{}; x < std::min(canvas->getWidth(), (int)image.size().width());
