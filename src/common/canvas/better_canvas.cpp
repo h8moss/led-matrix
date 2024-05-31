@@ -84,6 +84,8 @@ void BetterCanvas::drawCircle(int x, int y, int r, Color c, bool filled) {
   }
 }
 
+rgb_matrix::Canvas *BetterCanvas::getCanvas() { return canvas; }
+
 int BetterCanvas::getWidth() const { return canvas->width(); }
 int BetterCanvas::getHeight() const { return canvas->height(); }
 

@@ -24,6 +24,8 @@ public:
 
   void drawText(std::vector<ColoredText> text, int x = 2) override;
 
+  rgb_matrix::Canvas *getCanvas() override;
+
   int getWidth() const override;
   int getHeight() const override;
 

@@ -3,7 +3,10 @@
 #include "modules/images/images_configuration.hpp"
 
 #include <Magick++/Geometry.h>
+#include <Magick++/Image.h>
 #include <cmath>
+#include <cstdint>
+#include <graphics.h>
 
 Images::ImagesModule::ImagesModule(ICanvas *canvas)
     : Module(canvas, "images", "Display images in the led matrix"),
@@ -11,13 +14,19 @@ Images::ImagesModule::ImagesModule(ICanvas *canvas)
 
 void Images::ImagesModule::setup() {
   currentImage = 0;
-  images = {};
+  images = {std::vector<Magick::Image>(config.images.size())};
+  imageBuffers = {std::vector<uint8_t *>(config.images.size())};
 
-  for (auto c : config.images) {
+  for (size_t i{}; i < config.images.size(); ++i) {
+    auto c{config.images[i]};
+
     Magick::Image img{};
     img.read(c);
+
     unsigned long imgW{img.size().width()};
     unsigned long imgH{img.size().height()};
+
+    uint8_t *buffer{new uint8_t[3 * imgW * imgH]};
 
     if (config.fit == Images::ImageFit::crop) {
       float ratioW{(float)imgW / (float)canvas->getWidth()};
@@ -40,7 +49,18 @@ void Images::ImagesModule::setup() {
     } else {
       throw "Unkown fitting strategy";
     }
-    images.push_back(img);
+
+    for (size_t i{}; i < imgH; ++i) {
+      for (size_t j{}; j < imgW; ++j) {
+        auto color{img.pixelColor(j, i)};
+        buffer[(i * imgW + j) * 3 + 0] = color.redQuantum();
+        buffer[(i * imgW + j) * 3 + 1] = color.greenQuantum();
+        buffer[(i * imgW + j) * 3 + 2] = color.blueQuantum();
+      }
+    }
+
+    images[i] = img;
+    imageBuffers[i] = buffer;
   }
 }
 
@@ -72,6 +92,7 @@ long int Images::ImagesModule::render() {
   }
 
   // paint image
+  /*
   for (int x{}; x < std::min(canvas->getWidth(), (int)image.size().width());
        x++) {
     for (int y{}; y < std::min(canvas->getHeight(), (int)image.size().height());
@@ -84,6 +105,10 @@ long int Images::ImagesModule::render() {
                        Color::fromMagickColor(image.pixelColor(x, y)));
     }
   }
+*/
+  rgb_matrix::SetImage(canvas, xOffset, yOffset, imageBuffers[index],
+                       image.size().width() * image.size().height * 3,
+                       image.size().width(), image.size().height(), false);
   int duration{1000};
   if (config.durations.size() < index + 1) {
     if (config.durations.size() > 1) {

@@ -20,6 +20,8 @@ struct ICanvas {
   virtual int getWidth() const = 0;
   virtual int getHeight() const = 0;
 
+  virtual rgb_matrix::Canvas *getCanvas() = 0;
+
   virtual ~ICanvas() {}
 
   std::string fontName{};

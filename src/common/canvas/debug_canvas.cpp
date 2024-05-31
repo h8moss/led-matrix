@@ -37,6 +37,11 @@ void DebugCanvas::drawText(std::vector<ColoredText> text, int x) {
   }
 }
 
+rgb_matrix::Canvas *DebugCanvas::getCanvas() {
+  dLog("Attempted to get canvas");
+  return nullptr;
+}
+
 int DebugCanvas::getWidth() const { return 64; }
 
 int DebugCanvas::getHeight() const { return 64; }

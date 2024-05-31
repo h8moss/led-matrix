@@ -27,5 +27,6 @@ private:
 
   int currentImage;
   std::vector<Magick::Image> images;
+  std::vector<uint8_t *> imageBuffers;
 };
 } // namespace Images
