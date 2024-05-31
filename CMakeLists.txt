@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Depend on ImageMagick++
-add_definitions( -DMAGICKCORE_QUANTUM_DEPTH=16 )
+add_definitions( -DMAGICKCORE_QUANTUM_DEPTH=8 )
 add_definitions( -DMAGICKCORE_HDRI_ENABLE=0 )
 find_package(ImageMagick COMPONENTS Magick++)
 
