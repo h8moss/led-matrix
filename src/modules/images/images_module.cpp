@@ -12,12 +12,14 @@ Images::ImagesModule::ImagesModule(ICanvas *canvas)
     : Module(canvas, "images", "Display images in the led matrix"),
       config{Images::Configuration::defaults}, currentImage{}, images{} {}
 
-void Images::ImagesModule::setup() {
+void Images::ImagesModule::setup()
+{
   currentImage = 0;
   images = {std::vector<Magick::Image>(config.images.size())};
   imageBuffers = {std::vector<uint8_t *>(config.images.size())};
 
-  for (size_t i{}; i < config.images.size(); ++i) {
+  for (size_t i{}; i < config.images.size(); ++i)
+  {
     auto c{config.images[i]};
 
     Magick::Image img{};
@@ -28,30 +30,41 @@ void Images::ImagesModule::setup() {
 
     uint8_t *buffer{new uint8_t[3 * imgW * imgH]};
 
-    if (config.fit == Images::ImageFit::crop) {
+    if (config.fit == Images::ImageFit::crop)
+    {
       float ratioW{(float)imgW / (float)canvas->getWidth()};
       float ratioH{(float)imgH / (float)canvas->getHeight()};
       float finalRatio{std::min(ratioW, ratioH)};
       img.scale(
           Magick::Geometry((float)imgW / finalRatio, (float)imgH / finalRatio));
-    } else if (config.fit == Images::ImageFit::stretch) {
+    }
+    else if (config.fit == Images::ImageFit::stretch)
+    {
       img.resize(Magick::Geometry(canvas->getWidth(), canvas->getHeight()));
       img.syncPixels();
-    } else if (config.fit == Images::ImageFit::place) {
+    }
+    else if (config.fit == Images::ImageFit::place)
+    {
       // Do nothing
-    } else if (config.fit == Images::ImageFit::box) {
+    }
+    else if (config.fit == Images::ImageFit::box)
+    {
       float ratioW{(float)imgW / (float)canvas->getWidth()};
       float ratioH{(float)imgH / (float)canvas->getHeight()};
       float finalRatio{std::max(ratioW, ratioH)};
       img.scale(
           Magick::Geometry((float)imgW / finalRatio, (float)imgH / finalRatio));
-
-    } else {
+    }
+    else
+    {
       throw "Unkown fitting strategy";
     }
 
-    for (size_t i{}; i < imgH; ++i) {
-      for (size_t j{}; j < imgW; ++j) {
+    for (size_t i{}; i < imgH; ++i)
+    {
+      for (size_t j{}; j < imgW; ++j)
+      {
+        dLog("Buffer: " + std::to_string(i * imgW + j));
         auto color{img.pixelColor(j, i)};
         buffer[(i * imgW + j) * 3 + 0] = color.redQuantum();
         buffer[(i * imgW + j) * 3 + 1] = color.greenQuantum();
@@ -64,9 +77,11 @@ void Images::ImagesModule::setup() {
   }
 }
 
-long int Images::ImagesModule::render() {
+long int Images::ImagesModule::render()
+{
   // If there is just one image and we already show it
-  if (currentImage != 0 && images.size() == 1) {
+  if (currentImage != 0 && images.size() == 1)
+  {
     return 20000; // return 20ms
   }
 
@@ -79,15 +94,21 @@ long int Images::ImagesModule::render() {
   int xOffset{};
   int yOffset{};
 
-  if (config.xAlignment == Images::Alignment::center) {
+  if (config.xAlignment == Images::Alignment::center)
+  {
     xOffset = (canvas->getWidth() - image.size().width()) / 2;
-  } else if (config.xAlignment == Images::Alignment::trailing) {
+  }
+  else if (config.xAlignment == Images::Alignment::trailing)
+  {
     xOffset = (canvas->getWidth() - image.size().width());
   }
 
-  if (config.yAlignment == Images::Alignment::center) {
+  if (config.yAlignment == Images::Alignment::center)
+  {
     yOffset = (canvas->getHeight() - image.size().height()) / 2;
-  } else if (config.yAlignment == Images::Alignment::trailing) {
+  }
+  else if (config.yAlignment == Images::Alignment::trailing)
+  {
     yOffset = (canvas->getHeight() - image.size().height());
   }
 
@@ -111,11 +132,15 @@ long int Images::ImagesModule::render() {
                        image.size().width() * image.size().height() * 3,
                        image.size().width(), image.size().height(), false);
   int duration{1000};
-  if (config.durations.size() < index + 1) {
-    if (config.durations.size() > 1) {
+  if (config.durations.size() < index + 1)
+  {
+    if (config.durations.size() > 1)
+    {
       duration = config.durations[config.durations.size() - 1];
     }
-  } else {
+  }
+  else
+  {
     duration = config.durations[index];
   }
 
@@ -124,7 +149,8 @@ long int Images::ImagesModule::render() {
 
 void Images::ImagesModule::teardown() { canvas->clear(); }
 
-void Images::ImagesModule::addFlags(CLI::App *app) {
+void Images::ImagesModule::addFlags(CLI::App *app)
+{
   auto cmd{app->add_subcommand(this->name, this->description)};
 
   cmd->add_option("--image,-i", config.images,
