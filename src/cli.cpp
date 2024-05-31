@@ -22,6 +22,7 @@ volatile bool interruptReceived = false;
 static void Interrupt(int signo) { interruptReceived = true; }
 
 int main(int argc, char **argv) {
+  Magick::InitializeMagick(*argv);
   CLI::App app{"Led matrix"};
   argv = app.ensure_utf8(argv);
   app.require_subcommand(1);
