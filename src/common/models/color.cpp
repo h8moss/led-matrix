@@ -24,7 +24,7 @@ float hueToRGB(float p, float q, float t) {
 }
 
 Color::Color(int _r, int _g, int _b) : r{_r}, g{_g}, b{_b} {
-  if (std::max(r, g, b) > 255) {
+  if (std::max({r, g, b}) > 255) {
     throw "Max RGB value is (255,255,255), but got (" + string();
   }
 }
