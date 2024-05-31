@@ -23,7 +23,11 @@ float hueToRGB(float p, float q, float t) {
   return p;
 }
 
-Color::Color(int _r, int _g, int _b) : r{_r}, g{_g}, b{_b} {}
+Color::Color(int _r, int _g, int _b) : r{_r}, g{_g}, b{_b} {
+  if (std::max(r, g, b) > 255) {
+    throw "Max RGB value is (255,255,255), but got (" + string();
+  }
+}
 Color::Color() : Color(0, 0, 0) {}
 
 const std::string Color::string() const {
@@ -108,11 +112,13 @@ rgb_matrix::Color Color::toRGBMatrixColor() {
 }
 
 Color Color::fromMagickColor(Magick::Color c) {
-  return Color{
+  auto col{Color{
       c.redQuantum(),
       c.greenQuantum(),
       c.blueQuantum(),
-  };
+  }};
+  dLog(col.string());
+  return col;
 }
 // ----- CLI11 Lexical cast -----
 bool lexical_cast(const std::string &input, Color &v) {
