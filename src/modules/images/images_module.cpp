@@ -27,6 +27,7 @@ void Images::ImagesModule::setup() {
           Magick::Geometry((float)imgW / finalRatio, (float)imgH / finalRatio));
     } else if (config.fit == Images::ImageFit::stretch) {
       img.resize(Magick::Geometry(canvas->getWidth(), canvas->getHeight()));
+      img.write("out.jpg");
 
     } else if (config.fit == Images::ImageFit::place) {
       // Do nothing
