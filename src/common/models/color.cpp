@@ -108,16 +108,11 @@ rgb_matrix::Color Color::toRGBMatrixColor() {
 }
 
 Color Color::fromMagickColor(Magick::Color c) {
-  dLog("MaxRGB: " + std::to_string(MaxRGB));
-
-  float red{(float)c.redQuantum() / (float)MaxRGB};
-  float green{(float)c.greenQuantum() / (float)MaxRGB};
-  float blue{(float)c.blueQuantum() / (float)MaxRGB};
-  dLog("R: " + std::to_string(c.redQuantum()));
-  dLog("G: " + std::to_string(c.greenQuantum()));
-  dLog("B: " + std::to_string(c.blueQuantum()));
-
-  return Color{(int)(255 * red), (int)(255 * green), (int)(255 * blue)};
+  return Color{
+      c.redQuantum(),
+      c.greenQuantum(),
+      c.blueQuantum(),
+  };
 }
 // ----- CLI11 Lexical cast -----
 bool lexical_cast(const std::string &input, Color &v) {
