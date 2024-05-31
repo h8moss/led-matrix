@@ -9,6 +9,7 @@
 #include "CLI/CLI.hpp"
 #include "led-matrix.h"
 
+#include <Magick++/Exception.h>
 #include <iostream>
 #include <signal.h>
 #include <sys/select.h>
@@ -118,7 +119,7 @@ int main(int argc, char **argv) {
   } catch (const std::string err) {
     std::cerr << err << std::endl;
     return 1;
-  } catch (const std::exception err) {
+  } catch (const std::exception &err) {
     std::cerr << "Something went wrong!" << '\n';
     std::cerr << err.what() << std::endl;
   }
