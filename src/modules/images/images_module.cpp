@@ -26,7 +26,7 @@ void Images::ImagesModule::setup() {
       img.scale(
           Magick::Geometry((float)imgW / finalRatio, (float)imgH / finalRatio));
     } else if (config.fit == Images::ImageFit::stretch) {
-      img.scale(Magick::Geometry(canvas->getWidth(), canvas->getHeight()));
+      img.resize(Magick::Geometry(canvas->getWidth(), canvas->getHeight()));
 
     } else if (config.fit == Images::ImageFit::place) {
       // Do nothing
