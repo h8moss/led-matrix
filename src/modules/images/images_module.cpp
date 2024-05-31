@@ -26,15 +26,7 @@ void Images::ImagesModule::setup() {
       img.scale(
           Magick::Geometry((float)imgW / finalRatio, (float)imgH / finalRatio));
     } else if (config.fit == Images::ImageFit::stretch) {
-      dLog("PRE SIZE");
-      dLog(img.size().width());
-      dLog(img.size().height());
-
       img.scale(Magick::Geometry(canvas->getWidth(), canvas->getHeight()));
-
-      dLog("POST SIZE");
-      dLog(img.size().width());
-      dLog(img.size().height());
 
     } else if (config.fit == Images::ImageFit::place) {
       // Do nothing
@@ -48,7 +40,7 @@ void Images::ImagesModule::setup() {
     } else {
       throw "Unkown fitting strategy";
     }
-    images.push_back(c);
+    images.push_back(img);
   }
 }
 
