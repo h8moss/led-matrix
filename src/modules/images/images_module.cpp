@@ -28,7 +28,7 @@ void Images::ImagesModule::setup()
     unsigned long imgW{img.size().width()};
     unsigned long imgH{img.size().height()};
 
-    uint8_t *buffer{new uint8_t[3 * imgW * imgH]};
+    uint8_t *buffer{new uint8_t[3 * canvas->getWidth() * canvas->getHeight()]};
 
     if (config.fit == Images::ImageFit::crop)
     {
@@ -60,9 +60,9 @@ void Images::ImagesModule::setup()
       throw "Unkown fitting strategy";
     }
 
-    for (size_t i{}; i < imgW; ++i)
+    for (size_t i{}; i < canvas->getWidth(); ++i)
     {
-      for (size_t j{}; j < imgH; ++j)
+      for (size_t j{}; j < canvas->getHeight(); ++j)
       {
         dLog("Buffer: " + std::to_string(i * imgW + j));
         dLog("Out of " + std::to_string(imgW * imgH));
