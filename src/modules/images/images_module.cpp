@@ -107,7 +107,7 @@ long int Images::ImagesModule::render() {
   }
 */
   rgb_matrix::SetImage(canvas, xOffset, yOffset, imageBuffers[index],
-                       image.size().width() * image.size().height * 3,
+                       image.size().width() * image.size().height() * 3,
                        image.size().width(), image.size().height(), false);
   int duration{1000};
   if (config.durations.size() < index + 1) {
