@@ -26,7 +26,16 @@ void Images::ImagesModule::setup() {
       img.scale(
           Magick::Geometry((float)imgW / finalRatio, (float)imgH / finalRatio));
     } else if (config.fit == Images::ImageFit::stretch) {
+      dLog("PRE SIZE");
+      dLog(img.size().width());
+      dLog(img.size().height());
+
       img.scale(Magick::Geometry(canvas->getWidth(), canvas->getHeight()));
+
+      dLog("POST SIZE");
+      dLog(img.size().width());
+      dLog(img.size().height());
+
     } else if (config.fit == Images::ImageFit::place) {
       // Do nothing
     } else if (config.fit == Images::ImageFit::box) {
@@ -70,6 +79,7 @@ long int Images::ImagesModule::render() {
     yOffset = (canvas->getHeight() - image.size().height());
   }
 
+  dLog("IZE");
   dLog(image.size().width());
   dLog(image.size().height());
 
