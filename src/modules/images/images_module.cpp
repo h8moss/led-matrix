@@ -88,7 +88,7 @@ void Images::ImagesModule::setup()
     {
       for (int y{}; y < img.size().height(); ++y)
       {
-        dLog(std::to_string(x + y * img.size().width()) + "/" + std::to_string(img.size().width() * img.size().height()));
+        dLog(std::to_string(x * img.size().width() + y) + "/" + std::to_string(img.size().width() * img.size().height()));
         pixels[i].push_back(Color::fromMagickColor(img.pixelColor(x, y)));
       }
     }
@@ -108,6 +108,7 @@ long int Images::ImagesModule::render()
   {
     int x{pixelIndex % img.size().width()};
     int y{pixelIndex / img.size().width()};
+    dLog("X: " + std::to_string(x) + " Y: " + std::to_string(y));
 
     canvas->setPixel(x, y, px);
 
