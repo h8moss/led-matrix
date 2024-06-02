@@ -7,26 +7,31 @@
 #include <Magick++.h>
 #include <Magick++/Image.h>
 
-namespace Images {
-class ImagesModule : public Module {
-public:
-  ImagesModule(ICanvas *canvas);
+namespace Images
+{
+  class ImagesModule : public Module
+  {
+  public:
+    ImagesModule(ICanvas *canvas);
 
-  void setup() override;
-  long int render() override;
-  void teardown() override;
+    void setup() override;
+    long int render() override;
+    void teardown() override;
 
-  void addFlags(CLI::App *app) override;
-  void
-  readArguments(std::map<std::string, std::vector<std::string>> args) override;
+    void addFlags(CLI::App *app) override;
+    void
+    readArguments(std::map<std::string, std::vector<std::string>> args) override;
 
-  ~ImagesModule();
+    ~ImagesModule();
 
-private:
-  Images::Configuration config;
+  private:
+    Images::Configuration config;
 
-  int currentImage;
-  std::vector<Magick::Image> images;
-  std::vector<uint8_t *> imageBuffers;
-};
+    int currentImage;
+    std::vector<Magick::Image> images;
+    std::vector<uint8_t *> imageBuffers;
+
+    std::vector<int> bufferH;
+    std::vector<int> bufferW;
+  };
 } // namespace Images

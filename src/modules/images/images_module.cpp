@@ -18,6 +18,8 @@ void Images::ImagesModule::setup()
 {
   images = std::vector<Magick::Image>(config.images.size());
   imageBuffers = std::vector<uint8_t *>(config.images.size());
+  bufferW = std::vector<int>(config.images.size());
+  bufferH = std::vector<int>(config.images.size());
 
   for (int i{}; i < images.size(); ++i)
   {
@@ -81,9 +83,27 @@ void Images::ImagesModule::setup()
     }
 
     img.modifyImage();
-    Magick::Quantum *pixels{img.getPixels(0, 0, img.size().width(), img.size().height())};
 
-    imageBuffers[i] = (uint8_t *)pixels;
+    bufferW[i] = std::min((int)img.size().width(), canvas->getWidth());
+    bufferH[i] = std::min((int)img.size().height(), canvas->getHeight());
+
+    imageBuffers[i] = new uint8_t[img.size().width() * img.size().height() * 3];
+
+    for (int x{}; x < bufferW[i]; ++x)
+    {
+      for (int y{}; y < bufferH[y]; ++y)
+      {
+        dLog(std::to_string(x + y * bufferW[i]) + "/" + std::to_string(bufferW[i] * bufferH[i]));
+        // set image buffer quantum values
+        // red
+        imageBuffers[i][x + y * bufferW[i] * 3] = img.pixelColor(x, y).quantumRed();
+        // green
+        imageBuffers[i][x + y * bufferW[i] * 3 + 1] = img.pixelColor(x, y).quantumGreen();
+        // blue
+        imageBuffers[i][x + y * bufferW[i] * 3 + 2] = img.pixelColor(x, y).quantumBlue();
+      }
+    }
+
     images[i] = img;
   }
 }
@@ -92,6 +112,8 @@ long int Images::ImagesModule::render()
 {
   auto img{images[currentImage]};
   auto buffer{imageBuffers[currentImage]};
+
+  canvas->clear();
 
   rgb_matrix::SetImage(canvas->getCanvas(), 0, 0, buffer, img.size().width() * img.size().height() * 3, img.size().width(), img.size().height(), false);
 
