@@ -112,10 +112,12 @@ long int Images::ImagesModule::render()
 {
   auto img{images[currentImage]};
   auto buffer{imageBuffers[currentImage]};
+  int buffW{bufferW[currentImage]};
+  int buffH{bufferH[currentImage]};
 
   canvas->clear();
 
-  rgb_matrix::SetImage(canvas->getCanvas(), 0, 0, buffer, img.size().width() * img.size().height() * 3, img.size().width(), img.size().height(), false);
+  rgb_matrix::SetImage(canvas->getCanvas(), 0, 0, buffer, buffW * buffH * 3, buffW, buffH, false);
 
   return 1000 * 1000;
 }
