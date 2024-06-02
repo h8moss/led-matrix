@@ -7,7 +7,8 @@
 #include "graphics.h"
 #include "led-matrix.h"
 
-class BetterCanvas : public ICanvas {
+class BetterCanvas : public ICanvas
+{
 public:
   BetterCanvas(int argc, char **argv, rgb_matrix::RGBMatrix::Options options);
   BetterCanvas(const BetterCanvas &canvas);
@@ -32,7 +33,7 @@ public:
   ~BetterCanvas();
 
 private:
-  rgb_matrix::Canvas *canvas;
+  rgb_matrix::RGBMatrix *canvas;
 
   rgb_matrix::Font *font;
   rgb_matrix::Font *getFont();
