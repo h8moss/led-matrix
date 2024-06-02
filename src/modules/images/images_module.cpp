@@ -2,6 +2,8 @@
 #include "common/util/debug_log.hpp"
 #include "modules/images/images_configuration.hpp"
 
+#include "led-matrix.h"
+
 #include <Magick++/Geometry.h>
 #include <Magick++/Image.h>
 #include <cmath>
@@ -14,138 +16,86 @@ Images::ImagesModule::ImagesModule(ICanvas *canvas)
 
 void Images::ImagesModule::setup()
 {
-  currentImage = 0;
-  images = {std::vector<Magick::Image>(config.images.size())};
-  imageBuffers = {std::vector<uint8_t *>(config.images.size())};
+  images = std::vector<Magick::Image>(config.images.size());
+  imageBuffers = std::vector<uint8_t *>(config.images.size());
 
-  for (size_t i{}; i < config.images.size(); ++i)
+  for (int i{}; i < images.size(); ++i)
   {
-    auto c{config.images[i]};
+    const std::string filename = config.images[i];
+    // FileInfo *file_info = NULL;
 
     Magick::Image img{};
-    img.read(c);
+    img.read(config.images[i]);
 
-    unsigned long imgW{img.size().width()};
-    unsigned long imgH{img.size().height()};
+    int resizeW{};
+    int resizeH{};
+    if (img.size().width() != canvas->getWidth() || img.size().height() != canvas->getHeight())
+    {
 
-    uint8_t *buffer{new uint8_t[3 * canvas->getWidth() * canvas->getHeight()]};
-
-    if (config.fit == Images::ImageFit::crop)
-    {
-      float ratioW{(float)imgW / (float)canvas->getWidth()};
-      float ratioH{(float)imgH / (float)canvas->getHeight()};
-      float finalRatio{std::min(ratioW, ratioH)};
-      img.scale(
-          Magick::Geometry((float)imgW / finalRatio, (float)imgH / finalRatio));
-    }
-    else if (config.fit == Images::ImageFit::stretch)
-    {
-      img.resize(Magick::Geometry(canvas->getWidth(), canvas->getHeight()));
-      img.syncPixels();
-    }
-    else if (config.fit == Images::ImageFit::place)
-    {
-      // Do nothing
-    }
-    else if (config.fit == Images::ImageFit::box)
-    {
-      float ratioW{(float)imgW / (float)canvas->getWidth()};
-      float ratioH{(float)imgH / (float)canvas->getHeight()};
-      float finalRatio{std::max(ratioW, ratioH)};
-      img.scale(
-          Magick::Geometry((float)imgW / finalRatio, (float)imgH / finalRatio));
-    }
-    else
-    {
-      throw "Unkown fitting strategy";
-    }
-
-    for (size_t i{}; i < canvas->getWidth(); ++i)
-    {
-      for (size_t j{}; j < canvas->getHeight(); ++j)
+      if (config.fit == Images::ImageFit::box)
       {
-        dLog("Buffer: " + std::to_string(i * imgW + j));
-        dLog("Out of " + std::to_string(imgW * imgH));
-        auto color{img.pixelColor(j, i)};
-        buffer[(i * imgW + j) * 3 + 0] = color.redQuantum();
-        buffer[(i * imgW + j) * 3 + 1] = color.greenQuantum();
-        buffer[(i * imgW + j) * 3 + 2] = color.blueQuantum();
+        // Scale image until largest side matches the matrix size
+        if (img.size().width() > img.size().height())
+        {
+          resizeW = canvas->getWidth();
+          resizeH = (img.size().height() * resizeW) / img.size().width();
+        }
+        else
+        {
+          resizeH = canvas->getHeight();
+          resizeW = (img.size().width() * resizeH) / img.size().height();
+        }
+      }
+      else if (config.fit == Images::ImageFit::crop)
+      {
+        // Scale image until smallest side matches the matrix size
+        if (img.size().width() < img.size().height())
+        {
+          resizeW = canvas->getWidth();
+          resizeH = (img.size().height() * resizeW) / img.size().width();
+        }
+        else
+        {
+          resizeH = canvas->getHeight();
+          resizeW = (img.size().width() * resizeH) / img.size().height();
+        }
+      }
+      else if (config.fit == Images::ImageFit::place)
+      {
+        // do nothing
+      }
+      else if (config.fit == Images::ImageFit::stretch)
+      {
+        // Scale image until both sides match the matrix size
+        resizeW = canvas->getWidth();
+        resizeH = canvas->getHeight();
+      }
+      else
+      {
+        throw "Unknown image fit";
       }
     }
+    if (resizeW + resizeH != 0)
+    {
+      img.resize(Magick::Geometry(resizeW, resizeH));
+    }
 
+    img.modifyImage();
+    Magick::Quantum *pixels{img.getPixels(0, 0, img.size().width(), img.size().height())};
+
+    imageBuffers[i] = (uint8_t *)pixels;
     images[i] = img;
-    imageBuffers[i] = buffer;
   }
 }
 
 long int Images::ImagesModule::render()
 {
-  // If there is just one image and we already show it
-  if (currentImage != 0 && images.size() == 1)
-  {
-    return 20000; // return 20ms
-  }
+  auto img{images[currentImage]};
+  auto buffer{imageBuffers[currentImage]};
 
-  canvas->clear();
-  size_t index{(size_t)currentImage % images.size()};
-  ++currentImage;
+  rgb_matrix::SetImage(canvas->getCanvas(), 0, 0, buffer, img.size().width() * img.size().height() * 3, img.size().width(), img.size().height(), false);
 
-  auto image{images[index]};
-
-  int xOffset{};
-  int yOffset{};
-
-  if (config.xAlignment == Images::Alignment::center)
-  {
-    xOffset = (canvas->getWidth() - image.size().width()) / 2;
-  }
-  else if (config.xAlignment == Images::Alignment::trailing)
-  {
-    xOffset = (canvas->getWidth() - image.size().width());
-  }
-
-  if (config.yAlignment == Images::Alignment::center)
-  {
-    yOffset = (canvas->getHeight() - image.size().height()) / 2;
-  }
-  else if (config.yAlignment == Images::Alignment::trailing)
-  {
-    yOffset = (canvas->getHeight() - image.size().height());
-  }
-
-  // paint image
-  /*
-  for (int x{}; x < std::min(canvas->getWidth(), (int)image.size().width());
-       x++) {
-    for (int y{}; y < std::min(canvas->getHeight(), (int)image.size().height());
-         y++) {
-      if (x == 0) {
-        auto color{Color::fromMagickColor(image.pixelColor(x, y))};
-        dLog(color.string());
-      }
-      canvas->setPixel(x + xOffset, y + yOffset,
-                       Color::fromMagickColor(image.pixelColor(x, y)));
-    }
-  }
-*/
-  rgb_matrix::SetImage(canvas->getCanvas(), xOffset, yOffset,
-                       imageBuffers[index],
-                       image.size().width() * image.size().height() * 3,
-                       image.size().width(), image.size().height(), false);
-  int duration{1000};
-  if (config.durations.size() < index + 1)
-  {
-    if (config.durations.size() > 1)
-    {
-      duration = config.durations[config.durations.size() - 1];
-    }
-  }
-  else
-  {
-    duration = config.durations[index];
-  }
-
-  return duration * 1000;
+  return 1000 * 1000;
 }
 
 void Images::ImagesModule::teardown() { canvas->clear(); }
