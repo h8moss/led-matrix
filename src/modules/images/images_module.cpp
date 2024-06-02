@@ -96,11 +96,11 @@ void Images::ImagesModule::setup()
         dLog(std::to_string(x + y * bufferW[i]) + "/" + std::to_string(bufferW[i] * bufferH[i]));
         // set image buffer quantum values
         // red
-        imageBuffers[i][x + y * bufferW[i] * 3] = img.pixelColor(x, y).quantumRed();
+        imageBuffers[i][x + y * bufferW[i] * 3] = img.pixelColor(x, y).redQuantum();
         // green
-        imageBuffers[i][x + y * bufferW[i] * 3 + 1] = img.pixelColor(x, y).quantumGreen();
+        imageBuffers[i][x + y * bufferW[i] * 3 + 1] = img.pixelColor(x, y).greenQuantum();
         // blue
-        imageBuffers[i][x + y * bufferW[i] * 3 + 2] = img.pixelColor(x, y).quantumBlue();
+        imageBuffers[i][x + y * bufferW[i] * 3 + 2] = img.pixelColor(x, y).blueQuantum();
       }
     }
 
