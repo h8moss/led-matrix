@@ -122,7 +122,14 @@ long int Images::ImagesModule::render()
   return 1000 * 1000;
 }
 
-void Images::ImagesModule::teardown() { canvas->clear(); }
+void Images::ImagesModule::teardown()
+{
+  canvas->clear();
+  for (auto &buffer : imageBuffers)
+  {
+    delete[] buffer;
+  }
+}
 
 void Images::ImagesModule::addFlags(CLI::App *app)
 {
@@ -154,4 +161,6 @@ void Images::ImagesModule::addFlags(CLI::App *app)
 void Images::ImagesModule::readArguments(
     std::map<std::string, std::vector<std::string>> args) {}
 
-Images::ImagesModule::~ImagesModule() {}
+Images::ImagesModule::~ImagesModule()
+{
+}
