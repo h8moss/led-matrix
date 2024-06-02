@@ -17,9 +17,7 @@ Images::ImagesModule::ImagesModule(ICanvas *canvas)
 void Images::ImagesModule::setup()
 {
   images = std::vector<Magick::Image>(config.images.size());
-  imageBuffers = std::vector<uint8_t *>(config.images.size());
-  bufferW = std::vector<int>(config.images.size());
-  bufferH = std::vector<int>(config.images.size());
+  pixels = std::vector<std::vector<Color>>(config.images.size());
 
   for (int i{}; i < images.size(); ++i)
   {
@@ -83,24 +81,15 @@ void Images::ImagesModule::setup()
     }
 
     img.modifyImage();
+    img.syncPixels();
 
-    bufferW[i] = std::min((int)img.size().width(), canvas->getWidth());
-    bufferH[i] = std::min((int)img.size().height(), canvas->getHeight());
-
-    imageBuffers[i] = new uint8_t[img.size().width() * img.size().height() * 3];
-
-    for (int x{}; x < bufferW[i]; ++x)
+    pixels[i] = std::vector<Color>(img.size().width() * img.size().height());
+    for (int x{}; x < img.size().width(); ++x)
     {
-      for (int y{}; y < bufferH[i]; ++y)
+      for (int y{}; y < img.size().height(); ++y)
       {
-        dLog(std::to_string(x + y * bufferW[i]) + "/" + std::to_string(bufferW[i] * bufferH[i]));
-        // set image buffer quantum values
-        // red
-        imageBuffers[i][x + y * bufferW[i] * 3] = img.pixelColor(x, y).redQuantum();
-        // green
-        imageBuffers[i][x + y * bufferW[i] * 3 + 1] = img.pixelColor(x, y).greenQuantum();
-        // blue
-        imageBuffers[i][x + y * bufferW[i] * 3 + 2] = img.pixelColor(x, y).blueQuantum();
+        dLog(std::to_string(x + y * img.size().width()) + "/" + std::to_string(img.size().width() * img.size().height()));
+        pixels[i].push_back(Color::fromMagickColor(img.pixelColor(x, y)));
       }
     }
 
@@ -111,13 +100,19 @@ void Images::ImagesModule::setup()
 long int Images::ImagesModule::render()
 {
   auto img{images[currentImage]};
-  auto buffer{imageBuffers[currentImage]};
-  int buffW{bufferW[currentImage]};
-  int buffH{bufferH[currentImage]};
+  auto currentPixels{pixels[currentImage]};
 
   canvas->clear();
+  int pixelIndex{};
+  for (auto px : currentPixels)
+  {
+    int x{pixelIndex % img.size().width()};
+    int y{pixelIndex / img.size().width()};
 
-  rgb_matrix::SetImage(canvas->getCanvas(), 0, 0, buffer, buffW * buffH * 3, buffW, buffH, false);
+    canvas->setPixel(x, y, px);
+
+    ++pixelIndex;
+  }
 
   return 1000 * 1000;
 }
@@ -125,10 +120,6 @@ long int Images::ImagesModule::render()
 void Images::ImagesModule::teardown()
 {
   canvas->clear();
-  for (auto &buffer : imageBuffers)
-  {
-    delete[] buffer;
-  }
 }
 
 void Images::ImagesModule::addFlags(CLI::App *app)

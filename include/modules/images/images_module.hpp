@@ -29,9 +29,6 @@ namespace Images
 
     int currentImage;
     std::vector<Magick::Image> images;
-    std::vector<uint8_t *> imageBuffers;
-
-    std::vector<int> bufferH;
-    std::vector<int> bufferW;
+    std::vector<std::vector<Color>> pixels;
   };
 } // namespace Images
