@@ -91,7 +91,7 @@ void Images::ImagesModule::setup()
 
     for (int x{}; x < bufferW[i]; ++x)
     {
-      for (int y{}; y < bufferH[y]; ++y)
+      for (int y{}; y < bufferH[i]; ++y)
       {
         dLog(std::to_string(x + y * bufferW[i]) + "/" + std::to_string(bufferW[i] * bufferH[i]));
         // set image buffer quantum values
