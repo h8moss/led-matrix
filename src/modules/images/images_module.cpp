@@ -108,7 +108,7 @@ long int Images::ImagesModule::render()
   {
     int x{pixelIndex % img.size().width()};
     int y{pixelIndex / img.size().width()};
-    dLog("X: " + std::to_string(x) + " Y: " + std::to_string(y));
+    dLog("X: " + std::to_string(x) + " Y: " + std::to_string(y) + " TOT: " std::to_string(pixelIndex) + " COL: " + px.string();
 
     canvas->setPixel(x, y, px);
 
