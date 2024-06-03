@@ -115,7 +115,7 @@ long int Images::ImagesModule::render()
     ++pixelIndex;
   }
 
-  return 1000 * 1000;
+  return 1000 * 1000 * 30;
 }
 
 void Images::ImagesModule::teardown()
