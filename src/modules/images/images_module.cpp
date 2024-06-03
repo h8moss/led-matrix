@@ -65,11 +65,15 @@ void Images::ImagesModule::setup() {
     img.modifyImage();
     img.syncPixels();
 
-    pixels[i] = std::vector<Color>(img.size().width() * img.size().height());
-    for (size_t x{}; x < img.size().width(); ++x) {
-      for (size_t y{}; y < img.size().height(); ++y) {
-        dLog(std::to_string(x * img.size().width() + y) + "/" +
-             std::to_string(img.size().width() * img.size().height()));
+    int minSizeW{std::min((int)img.size().width(), canvas->getWidth())};
+    int minSizeH{std::min((int)img.size().width(), canvas->getHeight())};
+
+    pixels[i] = std::vector<Color>(minSizeW * minSizeH);
+    for (size_t x{}; x < minSizeW; ++x) {
+      for (size_t y{}; y < minSizeH; ++y) {
+        dLog(std::to_string(x * minSizeW + y) + "/" +
+             std::to_string(minSizeW * minSizeH) + " X: " + std::to_string(x) +
+             " Y:" + std::to_string(y));
         pixels[i][img.size().width() * x + y] =
             Color::fromMagickColor(img.pixelColor((long)x, (long)y));
       }
@@ -86,9 +90,13 @@ long int Images::ImagesModule::render() {
   canvas->clear();
   int pixelIndex{};
 
+  int minSizeW{std::min((int)img.size().width(), canvas->getWidth())};
+  int minSizeH{std::min((int)img.size().width(), canvas->getHeight())};
+
   for (auto px : currentPixels) {
-    unsigned long x{pixelIndex % img.size().width()};
-    unsigned long y{pixelIndex / img.size().width()};
+    int x{pixelIndex % minSizeW};
+    int y{pixelIndex / minSizeW};
+
     dLog("X: " + std::to_string(x) + " Y: " + std::to_string(y) +
          " TOT: " + std::to_string(pixelIndex) + " COL: " + px.string());
 
