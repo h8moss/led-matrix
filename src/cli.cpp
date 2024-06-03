@@ -100,7 +100,7 @@ int main(int argc, char **argv)
       }
       unsigned long int finalSleepTime{(unsigned long int)sleepTime};
 
-      if (finalSleepTme > 1000000)
+      if (finalSleepTime > 1000000)
       {
         sleep(finalSleepTime / 1000000);
         finalSleepTime = finalSleepTime % 1000000;
