@@ -14,13 +14,11 @@ Images::ImagesModule::ImagesModule(ICanvas *canvas)
     : Module(canvas, "images", "Display images in the led matrix"),
       config{Images::Configuration::defaults}, currentImage{}, images{} {}
 
-void Images::ImagesModule::setup()
-{
+void Images::ImagesModule::setup() {
   images = std::vector<Magick::Image>(config.images.size());
   pixels = std::vector<std::vector<Color>>(config.images.size());
 
-  for (int i{}; i < images.size(); ++i)
-  {
+  for (size_t i{}; i < images.size(); ++i) {
     const std::string filename = config.images[i];
     // FileInfo *file_info = NULL;
 
@@ -29,54 +27,38 @@ void Images::ImagesModule::setup()
 
     int resizeW{};
     int resizeH{};
-    if (img.size().width() != canvas->getWidth() || img.size().height() != canvas->getHeight())
-    {
+    if (img.size().width() != canvas->getWidth() ||
+        img.size().height() != canvas->getHeight()) {
 
-      if (config.fit == Images::ImageFit::box)
-      {
+      if (config.fit == Images::ImageFit::box) {
         // Scale image until largest side matches the matrix size
-        if (img.size().width() > img.size().height())
-        {
+        if (img.size().width() > img.size().height()) {
           resizeW = canvas->getWidth();
           resizeH = (img.size().height() * resizeW) / img.size().width();
-        }
-        else
-        {
+        } else {
           resizeH = canvas->getHeight();
           resizeW = (img.size().width() * resizeH) / img.size().height();
         }
-      }
-      else if (config.fit == Images::ImageFit::crop)
-      {
+      } else if (config.fit == Images::ImageFit::crop) {
         // Scale image until smallest side matches the matrix size
-        if (img.size().width() < img.size().height())
-        {
+        if (img.size().width() < img.size().height()) {
           resizeW = canvas->getWidth();
           resizeH = (img.size().height() * resizeW) / img.size().width();
-        }
-        else
-        {
+        } else {
           resizeH = canvas->getHeight();
           resizeW = (img.size().width() * resizeH) / img.size().height();
         }
-      }
-      else if (config.fit == Images::ImageFit::place)
-      {
+      } else if (config.fit == Images::ImageFit::place) {
         // do nothing
-      }
-      else if (config.fit == Images::ImageFit::stretch)
-      {
+      } else if (config.fit == Images::ImageFit::stretch) {
         // Scale image until both sides match the matrix size
         resizeW = canvas->getWidth();
         resizeH = canvas->getHeight();
-      }
-      else
-      {
+      } else {
         throw "Unknown image fit";
       }
     }
-    if (resizeW + resizeH != 0)
-    {
+    if (resizeW + resizeH != 0) {
       img.resize(Magick::Geometry(resizeW, resizeH));
     }
 
@@ -84,12 +66,12 @@ void Images::ImagesModule::setup()
     img.syncPixels();
 
     pixels[i] = std::vector<Color>(img.size().width() * img.size().height());
-    for (int x{}; x < img.size().width(); ++x)
-    {
-      for (int y{}; y < img.size().height(); ++y)
-      {
-        dLog(std::to_string(x * img.size().width() + y) + "/" + std::to_string(img.size().width() * img.size().height()));
-        pixels[i].push_back(Color::fromMagickColor(img.pixelColor(x, y)));
+    for (size_t x{}; x < img.size().width(); ++x) {
+      for (size_t y{}; y < img.size().height(); ++y) {
+        dLog(std::to_string(x * img.size().width() + y) + "/" +
+             std::to_string(img.size().width() * img.size().height()));
+        pixels[i][img.size().width() * x + y] =
+            Color::fromMagickColor(img.pixelColor((long)x, (long)y));
       }
     }
 
@@ -97,18 +79,18 @@ void Images::ImagesModule::setup()
   }
 }
 
-long int Images::ImagesModule::render()
-{
+long int Images::ImagesModule::render() {
   auto img{images[currentImage]};
   auto currentPixels{pixels[currentImage]};
 
   canvas->clear();
   int pixelIndex{};
-  for (auto px : currentPixels)
-  {
-    int x{pixelIndex % img.size().width()};
-    int y{pixelIndex / img.size().width()};
-    dLog("X: " + std::to_string(x) + " Y: " + std::to_string(y) + " TOT: " + std::to_string(pixelIndex) + " COL: " + px.string());
+
+  for (auto px : currentPixels) {
+    unsigned long x{pixelIndex % img.size().width()};
+    unsigned long y{pixelIndex / img.size().width()};
+    dLog("X: " + std::to_string(x) + " Y: " + std::to_string(y) +
+         " TOT: " + std::to_string(pixelIndex) + " COL: " + px.string());
 
     canvas->setPixel(x, y, px);
 
@@ -118,13 +100,9 @@ long int Images::ImagesModule::render()
   return 1000 * 1000 * 30;
 }
 
-void Images::ImagesModule::teardown()
-{
-  canvas->clear();
-}
+void Images::ImagesModule::teardown() { canvas->clear(); }
 
-void Images::ImagesModule::addFlags(CLI::App *app)
-{
+void Images::ImagesModule::addFlags(CLI::App *app) {
   auto cmd{app->add_subcommand(this->name, this->description)};
 
   cmd->add_option("--image,-i", config.images,
@@ -153,6 +131,4 @@ void Images::ImagesModule::addFlags(CLI::App *app)
 void Images::ImagesModule::readArguments(
     std::map<std::string, std::vector<std::string>> args) {}
 
-Images::ImagesModule::~ImagesModule()
-{
-}
+Images::ImagesModule::~ImagesModule() {}
