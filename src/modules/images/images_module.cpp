@@ -6,6 +6,7 @@
 
 #include <Magick++/Geometry.h>
 #include <Magick++/Image.h>
+#include <Magick++/Include.h>
 #include <cmath>
 #include <cstdint>
 #include <graphics.h>
@@ -66,18 +67,30 @@ void Images::ImagesModule::setup() {
     img.syncPixels();
 
     int minSizeW{std::min((int)img.size().width(), canvas->getWidth())};
-    int minSizeH{std::min((int)img.size().width(), canvas->getHeight())};
+    int minSizeH{std::min((int)img.size().height(), canvas->getHeight())};
 
+    Magick::Quantum *xd{img.getPixels(0, 0, 32, 32)};
     pixels[i] = std::vector<Color>(minSizeW * minSizeH);
-    for (size_t x{}; x < minSizeW; ++x) {
-      for (size_t y{}; y < minSizeH; ++y) {
-        dLog(std::to_string(x * minSizeW + y) + "/" +
-             std::to_string(minSizeW * minSizeH) + " X: " + std::to_string(x) +
-             " Y:" + std::to_string(y));
-        pixels[i][img.size().width() * x + y] =
-            Color::fromMagickColor(img.pixelColor((long)x, (long)y));
-      }
+
+    for (size_t colorIndex{}, pix{}; colorIndex < minSizeW * minSizeH * 3;
+         colorIndex += 3, pix++) {
+      dLog("(" + std::to_string((int)xd[colorIndex]) + ", " +
+           std::to_string((int)xd[colorIndex + 1]) + ", " +
+           std::to_string((int)xd[colorIndex + 2]) + ")");
+      Color c{(int)xd[colorIndex], (int)xd[colorIndex + 1],
+              (int)xd[colorIndex + 2]};
+      pixels[i][pix] = c;
     }
+
+    // for (size_t x{}; x < minSizeW; ++x) {
+    //   for (size_t y{}; y < minSizeH; ++y) {
+    //     dLog(std::to_string(x * minSizeW + y) + "/" +
+    //          std::to_string(minSizeW * minSizeH) + " X: " + std::to_string(x)
+    //          + " Y:" + std::to_string(y));
+    //     pixels[i][img.size().width() * x + y] =
+    //         Color::fromMagickColor(img.pixelColor((long)x, (long)y));
+    //   }
+    // }
 
     images[i] = img;
   }
