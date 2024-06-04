@@ -7,8 +7,6 @@
 #include <sstream>
 #include <string>
 
-using Magick::Quantum;
-
 float hueToRGB(float p, float q, float t) {
   if (t < 0)
     t += 1.0f;
@@ -112,11 +110,7 @@ rgb_matrix::Color Color::toRGBMatrixColor() {
 }
 
 Color Color::fromMagickColor(Magick::Color c) {
-  auto col{Color{
-      c.redQuantum(),
-      c.greenQuantum(),
-      c.blueQuantum(),
-  }};
+  auto col{Color{c.quantumRed(), c.quantumGreen(), c.quantumBlue()}};
   return col;
 }
 // ----- CLI11 Lexical cast -----
