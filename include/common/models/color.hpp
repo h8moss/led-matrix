@@ -1,9 +1,9 @@
 #pragma once
 
-#include <Magick++/Color.h>
+#include "graphics.h"
 #include <string>
 
-#include "graphics.h"
+#include <Magick++.h>
 
 struct Color {
   int r;
