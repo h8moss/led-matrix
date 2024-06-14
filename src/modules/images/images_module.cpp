@@ -69,17 +69,14 @@ void Images::ImagesModule::setup() {
     int minSizeW{std::min((int)img.size().width(), canvas->getWidth())};
     int minSizeH{std::min((int)img.size().height(), canvas->getHeight())};
 
-    Magick::Quantum *xd{img.getPixels(0, 0, 32, 32)};
+    Magick::PixelPacket *xd{img.getPixels(0, 0, 32, 32)};
     pixels[i] = std::vector<Color>(minSizeW * minSizeH);
 
-    for (size_t colorIndex{}, pix{}; colorIndex < minSizeW * minSizeH * 3;
-         colorIndex += 3, pix++) {
-      dLog("(" + std::to_string((int)xd[colorIndex]) + ", " +
-           std::to_string((int)xd[colorIndex + 1]) + ", " +
-           std::to_string((int)xd[colorIndex + 2]) + ")");
-      Color c{(int)xd[colorIndex], (int)xd[colorIndex + 1],
-              (int)xd[colorIndex + 2]};
-      pixels[i][pix] = c;
+    for (size_t pixel{}; pixel < minSizeW * minSizeH; ++pixel) {
+
+      Color c{xd[pixel].red, xd[pixel].green, xd[pixel].blue};
+      dLog(c.string());
+      pixels[i][pixel] = c;
     }
 
     // for (size_t x{}; x < minSizeW; ++x) {
