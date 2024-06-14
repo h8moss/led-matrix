@@ -1,16 +1,49 @@
 include(ExternalProject)
 
-project(led-matrix)
-
 # Basic Compiler options
 cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+project(led-matrix VERSION 0.1.0)
+
 # Depend on ImageMagick++
 add_definitions( -DMAGICKCORE_QUANTUM_DEPTH=8 )
 add_definitions( -DMAGICKCORE_HDRI_ENABLE=0 )
-find_package(ImageMagick COMPONENTS Magick++)
+
+# Graphics Magick
+execute_process(COMMAND GraphicsMagick-config --cflags
+OUTPUT_VARIABLE GM_CFLAGS 
+OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process(COMMAND GraphicsMagick-config --cppflags
+OUTPUT_VARIABLE GM_CPPFLAGS 
+OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process(COMMAND GraphicsMagick-config --ldflags
+OUTPUT_VARIABLE GM_LDFLAGS 
+OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process(COMMAND GraphicsMagick-config --libs 
+OUTPUT_VARIABLE GM_LIBS 
+OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+set(GM_COMP_FLAGS "${GM_CFLAGS} ${GM_CPPFLAGS}")
+set(GM_LINK_FLAGS "${GM_LDFLAGS} ${GM_LIBS}")
+
+separate_arguments(GM_COMP_FLAGS)
+separate_arguments(GM_LINK_FLAGS)
+
+foreach(flag ${GM_COMP_FLAGS})
+    add_compile_options(${flag})
+endforeach()
+
+foreach(flag ${GM_LINK_FLAGS})
+    add_link_options(${flag})
+endforeach()
+
+message(STATUS "GraphicsMagick compile flags: ${GM_COMP_FLAGS}")
+message(STATUS "GraphicsMagick link flags: ${GM_LINK_FLAGS}")
 
 # Depend on rpi-rgb-led-matrix
 ExternalProject_Add(
@@ -38,7 +71,6 @@ include_directories(
 
 include_directories(SYSTEM
 	${CMAKE_SOURCE_DIR}/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/include
-	${ImageMagick_INCLUDE_DIRS} # Image magick++
 )
 
 # Add link for rpi-rgb-led-matrix
@@ -99,5 +131,5 @@ add_dependencies(led-matrix rpi-rgb-led-matrix)
 add_dependencies(led-matrix-manager rpi-rgb-led-matrix)
 
 # Link the executables
-target_link_libraries(led-matrix PRIVATE  rt m pthread led-matrix-lib CLI11::CLI11 ${ImageMagick_LIBRARIES})
-target_link_libraries(led-matrix-manager PRIVATE  rt m pthread led-matrix-lib CLI11::CLI11 ${ImageMagick_LIBRARIES})
+target_link_libraries(led-matrix PRIVATE  rt m pthread led-matrix-lib CLI11::CLI11 )
+target_link_libraries(led-matrix-manager PRIVATE  rt m pthread led-matrix-lib CLI11::CLI11 )
