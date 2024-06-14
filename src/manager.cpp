@@ -1,3 +1,4 @@
+#include <Magick++/Functions.h>
 #include <fcntl.h>
 #include <iostream>
 #include <unistd.h>
@@ -5,18 +6,20 @@
 #include "common/canvas/better_canvas.hpp"
 #include "common/util/arg_parser.hpp"
 #include "common/util/debug_log.hpp"
-#include "common/util/starts_with.hpp"
 #include "modules/colors/colors_module.hpp"
 #include "modules/game-of-life/game_of_life_module.hpp"
 #include "modules/module.hpp"
 #include "modules/time-date/time_date_module.hpp"
 
+#include "Magick++.h"
 #include "led-matrix.h"
 
 using std::cout;
 using std::endl;
 
 int main(int argc, char **argv) {
+  Magick::InitializeMagick(*argv);
+
   try {
     rgb_matrix::RGBMatrix::Options defaults;
     defaults.hardware_mapping = "regular";
