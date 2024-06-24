@@ -1,4 +1,7 @@
 #include "common/models/color.hpp"
+#include "Magick++/Include.h"
+#include "common/util/debug_log.hpp"
+#include "magick/image.h"
 
 #include <map>
 #include <sstream>
@@ -19,6 +22,23 @@ float hueToRGB(float p, float q, float t) {
 }
 
 Color::Color(int _r, int _g, int _b) : r{_r}, g{_g}, b{_b} {
+  if (MaxRGB > 255) {
+    dLog("BEFORE: ");
+    dLog(this->string());
+    dLog("MAX");
+    dLog(MaxRGB);
+    dLog("RATIO: ");
+    dLog((float)r / (float)MaxRGB);
+    dLog((float)g / (float)MaxRGB);
+    dLog((float)b / (float)MaxRGB);
+
+    r = 255 * ((float)r / (float)MaxRGB);
+    g = 255 * ((float)g / (float)MaxRGB);
+    b = 255 * ((float)b / (float)MaxRGB);
+
+    dLog("AFTER");
+    dLog(this->string());
+  }
   if (std::max({r, g, b}) > 255) {
     throw "Max RGB value is (255,255,255), but got (" + string();
   }

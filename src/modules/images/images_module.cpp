@@ -74,7 +74,9 @@ void Images::ImagesModule::setup() {
 
     for (size_t pixel{}; pixel < minSizeW * minSizeH; ++pixel) {
 
-      Color c{xd[pixel].red, xd[pixel].green, xd[pixel].blue};
+      Color c{ScaleQuantumToChar(xd[pixel].red),
+              ScaleQuantumToChar(xd[pixel].green),
+              ScaleQuantumToChar(xd[pixel].blue)};
       dLog(c.string());
       pixels[i][pixel] = c;
     }
