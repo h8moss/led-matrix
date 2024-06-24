@@ -108,7 +108,7 @@ void Colors::ColorsModule::readArguments(
     std::string value = ArgParser::ensureSingle(map, "duration");
     try {
       config.duration = std::stof(value);
-    } catch (std::invalid_argument e) {
+    } catch (std::invalid_argument &e) {
       throw "Could not understand the value of duration";
     }
   }
@@ -116,7 +116,7 @@ void Colors::ColorsModule::readArguments(
     std::string value = ArgParser::ensureSingle(map, "animation-duration");
     try {
       config.animationDuration = std::stof(value);
-    } catch (std::invalid_argument e) {
+    } catch (std::invalid_argument &e) {
       throw "Could not understand the value of animation-duration";
     }
   }
