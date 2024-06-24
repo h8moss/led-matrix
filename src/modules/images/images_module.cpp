@@ -1,5 +1,6 @@
 #include "modules/images/images_module.hpp"
 #include "common/util/debug_log.hpp"
+#include "common/util/enum_checked_transformer.hpp"
 #include "modules/images/images_configuration.hpp"
 
 #include "led-matrix.h"
@@ -16,12 +17,12 @@ Images::ImagesModule::ImagesModule(ICanvas *canvas)
       config{Images::Configuration::defaults}, currentImage{}, images{} {}
 
 void Images::ImagesModule::setup() {
+  currentImage = 0;
   images = std::vector<Magick::Image>(config.images.size());
   pixels = std::vector<std::vector<Color>>(config.images.size());
 
   for (size_t i{}; i < images.size(); ++i) {
     const std::string filename = config.images[i];
-    // FileInfo *file_info = NULL;
 
     Magick::Image img{};
     img.read(config.images[i]);
@@ -80,22 +81,14 @@ void Images::ImagesModule::setup() {
       dLog(c.string());
       pixels[i][pixel] = c;
     }
-
-    // for (size_t x{}; x < minSizeW; ++x) {
-    //   for (size_t y{}; y < minSizeH; ++y) {
-    //     dLog(std::to_string(x * minSizeW + y) + "/" +
-    //          std::to_string(minSizeW * minSizeH) + " X: " + std::to_string(x)
-    //          + " Y:" + std::to_string(y));
-    //     pixels[i][img.size().width() * x + y] =
-    //         Color::fromMagickColor(img.pixelColor((long)x, (long)y));
-    //   }
-    // }
-
     images[i] = img;
   }
 }
 
 long int Images::ImagesModule::render() {
+  if (currentImage && images.size() == 1) {
+    return 100; // Just one image and it has already been drawn
+  }
   auto img{images[currentImage]};
   auto currentPixels{pixels[currentImage]};
 
@@ -105,19 +98,38 @@ long int Images::ImagesModule::render() {
   int minSizeW{std::min((int)img.size().width(), canvas->getWidth())};
   int minSizeH{std::min((int)img.size().width(), canvas->getHeight())};
 
+  int xOffset{};
+  int yOffset{};
+
+  if (config.xAlignment == Images::Alignment::center) {
+    xOffset = (img.size().width() - canvas->getHeight()) / 2;
+  } else if (config.xAlignment == Images::Alignment::trailing) {
+    xOffset = (img.size().width() - canvas->getHeight());
+  }
+
+  if (config.yAlignment == Images::Alignment::center) {
+    yOffset = (img.size().width() - canvas->getHeight()) / 2;
+  } else if (config.yAlignment == Images::Alignment::trailing) {
+    yOffset = (img.size().width() - canvas->getHeight());
+  }
+
   for (auto px : currentPixels) {
     int x{pixelIndex % minSizeW};
-    int y{pixelIndex / minSizeW};
+    int y{pixelIndex / minSizeH};
 
-    dLog("X: " + std::to_string(x) + " Y: " + std::to_string(y) +
-         " TOT: " + std::to_string(pixelIndex) + " COL: " + px.string());
-
-    canvas->setPixel(x, y, px);
+    canvas->setPixel(x + xOffset, y + yOffset, px);
 
     ++pixelIndex;
   }
+  currentImage++;
+  int duration{1000};
+  if (config.durations.size() < currentImage) {
+    duration = config.durations[currentImage];
+  } else if (config.durations.size() > 0) {
+    duration = config.durations[config.durations.size() - 1];
+  }
 
-  return 1000 * 1000 * 30;
+  return 1000 * duration;
 }
 
 void Images::ImagesModule::teardown() { canvas->clear(); }
@@ -131,16 +143,46 @@ void Images::ImagesModule::addFlags(CLI::App *app) {
                   "The time the image should be on screen in ms. If passed "
                   "more than once, matches the correspoinding image");
   cmd->add_option("--fit", config.fit, "How to fit the image into the matrix")
-      ->transform(CLI::CheckedTransformer(Images::Configuration::imageFitMap,
-                                          CLI::ignore_case));
+      ->transform(EnumCheckedTransformer(
+          {{"box", Images::ImageFit::box},
+           {"crop", Images::ImageFit::crop},
+           {"place", Images::ImageFit::place},
+           {"stretch", Images::ImageFit::stretch}},
+          {{Images::ImageFit::box,
+            "Shrinks the image until its largest side fits in the matrix "},
+           {Images::ImageFit::crop,
+            "Shrinks the image until its smallest side fits in the matrix"},
+           {Images::ImageFit::place, "Places the image exactly as it is"},
+           {Images::ImageFit::stretch,
+            "Stretches each side to be exactly as big as the matrix"}}));
+
   cmd->add_option("--x-align,-x", config.xAlignment,
+
+                  // TODO: Migrate to EnumCheckedTransformer
                   "The alignment of the image on the x axis")
-      ->transform(CLI::CheckedTransformer(Images::Configuration::alignmentMap,
-                                          CLI::ignore_case));
+      ->transform(EnumCheckedTransformer(
+          {{"leading", Images::Alignment::leading},
+           {"trailing", Images::Alignment::trailing},
+           {"center", Images::Alignment::center}},
+          {{Images::Alignment::leading,
+            "The image is to the left of the canvas"},
+           {Images::Alignment::trailing,
+            "The image is to the right of the canvas"},
+           {Images::Alignment::center,
+            "The image is to the center of the canvas"}}));
   cmd->add_option("--y-align,-y", config.yAlignment,
                   "The alignment of the image on the y axis")
-      ->transform(CLI::CheckedTransformer(Images::Configuration::alignmentMap,
-                                          CLI::ignore_case));
+      ->transform(EnumCheckedTransformer(
+          {{"leading", Images::Alignment::leading},
+           {"trailing", Images::Alignment::trailing},
+           {"center", Images::Alignment::center}},
+          {{Images::Alignment::leading,
+            "The image is to the top of the canvas"},
+           {Images::Alignment::trailing,
+            "The image is to the bottom of the canvas"},
+           {Images::Alignment::center,
+            "The image is to the center of the canvas"}}));
+
   cmd->add_flag("--no-loop", config.exitOnEnd,
                 "If passed, the images will not loop and instead the program "
                 "will exit after once run");
