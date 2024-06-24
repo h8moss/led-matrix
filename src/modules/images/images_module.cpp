@@ -112,6 +112,7 @@ long int Images::ImagesModule::render() {
   } else if (config.yAlignment == Images::Alignment::trailing) {
     yOffset = (img.size().width() - canvas->getHeight());
   }
+  dLog("(" + std::to_string(xOffset) + ", " + std::to_string(yOffset) + ")");
 
   for (auto px : currentPixels) {
     int x{pixelIndex % minSizeW};
@@ -123,7 +124,7 @@ long int Images::ImagesModule::render() {
   }
   currentImage++;
   int duration{1000};
-  if (config.durations.size() < currentImage) {
+  if (currentImage < config.durations.size()) {
     duration = config.durations[currentImage];
   } else if (config.durations.size() > 0) {
     duration = config.durations[config.durations.size() - 1];
