@@ -1,6 +1,5 @@
 #pragma once
 
-#include <map>
 #include <string>
 #include <vector>
 
@@ -25,7 +24,5 @@ struct Configuration {
   bool shuffleImages;
 
   static Configuration defaults;
-  static std::map<std::string, Alignment> alignmentMap;
-  static std::map<std::string, ImageFit> imageFitMap;
 };
 } // namespace Images

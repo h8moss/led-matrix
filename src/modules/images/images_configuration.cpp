@@ -9,15 +9,3 @@ Images::Configuration Images::Configuration::defaults = {
     .exitOnEnd = false,
     .shuffleImages = false,
 };
-
-std::map<std::string, Images::Alignment> Images::Configuration::alignmentMap = {
-    {"leading", Images::Alignment::leading},
-    {"center", Images::Alignment::center},
-    {"trailing", Images::Alignment::trailing},
-};
-
-std::map<std::string, Images::ImageFit> Images::Configuration::imageFitMap = {
-    {"stretch", Images::ImageFit::stretch},
-    {"box", Images::ImageFit::box},
-    {"place", Images::ImageFit::place},
-    {"crop", Images::ImageFit::crop}};

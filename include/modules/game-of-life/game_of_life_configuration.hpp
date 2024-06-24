@@ -1,7 +1,6 @@
 #pragma once
 
 #include "common/models/color.hpp"
-#include <map>
 
 namespace GameOfLife {
 
@@ -16,7 +15,5 @@ struct Configuration {
   StagnationBehaviour onStagnation;
 
   static Configuration defaults;
-
-  static std::map<std::string, StagnationBehaviour> stagnationBehaviourMap;
 };
 } // namespace GameOfLife

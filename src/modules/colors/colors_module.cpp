@@ -51,9 +51,6 @@ void Colors::ColorsModule::addFlags(CLI::App *app) {
 
   module
       ->add_option("--animation, -a", config.animation, "The animation to show")
-      // ->transform(CLI::CheckedTransformer(
-      //     Colors::ConfigurationWithAnimation::animationMap,
-      //     CLI::ignore_case));
       ->transform(EnumCheckedTransformer(
           {{"pulse", Colors::Animation::pulse},
            {"corners", Colors::Animation::corners},

@@ -7,9 +7,3 @@ GameOfLife::Configuration GameOfLife::Configuration::defaults = {
     .fade = false,
     .fadeSpeed = 0.1f,
     .onStagnation = StagnationBehaviour::reset};
-
-std::map<std::string, GameOfLife::StagnationBehaviour>
-    GameOfLife::Configuration::stagnationBehaviourMap = {
-        {"ignore", GameOfLife::StagnationBehaviour::ignore},
-        {"reset", GameOfLife::StagnationBehaviour::reset},
-        {"quit", GameOfLife::StagnationBehaviour::quit}};

@@ -2,6 +2,7 @@
 #include "CLI/CLI.hpp"
 #include "common/models/fade_data.hpp"
 #include "common/util/arg_parser.hpp"
+#include "common/util/enum_checked_transformer.hpp"
 #include "modules/game-of-life/game_of_life_board.hpp"
 #include "modules/game-of-life/game_of_life_configuration.hpp"
 
@@ -131,8 +132,16 @@ void GameOfLife::GOLModule::addFlags(CLI::App *app) {
       ->needs(fadeOpt);
   cmd->add_option("--stagnation", config.onStagnation,
                   "What the game should do if it encounters stagnation")
-      ->transform(CLI::CheckedTransformer(
-          GameOfLife::Configuration::stagnationBehaviourMap, CLI::ignore_case));
+      ->transform(EnumCheckedTransformer(
+          {{"quit", GameOfLife::StagnationBehaviour::quit},
+           {"reset", GameOfLife::StagnationBehaviour::reset},
+           {"ignore", GameOfLife::StagnationBehaviour::ignore}},
+          {{GameOfLife::StagnationBehaviour::ignore,
+            "The game ignores the stagnation and continues"},
+           {GameOfLife::StagnationBehaviour::reset,
+            "The game stars over when it finds stagnation"},
+           {GameOfLife::StagnationBehaviour::quit,
+            "The game ends when it finds stagnation"}}));
 }
 
 void GameOfLife::GOLModule::readArguments(
