@@ -12,38 +12,54 @@ add_definitions( -DMAGICKCORE_QUANTUM_DEPTH=8 )
 add_definitions( -DMAGICKCORE_HDRI_ENABLE=0 )
 
 # Graphics Magick
-execute_process(COMMAND GraphicsMagick-config --cflags
+execute_process(COMMAND GraphicsMagick++-config --cxxflags
 OUTPUT_VARIABLE GM_CFLAGS 
 OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-execute_process(COMMAND GraphicsMagick-config --cppflags
+execute_process(COMMAND GraphicsMagick++-config --cppflags
 OUTPUT_VARIABLE GM_CPPFLAGS 
 OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-execute_process(COMMAND GraphicsMagick-config --ldflags
+execute_process(COMMAND GraphicsMagick++-config --ldflags
 OUTPUT_VARIABLE GM_LDFLAGS 
 OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-execute_process(COMMAND GraphicsMagick-config --libs 
+execute_process(COMMAND GraphicsMagick++-config --libs 
 OUTPUT_VARIABLE GM_LIBS 
 OUTPUT_STRIP_TRAILING_WHITESPACE)
 
+message(STATUS "CFLAGS ${GM_CFLAGS}")
+message(STATUS "CPPFLAGS ${GM_CPPFLAGS}")
+message(STATUS "LDFLAGS ${GM_LDFLAGS}")
+message(STATUS "LIBS ${GM_LIBS}")
+
 set(GM_COMP_FLAGS "${GM_CFLAGS} ${GM_CPPFLAGS}")
-set(GM_LINK_FLAGS "${GM_LDFLAGS} ${GM_LIBS}")
+# set(GM_LINK_FLAGS "${GM_LDFLAGS} ${GM_LIBS}")
 
 separate_arguments(GM_COMP_FLAGS)
-separate_arguments(GM_LINK_FLAGS)
+separate_arguments(GM_LDFLAGS)
+separate_arguments(GM_LIBS)
+
+set(GM_LIBS_PROPER)
+
+foreach(lib IN LISTS GM_LIBS)
+  # Remove the -l prefix
+  string(REPLACE "-l" "" lib_name ${lib})
+  # Append the modified library to the list
+  list(APPEND GM_LIBS_PROPER ${lib_name})
+endforeach()
 
 foreach(flag ${GM_COMP_FLAGS})
     add_compile_options(${flag})
 endforeach()
 
-foreach(flag ${GM_LINK_FLAGS})
-    add_link_options(${flag})
+foreach(flag ${GM_LDFLAGS})
+  message(STATUS "LINK FLAG: ${flag}")
+  add_link_options(${flag})
 endforeach()
 
 message(STATUS "GraphicsMagick compile flags: ${GM_COMP_FLAGS}")
-message(STATUS "GraphicsMagick link flags: ${GM_LINK_FLAGS}")
+message(STATUS "GraphicsMagick link flags: ${GM_LDFLAGS}")
 
 # Depend on rpi-rgb-led-matrix
 ExternalProject_Add(
@@ -133,3 +149,8 @@ add_dependencies(led-matrix-manager rpi-rgb-led-matrix)
 # Link the executables
 target_link_libraries(led-matrix PRIVATE  rt m pthread led-matrix-lib CLI11::CLI11 )
 target_link_libraries(led-matrix-manager PRIVATE  rt m pthread led-matrix-lib CLI11::CLI11 )
+
+foreach(lib IN LISTS GM_LIBS_PROPER)
+    target_link_libraries(led-matrix PRIVATE ${lib})
+    target_link_libraries(led-matrix-manager PRIVATE ${lib})
+endforeach()
