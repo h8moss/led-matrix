@@ -35,10 +35,9 @@ To compile, on the raspberry pi run the following:
 
 ```bash
 $ git clone "https://github.com/h8moss/led-matrix"  # Clone the repository
-$ cd led-matrix                                     # Go into the project
-$ mkdir build                                       # Make a directory for the build to go to
-$ cd build                                          # Go into the build directory
-$ cmake ..                                          # Generate the build files
+$ cd led-matrix/build-scripts                       # Go into the project's build scripts
+$ ./build.sh                                        # Generate the build files
+$ cd ../build                                       # Go into the build directory
 $ make                                              # Actually build this project
 ```
 
