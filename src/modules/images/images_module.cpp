@@ -60,12 +60,16 @@ void Images::ImagesModule::setup() {
         throw "Unknown image fit";
       }
     }
+    dLog("RESIZE: " + std::to_string(resizeW) + ", " + std::to_string(resizeH));
     if (resizeW + resizeH != 0) {
       img.resize(Magick::Geometry(resizeW, resizeH));
     }
 
     img.modifyImage();
     img.syncPixels();
+
+    dLog("FINAL SIZE: " + std::to_string(img.size().width()) + ", " +
+         std::to_string(img.size().height()));
 
     int minSizeW{std::min((int)img.size().width(), canvas->getWidth())};
     int minSizeH{std::min((int)img.size().height(), canvas->getHeight())};
@@ -74,11 +78,9 @@ void Images::ImagesModule::setup() {
     pixels[i] = std::vector<Color>(minSizeW * minSizeH);
 
     for (size_t pixel{}; pixel < minSizeW * minSizeH; ++pixel) {
-
       Color c{ScaleQuantumToChar(pixelPacks[pixel].red),
               ScaleQuantumToChar(pixelPacks[pixel].green),
               ScaleQuantumToChar(pixelPacks[pixel].blue)};
-      dLog(c.string());
       pixels[i][pixel] = c;
     }
     images[i] = img;
@@ -105,17 +107,16 @@ long int Images::ImagesModule::render() {
   int h{(int)img.size().height()};
 
   if (config.xAlignment == Images::Alignment::center) {
-    xOffset = (w - canvas->getHeight()) / 2;
+    xOffset = (canvas->getHeight() - w) / 2;
   } else if (config.xAlignment == Images::Alignment::trailing) {
-    xOffset = (w - canvas->getHeight());
+    xOffset = (canvas->getHeight() - w);
   }
 
   if (config.yAlignment == Images::Alignment::center) {
-    yOffset = (h - canvas->getHeight()) / 2;
+    yOffset = (canvas->getHeight() - h) / 2;
   } else if (config.yAlignment == Images::Alignment::trailing) {
-    yOffset = (h - canvas->getHeight());
+    yOffset = (canvas->getHeight() - h);
   }
-  dLog("(" + std::to_string(xOffset) + ", " + std::to_string(yOffset) + ")");
 
   for (auto px : currentPixels) {
     int x{pixelIndex % minSizeW};
