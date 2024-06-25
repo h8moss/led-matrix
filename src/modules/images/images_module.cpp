@@ -101,16 +101,19 @@ long int Images::ImagesModule::render() {
   int xOffset{};
   int yOffset{};
 
+  int w{(int)img.size().width()};
+  int h{(int)img.size().height()};
+
   if (config.xAlignment == Images::Alignment::center) {
-    xOffset = (img.size().width() - canvas->getHeight()) / 2;
+    xOffset = (w - canvas->getHeight()) / 2;
   } else if (config.xAlignment == Images::Alignment::trailing) {
-    xOffset = (img.size().width() - canvas->getHeight());
+    xOffset = (w - canvas->getHeight());
   }
 
   if (config.yAlignment == Images::Alignment::center) {
-    yOffset = (img.size().width() - canvas->getHeight()) / 2;
+    yOffset = (h - canvas->getHeight()) / 2;
   } else if (config.yAlignment == Images::Alignment::trailing) {
-    yOffset = (img.size().width() - canvas->getHeight());
+    yOffset = (h - canvas->getHeight());
   }
   dLog("(" + std::to_string(xOffset) + ", " + std::to_string(yOffset) + ")");
 
