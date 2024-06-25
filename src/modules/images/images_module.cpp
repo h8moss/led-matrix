@@ -62,7 +62,9 @@ void Images::ImagesModule::setup() {
     }
     dLog("RESIZE: " + std::to_string(resizeW) + ", " + std::to_string(resizeH));
     if (resizeW + resizeH != 0) {
-      img.resize(Magick::Geometry(resizeW, resizeH));
+      img.resize(Magick::Geometry(std::to_string(resizeW) + "x" +
+                                  std::to_string(resizeH) + "!"));
+      // img.resize(Magick::Geometry(resizeW, resizeH));
     }
 
     img.modifyImage();
