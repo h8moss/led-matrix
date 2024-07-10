@@ -117,6 +117,7 @@ set(SHARED_SOURCES
 	${CMAKE_SOURCE_DIR}/src/common/util/array_to_vector.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/enum_checked_transformer.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/pad_zeros.cpp
+	${CMAKE_SOURCE_DIR}/src/common/util/shuffle_vector.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/split_string.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/starts_with.cpp
 	${CMAKE_SOURCE_DIR}/src/modules/colors/renderers/circle_animation_renderer.cpp
