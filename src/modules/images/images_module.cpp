@@ -1,23 +1,21 @@
 #include "modules/images/images_module.hpp"
+
+#include "common/util/arg_parser.hpp"
 #include "common/util/debug_log.hpp"
 #include "common/util/enum_checked_transformer.hpp"
+#include "common/util/shuffle_vector.hpp"
 #include "modules/images/images_configuration.hpp"
 
-#include "led-matrix.h"
-
-#include <Magick++/Geometry.h>
-#include <Magick++/Image.h>
-#include <Magick++/Include.h>
+#include <Magick++.h>
 #include <cmath>
-#include <cstdint>
 #include <graphics.h>
 
 Images::ImagesModule::ImagesModule(ICanvas *canvas)
     : Module(canvas, "images", "Display images in the led matrix"),
-      config{Images::Configuration::defaults}, currentImage{}, images{} {}
+      config{Images::Configuration::defaults}, loopCount{}, images{} {}
 
 void Images::ImagesModule::setup() {
-  currentImage = 0;
+  loopCount = 0;
   images = std::vector<Magick::Image>(config.images.size());
   pixels = std::vector<std::vector<Color>>(config.images.size());
 
@@ -64,7 +62,6 @@ void Images::ImagesModule::setup() {
     if (resizeW + resizeH != 0) {
       img.resize(Magick::Geometry(std::to_string(resizeW) + "x" +
                                   std::to_string(resizeH) + "!"));
-      // img.resize(Magick::Geometry(resizeW, resizeH));
     }
 
     img.modifyImage();
@@ -87,9 +84,17 @@ void Images::ImagesModule::setup() {
     }
     images[i] = img;
   }
+  if (config.shuffleImages) {
+    images = shuffle(images);
+  }
 }
 
 long int Images::ImagesModule::render() {
+  if (config.exitOnEnd && loopCount >= images.size()) {
+    return -1; // exit
+  }
+
+  int currentImage{loopCount % (int)images.size()};
   if (currentImage && images.size() == 1) {
     return 100; // Just one image and it has already been drawn
   }
@@ -97,7 +102,6 @@ long int Images::ImagesModule::render() {
   auto currentPixels{pixels[currentImage]};
 
   canvas->clear();
-  int pixelIndex{};
 
   int minSizeW{std::min((int)img.size().width(), canvas->getWidth())};
   int minSizeH{std::min((int)img.size().width(), canvas->getHeight())};
@@ -120,21 +124,23 @@ long int Images::ImagesModule::render() {
     yOffset = (canvas->getHeight() - h);
   }
 
-  for (auto px : currentPixels) {
-    int x{pixelIndex % minSizeW};
-    int y{pixelIndex / minSizeH};
+  for (size_t pixelIndex{}; pixelIndex < currentPixels.size(); ++pixelIndex) {
+    int x{(int)pixelIndex % minSizeW};
+    int y{(int)pixelIndex / minSizeH};
+
+    auto px{currentPixels[pixelIndex]};
 
     canvas->setPixel(x + xOffset, y + yOffset, px);
-
-    ++pixelIndex;
   }
-  currentImage++;
-  int duration{1000};
+
+  int duration{Images::Configuration::defaultDuration};
   if (currentImage < config.durations.size()) {
     duration = config.durations[currentImage];
   } else if (config.durations.size() > 0) {
     duration = config.durations[config.durations.size() - 1];
   }
+
+  ++loopCount;
 
   return 1000 * duration;
 }
@@ -164,8 +170,6 @@ void Images::ImagesModule::addFlags(CLI::App *app) {
             "Stretches each side to be exactly as big as the matrix"}}));
 
   cmd->add_option("--x-align,-x", config.xAlignment,
-
-                  // TODO: Migrate to EnumCheckedTransformer
                   "The alignment of the image on the x axis")
       ->transform(EnumCheckedTransformer(
           {{"leading", Images::Alignment::leading},
@@ -198,6 +202,22 @@ void Images::ImagesModule::addFlags(CLI::App *app) {
 }
 
 void Images::ImagesModule::readArguments(
-    std::map<std::string, std::vector<std::string>> args) {}
+    std::map<std::string, std::vector<std::string>> map) {
+  config = Images::Configuration::defaults;
+
+  if (map.count("image")) {
+    config.images = map["image"];
+  }
+  if (map.count("duration")) {
+    config.durations = {std::vector<int>(map["duration"].size())};
+    for (size_t i{}; i < map["duration"].size(); ++i) {
+      config.durations[i] = std::stoi(map["duration"][i]);
+    }
+  }
+  // TODO: Enums! Use colors.animation as a guide
+  if (map.count("fit")) {
+    std::string value = ArgParser::ensureSingle(map, "fit");
+  }
+}
 
 Images::ImagesModule::~ImagesModule() {}

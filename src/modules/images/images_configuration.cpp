@@ -9,3 +9,5 @@ Images::Configuration Images::Configuration::defaults = {
     .exitOnEnd = false,
     .shuffleImages = false,
 };
+
+int Images::Configuration::defaultDuration = 1000;

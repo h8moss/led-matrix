@@ -24,5 +24,6 @@ struct Configuration {
   bool shuffleImages;
 
   static Configuration defaults;
+  static int defaultDuration;
 };
 } // namespace Images
