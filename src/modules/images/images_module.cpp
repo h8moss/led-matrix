@@ -150,6 +150,15 @@ void Images::ImagesModule::teardown() { canvas->clear(); }
 void Images::ImagesModule::addFlags(CLI::App *app) {
   auto cmd{app->add_subcommand(this->name, this->description)};
 
+  std::map<std::string, int> imageFitNames{};
+  std::map<std::string, int> alignmentNames{};
+  for (const auto &pair : Configuration::imageFitNames) {
+    imageFitNames[pair.first] = pair.second;
+  }
+  for (const auto &pair : Configuration::alignmentNames) {
+    alignmentNames[pair.first] = pair.second;
+  }
+
   cmd->add_option("--image,-i", config.images,
                   "An image to showcase, can be passed more than once");
   cmd->add_option("--duration,-d", config.durations,
@@ -157,10 +166,7 @@ void Images::ImagesModule::addFlags(CLI::App *app) {
                   "more than once, matches the correspoinding image");
   cmd->add_option("--fit", config.fit, "How to fit the image into the matrix")
       ->transform(EnumCheckedTransformer(
-          {{"box", Images::ImageFit::box},
-           {"crop", Images::ImageFit::crop},
-           {"place", Images::ImageFit::place},
-           {"stretch", Images::ImageFit::stretch}},
+          imageFitNames,
           {{Images::ImageFit::box,
             "Shrinks the image until its largest side fits in the matrix "},
            {Images::ImageFit::crop,
@@ -172,15 +178,12 @@ void Images::ImagesModule::addFlags(CLI::App *app) {
   cmd->add_option("--x-align,-x", config.xAlignment,
                   "The alignment of the image on the x axis")
       ->transform(EnumCheckedTransformer(
-          {{"leading", Images::Alignment::leading},
-           {"trailing", Images::Alignment::trailing},
-           {"center", Images::Alignment::center}},
-          {{Images::Alignment::leading,
-            "The image is to the left of the canvas"},
-           {Images::Alignment::trailing,
-            "The image is to the right of the canvas"},
-           {Images::Alignment::center,
-            "The image is to the center of the canvas"}}));
+          alignmentNames, {{Images::Alignment::leading,
+                            "The image is to the left of the canvas"},
+                           {Images::Alignment::trailing,
+                            "The image is to the right of the canvas"},
+                           {Images::Alignment::center,
+                            "The image is to the center of the canvas"}}));
   cmd->add_option("--y-align,-y", config.yAlignment,
                   "The alignment of the image on the y axis")
       ->transform(EnumCheckedTransformer(
@@ -214,9 +217,39 @@ void Images::ImagesModule::readArguments(
       config.durations[i] = std::stoi(map["duration"][i]);
     }
   }
-  // TODO: Enums! Use colors.animation as a guide
   if (map.count("fit")) {
     std::string value = ArgParser::ensureSingle(map, "fit");
+    if (!Configuration::imageFitNames.count(value)) {
+      throw "Unrecognized animation: " + value;
+    }
+
+    config.fit = Configuration::imageFitNames[value];
+  }
+  if (map.count("x-align")) {
+    std::string value = ArgParser::ensureSingle(map, "x-align");
+    if (!Configuration::imageFitNames.count(value)) {
+      throw "Unrecognized alignment value: " + value;
+    }
+
+    config.xAlignment = Configuration::alignmentNames[value];
+  }
+
+  if (map.count("y-align")) {
+    std::string value = ArgParser::ensureSingle(map, "y-align");
+    if (!Configuration::imageFitNames.count(value)) {
+      throw "Unrecognized alignment value: " + value;
+    }
+
+    config.yAlignment = Configuration::alignmentNames[value];
+  }
+  if (map.count("no-loop")) {
+    auto value = ArgParser::ensureBoolean(map, "no-loop");
+
+    config.exitOnEnd = value;
+  }
+  if (map.count("shuffle")) {
+    auto value = ArgParser::ensureBoolean(map, "shuffle");
+    config.shuffleImages = value;
   }
 }
 
