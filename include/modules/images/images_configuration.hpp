@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -25,5 +26,8 @@ struct Configuration {
 
   static Configuration defaults;
   static int defaultDuration;
+
+  static std::map<std::string, Images::ImageFit> imageFitNames;
+  static std::map<std::string, Images::Alignment> alignmentNames;
 };
 } // namespace Images
