@@ -2,6 +2,10 @@
 
 #include <vector>
 
+#include <algorithm>
+#include <cstdlib>
+#include <random>
+
 // template <typename T> std::vector<T> shuffle(std::vector<T> vector);
 
 template <typename T>
