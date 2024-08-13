@@ -1,7 +1,9 @@
 #include "modules/colors/renderers/circle_animation_renderer.hpp"
 #include "common/canvas/icanvas.hpp"
+#include "common/util/debug_log.hpp"
 #include "modules/colors/colors_configuration.hpp"
 
+#include <algorithm>
 #include <cmath>
 
 Colors::CircleAnimationRenderer::CircleAnimationRenderer(
@@ -44,8 +46,18 @@ long int Colors::CircleAnimationRenderer::render() {
       currentRadius = nextRadius;
       for (int i{}; i < (config.fading ? 11 : 1); i++) {
         // TODO: Test this works
-        float fade{1.0f - (0.1f * i)};
-        canvas->drawCircle(centerX, centerY, currentRadius - i * shrink,
+        float fade{
+          std::max(
+            0.0f,
+            std::min(1.0f,
+              (1.0f - (float)i / 10.0f)
+            )
+          )
+        };
+        dLog(fade);
+        dLog(1.0f - (float)i / 10.0f);
+        dLog(i);
+        canvas->drawCircle(centerX, centerY, currentRadius,
                            color * fade, true);
       }
     }
