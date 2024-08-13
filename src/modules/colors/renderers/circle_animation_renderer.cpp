@@ -11,7 +11,8 @@ Colors::CircleAnimationRenderer::CircleAnimationRenderer(
     : Renderer(canvas, config), radius{}, currentRadius{}, centerX{}, centerY{},
       color{}, loopCount{}, shrink{_shrink} {}
 
-void Colors::CircleAnimationRenderer::setup() {
+void Colors::CircleAnimationRenderer::setup()
+{
   canvas->clear();
   radius = (int)std::sqrt(canvas->getHeight() * canvas->getHeight() +
                           canvas->getWidth() * canvas->getWidth()) +
@@ -25,39 +26,42 @@ void Colors::CircleAnimationRenderer::setup() {
   color = config.getColor();
 }
 
-long int Colors::CircleAnimationRenderer::render() {
+long int Colors::CircleAnimationRenderer::render()
+{
   int progress{loopCount % (int)(config.animationDuration + config.duration)};
-  if (progress == 0) {
+  if (progress == 0)
+  {
     canvas->fill(color);
     color = config.getColor();
   }
 
   if (config.runOnce &&
-      progress == (int)(config.animationDuration + config.duration) - 1) {
+      progress == (int)(config.animationDuration + config.duration) - 1)
+  {
     return -1;
   }
 
-  if ((float)progress <= config.animationDuration) {
+  if ((float)progress <= config.animationDuration)
+  {
     float percent{(float)progress / config.animationDuration};
     if (shrink)
       percent = 1.0f - percent;
     int nextRadius{(int)(radius * percent)};
-    if (nextRadius != currentRadius) {
+    if (nextRadius != currentRadius)
+    {
       currentRadius = nextRadius;
-      for (int i{}; i <= (config.fading ? 10 : 0); i++) {
+      for (int i{}; i <= (config.fading ? 10 : 0); i++)
+      {
         // TODO: Test this works
         float fade{
-          std::max(
-            0.0f,
-            std::min(1.0f,
-              (1.0f - (float)i / 10.0f)
-            )
-          )
-        };
+            std::max(
+                0.0f,
+                std::min(1.0f,
+                         (1.0f - (float)i / 10.0f)))};
         dLog(fade);
         dLog(1.0f - (float)i / 10.0f);
         dLog(i);
-        canvas->drawCircle(centerX, centerY, currentRadius + i * (shrink ? -1 : 1),
+        canvas->drawCircle(centerX, centerY, currentRadius + i * (shrink ? 1 : -1),
                            color * fade, true);
       }
     }
