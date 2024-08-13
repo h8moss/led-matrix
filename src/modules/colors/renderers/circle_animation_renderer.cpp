@@ -44,7 +44,7 @@ long int Colors::CircleAnimationRenderer::render() {
     int nextRadius{(int)(radius * percent)};
     if (nextRadius != currentRadius) {
       currentRadius = nextRadius;
-      for (int i{}; i < (config.fading ? 11 : 1); i++) {
+      for (int i{}; i <= (config.fading ? 10 : 0); i++) {
         // TODO: Test this works
         float fade{
           std::max(
@@ -57,7 +57,7 @@ long int Colors::CircleAnimationRenderer::render() {
         dLog(fade);
         dLog(1.0f - (float)i / 10.0f);
         dLog(i);
-        canvas->drawCircle(centerX, centerY, currentRadius,
+        canvas->drawCircle(centerX, centerY, currentRadius + i * (shrink ? -1 : 1),
                            color * fade, true);
       }
     }
