@@ -62,7 +62,7 @@ long int Colors::CircleAnimationRenderer::render()
         dLog(1.0f - (float)i / 10.0f);
         dLog(i);
         canvas->drawCircle(centerX, centerY, currentRadius + i * (shrink ? 1 : -1),
-                           color * fade, true);
+                           color * fade, fade);
       }
     }
   }
