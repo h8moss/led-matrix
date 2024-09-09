@@ -1,5 +1,5 @@
-#include <Magick++/Functions.h>
 #include <fcntl.h>
+#include <fstream>
 #include <iostream>
 #include <unistd.h>
 
@@ -52,10 +52,17 @@ int main(int argc, char **argv) {
 
     bool shouldExit{false};
 
+#ifdef DEBUG
+    std::ofstream debugFile{};
+    debugFile.open("./led-matrix-manager.log");
+#endif // DEBUG
+
     do {
       if (timeCounter >= 1000) { // Only check commands every second
         number = read(fd, s, 50);
         timeCounter = 0;
+        debugFile << "number: " << number << '\n';
+
       } else {
         number = 0;
       }
@@ -113,6 +120,10 @@ int main(int argc, char **argv) {
         }
       }
     } while (!shouldExit);
+
+#ifdef DEBUG
+    debugFile.close();
+#endif
 
     if (module != nullptr) {
       module->teardown();
