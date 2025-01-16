@@ -4,6 +4,8 @@
 #include <unistd.h>
 
 #include "common/canvas/better_canvas.hpp"
+#include "common/canvas/debug_canvas.hpp"
+#include "common/canvas/icanvas.hpp"
 #include "common/util/arg_parser.hpp"
 #include "common/util/debug_log.hpp"
 #include "modules/colors/colors_module.hpp"
@@ -19,8 +21,16 @@ using std::endl;
 
 int main(int argc, char **argv) {
   Magick::InitializeMagick(*argv);
+  ICanvas *canvas;
 
   try {
+
+#ifdef DEVLAPTOP
+
+    canvas = new DebugCanvas();
+
+#else
+
     rgb_matrix::RGBMatrix::Options defaults;
     defaults.hardware_mapping = "regular";
     defaults.rows = 64;
@@ -28,8 +38,9 @@ int main(int argc, char **argv) {
     defaults.chain_length = 1;
     defaults.parallel = 1;
     defaults.show_refresh_rate = false;
-    BetterCanvas *canvas = new BetterCanvas(argc, argv, defaults);
+    canvas = new BetterCanvas(argc, argv, defaults);
 
+#endif
     std::vector<Module *> modules{
         new Colors::ColorsModule(canvas),
         new GameOfLife::GOLModule(canvas),
