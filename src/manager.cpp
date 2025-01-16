@@ -10,6 +10,7 @@
 #include "common/util/debug_log.hpp"
 #include "modules/colors/colors_module.hpp"
 #include "modules/game-of-life/game_of_life_module.hpp"
+#include "modules/images/images_module.hpp"
 #include "modules/module.hpp"
 #include "modules/time-date/time_date_module.hpp"
 
@@ -42,10 +43,8 @@ int main(int argc, char **argv) {
 
 #endif
     std::vector<Module *> modules{
-        new Colors::ColorsModule(canvas),
-        new GameOfLife::GOLModule(canvas),
-        new TimeDate::TimeDateModule(canvas),
-    };
+        new Colors::ColorsModule(canvas), new GameOfLife::GOLModule(canvas),
+        new TimeDate::TimeDateModule(canvas), new Images::ImagesModule(canvas)};
 
     long int timeCounter{};
 
@@ -63,16 +62,10 @@ int main(int argc, char **argv) {
 
     bool shouldExit{false};
 
-#ifdef DEBUG
-    std::ofstream debugFile{};
-    debugFile.open("./led-matrix-manager.log");
-#endif // DEBUG
-
     do {
       if (timeCounter >= 1000) { // Only check commands every second
         number = read(fd, s, 50);
         timeCounter = 0;
-        debugFile << "number: " << number << '\n';
 
       } else {
         number = 0;
@@ -131,10 +124,6 @@ int main(int argc, char **argv) {
         }
       }
     } while (!shouldExit);
-
-#ifdef DEBUG
-    debugFile.close();
-#endif
 
     if (module != nullptr) {
       module->teardown();
