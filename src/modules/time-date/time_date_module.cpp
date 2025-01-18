@@ -1,5 +1,6 @@
 #include "modules/time-date/time_date_module.hpp"
 #include "common/util/arg_parser.hpp"
+#include "common/util/debug_log.hpp"
 #include "common/util/pad_zeros.hpp"
 #include "modules/time-date/time_date_configuration.hpp"
 
@@ -20,8 +21,10 @@ void TimeDate::TimeDateModule::setup() {
 }
 
 long int TimeDate::TimeDateModule::render() {
+  dLog("clearing");
   canvas->clear();
 
+  dLog("timing");
   auto time{std::chrono::system_clock::now()};
   auto timeT{std::chrono::system_clock::to_time_t(time)};
   auto tm{localtime(&timeT)};
@@ -54,6 +57,8 @@ long int TimeDate::TimeDateModule::render() {
   std::string yearNum{padZeros(tm->tm_year % 100)};
 
   std::string timeText{hours + ":" + minutes + ":" + seconds};
+
+  dLog(timeText);
 
   canvas->drawText({{Color::red, timeText},
                     {Color::green, " " + weekday},
