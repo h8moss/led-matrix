@@ -9,7 +9,6 @@
 #include "CLI/CLI.hpp"
 #include "led-matrix.h"
 
-#include <Magick++/Exception.h>
 #include <iostream>
 #include <signal.h>
 #include <sys/select.h>
@@ -17,13 +16,13 @@
 #include <vector>
 
 #include "CLI/CLI.hpp"
+#include "Magick++.h"
 
 volatile bool interruptReceived = false;
 
 static void Interrupt(int signo) { interruptReceived = true; }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
   Magick::InitializeMagick(*argv);
   CLI::App app{"Led matrix"};
   argv = app.ensure_utf8(argv);
@@ -31,8 +30,7 @@ int main(int argc, char **argv)
 
   srand((unsigned int)time(nullptr));
 
-  try
-  {
+  try {
     ICanvas *canvas;
 
 #ifdef DEVLAPTOP
@@ -56,8 +54,7 @@ int main(int argc, char **argv)
         new Colors::ColorsModule(canvas), new GameOfLife::GOLModule(canvas),
         new TimeDate::TimeDateModule(canvas), new Images::ImagesModule(canvas)};
 
-    for (auto mod : modules)
-    {
+    for (auto mod : modules) {
       mod->addFlags(&app);
     }
 
@@ -72,17 +69,14 @@ int main(int argc, char **argv)
     FD_SET(STDIN_FILENO, &readfds);
 
     Module *module{nullptr};
-    for (auto mod : modules)
-    {
-      if (app.got_subcommand(mod->name))
-      {
+    for (auto mod : modules) {
+      if (app.got_subcommand(mod->name)) {
         module = mod;
         break;
       }
     }
 
-    if (module == nullptr)
-    {
+    if (module == nullptr) {
       std::cout << app.help() << std::endl;
       return 1;
     }
@@ -90,23 +84,19 @@ int main(int argc, char **argv)
     module->setup();
     std::cout << "Press Ctrl-C to stop :)" << std::endl;
 
-    while (!interruptReceived)
-    {
+    while (!interruptReceived) {
       long int sleepTime{module->render()};
 
-      if (sleepTime < 0)
-      {
+      if (sleepTime < 0) {
         break;
       }
       unsigned long int finalSleepTime{(unsigned long int)sleepTime};
 
-      if (finalSleepTime > 1000000)
-      {
+      if (finalSleepTime > 1000000) {
         sleep(finalSleepTime / 1000000);
         finalSleepTime = finalSleepTime % 1000000;
       }
-      if (finalSleepTime > 0)
-      {
+      if (finalSleepTime > 0) {
         usleep(finalSleepTime);
       }
     }
@@ -115,30 +105,21 @@ int main(int argc, char **argv)
     std::cout << "Ctrl-C received, Exiting" << std::endl;
     module = nullptr;
 
-    for (auto mod : modules)
-    {
+    for (auto mod : modules) {
       delete mod;
     }
 
     delete canvas;
     canvas = nullptr;
-  }
-  catch (const CLI::ParseError &err)
-  {
+  } catch (const CLI::ParseError &err) {
     return app.exit(err);
-  }
-  catch (const char *err)
-  {
+  } catch (const char *err) {
     std::cerr << err << std::endl;
     return 1;
-  }
-  catch (const std::string err)
-  {
+  } catch (const std::string err) {
     std::cerr << err << std::endl;
     return 1;
-  }
-  catch (const std::exception &err)
-  {
+  } catch (const std::exception &err) {
     std::cerr << "Something went wrong!" << '\n';
     std::cerr << err.what() << std::endl;
   }
