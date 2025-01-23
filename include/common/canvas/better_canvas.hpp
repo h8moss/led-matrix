@@ -7,8 +7,7 @@
 #include "graphics.h"
 #include "led-matrix.h"
 
-class BetterCanvas : public ICanvas
-{
+class BetterCanvas : public ICanvas {
 public:
   BetterCanvas(int argc, char **argv, rgb_matrix::RGBMatrix::Options options);
   BetterCanvas(const BetterCanvas &canvas);
@@ -23,7 +22,7 @@ public:
                   bool filled = false) override;
   void drawCircle(int x, int y, int r, Color c, bool filled = false) override;
 
-  void drawText(std::vector<ColoredText> text, int x = 2) override;
+  virtual void drawText(std::vector<ColoredText> text, int x = 2) override;
 
   rgb_matrix::Canvas *getCanvas() override;
 

@@ -23,8 +23,10 @@ BetterCanvas BetterCanvas::operator=(const BetterCanvas &canvas1) {
 }
 
 BetterCanvas::~BetterCanvas() {
-  delete this->canvas;
-  this->canvas = nullptr;
+  if (this->canvas != nullptr) {
+    delete this->canvas;
+    this->canvas = nullptr;
+  }
 
   if (font != nullptr) {
     delete font;
@@ -92,7 +94,6 @@ int BetterCanvas::getHeight() const { return canvas->height(); }
 rgb_matrix::Font *BetterCanvas::getFont() {
   if (this->font == nullptr) {
 #ifndef FONT_DIR
-#define FONT_DIR "MISSING"
 
     throw "Missing font directory declaration, this should not happen, please "
           "contact developer!";
