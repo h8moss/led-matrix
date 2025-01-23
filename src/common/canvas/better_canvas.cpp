@@ -7,7 +7,7 @@
 
 BetterCanvas::BetterCanvas(int argc, char **argv,
                            rgb_matrix::RGBMatrix::Options options)
-    : canvas{nullptr} {
+    : canvas{nullptr}, font{nullptr} {
   canvas = rgb_matrix::RGBMatrix::CreateFromFlags(&argc, &argv, &options);
   if (canvas == nullptr) {
     throw "Error creating canvas!";
@@ -119,6 +119,7 @@ void BetterCanvas::drawText(std::vector<ColoredText> text, int initialX) {
 
   dLog("3");
   int x{initialX};
+  dLog("3.5");
   int y{2 + font->height()};
 
   dLog("4");
