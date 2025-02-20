@@ -43,6 +43,8 @@ sudo apt-get update                                           # Update system pa
 sudo apt-get install libgraphicsmagick++-dev libwebp-dev -y   # Install required dependencies
 git clone "https://github.com/h8moss/led-matrix"              # Clone the repository
 cd led-matrix/build-scripts                                   # Go into the project's build scripts
+git submodule init                                            # Initialize submodules
+git submodule update                                          # Update submodules
 ./build.sh                                                    # Generate the build files
 cd ../build                                                   # Go into the build directory
 make                                                          # Build the project
