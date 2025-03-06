@@ -1,8 +1,12 @@
-# Led Matrix Controller
+# Led Matrix Controller 🌈
 
-A simple C++ script that allows you to control a led matrix with a bunch of different animations and images, using [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix)
+A powerful C++ Application for driving LED matrix displays with the raspberry Pi. Built on top of [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix)
 
-# Animations
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Platform](https://img.shields.io/badge/platform-Raspberry%20Pi-red.svg)
+![Language](https://img.shields.io/badge/language-C%2B%2B-green.svg)
+
+## Featured animation modules
 - [x] Shifting colors
 - [x] Game of life
 - [x] The time and date
@@ -14,43 +18,75 @@ A simple C++ script that allows you to control a led matrix with a bunch of diff
 - [ ] Pong
 - [ ] Sorting algorithms
 
-## Other planned animations
+### Other planned modules
 
-- [ ] Arbitrary images
+- [x] Arbitrary images
 - [ ] Arbitrary videos
 - [ ] Arbitrary text
 - [ ] Arbitrary drawings
 
+## 🚀 Installation
 
-# Usage
+### Prerequisites
+- Raspberry Pi (any model)
+- LED Matrix display properly connected
+- Git
+- CMake
+- Make
+- Required libraries: libgraphicsmagick++-dev, libwebp-dev
 
-In order to use this thing, you gotta compile it first (I know, if I figure out how, maybe I'll add releases one day)
+### Build instructions
 
-To build this project you will need to have git, cmake and make installed on your raspberry pi.
-Said raspberry pi must also be set up with a led matrix
-
-To compile, on the raspberry pi run the following:
-
-(note, if you want help connecting the raspberry pi to an led matrix, I will make a tutorial at some point)
-
+To build this project, run the following commands on the Raspberry Pi's command line
 ```bash
-$ git clone "https://github.com/h8moss/led-matrix"  # Clone the repository
-$ cd led-matrix/build-scripts                       # Go into the project's build scripts
-$ ./build.sh                                        # Generate the build files
-$ cd ../build                                       # Go into the build directory
-$ make                                              # Actually build this project
+sudo apt-get update                                           # Update system packages
+sudo apt-get install libgraphicsmagick++-dev libwebp-dev -y   # Install required dependencies
+git clone "https://github.com/h8moss/led-matrix"              # Clone the repository
+cd led-matrix/build-scripts                                   # Go into the project's build scripts
+git submodule init                                            # Initialize submodules
+git submodule update                                          # Update submodules
+./build.sh                                                    # Generate the build files
+cd ../build                                                   # Go into the build directory
+make                                                          # Build the project
 ```
 
-That should leave you with either an error, or two executables `led-matrix` and `led-matrix-manager`, both of these
-must be run with `sudo`
+## 📚 Usage
 
-`led-matrix` runs using flags and the command line, it should hopefully give you a self explanatory "usage" message if 
-you just run `sudo led-matrix`, `sudo led-matrix --help` and `sudo led-matrix <MODULE> --helṕ`
+After a successful build, two executables will be generated in the build directory, both of which require `sudo` to run.
 
-`led-matrix-manager` works similarly, but receives the command line arguments from a fifo, allowing it to be controlled through IPC
+### `led-matrix`
+Run any module directly using CLI arguments
 
-# Fonts
+```bash
+sudo ./led-matrix                   # Shows usage information
+sudo ./led-matrix --help            # Display help message
+sudo ./led-matrix <MODULE> --help   # Module-specific help
+```
 
-The time-date module (and one day, the text module) displays text and thus, needs a font, rpi-rgb-led-matrix comes with a bunch of default fonts for simple usage, once the project has been built, the list of fonts can be found on:
-`led-matrix/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/fonts`
-Here, you may add your own font files, as long as they are in .bdf format, it is not hard to find online converters from other formats into this one, once there, you can set them using the cli options of each module
+### `led-matrix-manager`
+Operates through IPC (Inter-Process Communication) using a FIFO, allowing remote control of the display.
+
+```
+sudo ./led-matrix-manager <PATH-TO-FIFO>
+```
+## 🎨 Font Support
+The time-date module uses BDF fonts for text rendering. Default fonts are included in:
+
+```
+led-matrix/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/fonts
+```
+
+Custom fonts in BDF format can be added to this directory. Online converters are available for converting other font formats to BDF. But beware, most fonts will be too big to fit in an ordinary LED matrix
+
+## 🤝 Contributing
+Contributions are welcome! Feel free to:
+
+Report bugs
+Suggest new features
+Submit pull requests
+
+## 📝 License
+This project is open source and available under the MIT License.
+
+## 🙏 Acknowledgments
+rpi-rgb-led-matrix library for the core LED matrix functionality

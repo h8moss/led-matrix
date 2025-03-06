@@ -115,6 +115,7 @@ set(SHARED_SOURCES
 	${CMAKE_SOURCE_DIR}/src/common/models/color.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/arg_parser.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/array_to_vector.cpp
+	${CMAKE_SOURCE_DIR}/src/common/util/config_loader.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/enum_checked_transformer.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/pad_zeros.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/shuffle_vector.cpp

@@ -32,14 +32,14 @@ int main(int argc, char **argv) {
 
 #else
 
-    rgb_matrix::RGBMatrix::Options defaults;
-    defaults.hardware_mapping = "regular";
-    defaults.rows = 64;
-    defaults.cols = 64;
-    defaults.chain_length = 1;
-    defaults.parallel = 1;
-    defaults.show_refresh_rate = false;
-    canvas = new BetterCanvas(argc, argv, defaults);
+    // rgb_matrix::RGBMatrix::Options defaults;
+    // defaults.hardware_mapping = "regular";
+    // defaults.rows = 64;
+    // defaults.cols = 64;
+    // defaults.chain_length = 1;
+    // defaults.parallel = 1;
+    // defaults.show_refresh_rate = false;
+    canvas = new BetterCanvas();
 
 #endif
     std::vector<Module *> modules{

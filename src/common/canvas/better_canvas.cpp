@@ -1,14 +1,16 @@
 #include "common/canvas/better_canvas.hpp"
 #include "common/models/colored_text.hpp"
+#include "common/util/config_loader.hpp"
 
 #include "common/util/debug_log.hpp"
 #include "graphics.h"
 #include "led-matrix.h"
 
-BetterCanvas::BetterCanvas(int argc, char **argv,
-                           rgb_matrix::RGBMatrix::Options options)
-    : canvas{nullptr}, font{nullptr} {
-  canvas = rgb_matrix::RGBMatrix::CreateFromFlags(&argc, &argv, &options);
+BetterCanvas::BetterCanvas() : canvas{nullptr}, font{nullptr} {
+
+  rgb_matrix::RGBMatrix::Options opts{loadConfig()};
+  rgb_matrix::RuntimeOptions rtOpts;
+  canvas = rgb_matrix::RGBMatrix::CreateFromOptions(opts, rtOpts);
   if (canvas == nullptr) {
     throw "Error creating canvas!";
   }

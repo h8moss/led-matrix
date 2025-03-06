@@ -9,7 +9,7 @@
 
 class BetterCanvas : public ICanvas {
 public:
-  BetterCanvas(int argc, char **argv, rgb_matrix::RGBMatrix::Options options);
+  BetterCanvas();
   BetterCanvas(const BetterCanvas &canvas);
 
   BetterCanvas operator=(const BetterCanvas &canvas);
