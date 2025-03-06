@@ -1,18 +1,15 @@
 #include "modules/colors/renderers/renderer.hpp"
-#include "common/util/better_canvas.hpp"
+#include "common/canvas/icanvas.hpp"
 #include "modules/colors/colors_configuration.hpp"
 
-Colors::Renderer::Renderer(BetterCanvas *canvas)
-    : Module(canvas, new Colors::Configuration()) {}
+#include "CLI/CLI.hpp"
 
-Colors::Configuration *Colors::Renderer::getConfig() const {
-  return static_cast<Colors::Configuration *>(configuration);
-}
+Colors::Renderer::Renderer(ICanvas *canvas, Colors::Configuration _config)
+    : Module(canvas, "renderer",
+             "A renderer, this text is not meant to be seen"),
+      config{_config} {}
 
-void Colors::Renderer::createConfiguration() {
-  if (configuration != nullptr) {
-    delete configuration;
-  }
+void Colors::Renderer::addFlags(CLI::App *app) {}
 
-  configuration = new Colors::Configuration();
-}
+void Colors::Renderer::readArguments(
+    std::map<std::string, std::vector<std::string>> _) {}

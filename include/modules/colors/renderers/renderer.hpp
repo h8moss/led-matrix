@@ -1,17 +1,20 @@
 #pragma once
 
-#include "common/util/better_canvas.hpp"
+#include "common/canvas/icanvas.hpp"
 #include "modules/colors/colors_configuration.hpp"
 #include "modules/module.hpp"
 
 namespace Colors {
 class Renderer : public Module {
 public:
-  Renderer(BetterCanvas *canvas);
+  Renderer(ICanvas *canvas, Colors::Configuration config);
 
-  Colors::Configuration *getConfig() const;
+  void addFlags(CLI::App *app) override;
+  void
+  readArguments(std::map<std::string, std::vector<std::string>> args) override;
 
-  virtual void createConfiguration() override;
+protected:
+  Colors::Configuration config;
 };
 
 } // namespace Colors

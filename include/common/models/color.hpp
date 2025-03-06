@@ -1,17 +1,19 @@
 #pragma once
 
+#include "graphics.h"
 #include <string>
 
-#include "graphics.h"
+#include <Magick++.h>
 
-class Color {
-public:
+struct Color {
   int r;
   int g;
   int b;
 
   Color(int _r, int _g, int _b);
   Color();
+
+  const std::string string() const;
 
   /// @brief  Generates a color from HSL values
   /// @param h The hue of the color (0-360)
@@ -22,7 +24,11 @@ public:
 
   static Color fromHex(std::string hex);
 
+  static Color fromMagickColor(Magick::Color c);
+
   friend Color operator*(const Color &c1, float value);
+
+  bool operator==(const Color &color) const;
 
   rgb_matrix::Color toRGBMatrixColor();
 
@@ -32,3 +38,5 @@ public:
   static const Color green;
   static const Color blue;
 };
+
+bool lexical_cast(const std::string &input, Color &v);

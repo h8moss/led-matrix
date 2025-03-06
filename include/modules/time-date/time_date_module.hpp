@@ -1,5 +1,5 @@
 #pragma once
-#include "common/util/better_canvas.hpp"
+#include "common/canvas/icanvas.hpp"
 #include "modules/module.hpp"
 #include "modules/time-date/time_date_configuration.hpp"
 
@@ -8,21 +8,23 @@
 namespace TimeDate {
 class TimeDateModule : public Module {
 public:
-  TimeDateModule(BetterCanvas *_canvas);
+  TimeDateModule(ICanvas *_canvas);
 
-  virtual void setup() override;
-  virtual long int render() override;
-  virtual void teardown() override;
+  void setup() override;
+  long int render() override;
+  void teardown() override;
 
-  TimeDate::Configuration *getConfig() const;
+  void addFlags(CLI::App *app) override;
+  void
+  readArguments(std::map<std::string, std::vector<std::string>> args) override;
 
-  virtual void createConfiguration() override;
-
-  virtual ~TimeDateModule();
+  ~TimeDateModule();
 
 protected:
   std::string hours;
   std::string minutes;
   std::string seconds;
+
+  TimeDate::Configuration config;
 };
 } // namespace TimeDate

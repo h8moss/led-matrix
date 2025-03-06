@@ -1,6 +1,11 @@
 #include "common/models/color.hpp"
+#include "Magick++/Include.h"
+#include "common/util/debug_log.hpp"
+#include "magick/image.h"
 
 #include <map>
+#include <sstream>
+#include <string>
 
 float hueToRGB(float p, float q, float t) {
   if (t < 0)
@@ -16,8 +21,35 @@ float hueToRGB(float p, float q, float t) {
   return p;
 }
 
-Color::Color(int _r, int _g, int _b) : r{_r}, g{_g}, b{_b} {}
+Color::Color(int _r, int _g, int _b) : r{_r}, g{_g}, b{_b} {
+  if (std::max({r, g, b}) > 255) {
+    if (MaxRGB > 255) {
+      dLog("BEFORE: ");
+      dLog(this->string());
+      dLog("MAX");
+      dLog(MaxRGB);
+      dLog("RATIO: ");
+      dLog((float)r / (float)MaxRGB);
+      dLog((float)g / (float)MaxRGB);
+      dLog((float)b / (float)MaxRGB);
+
+      r = 255 * ((float)r / (float)MaxRGB);
+      g = 255 * ((float)g / (float)MaxRGB);
+      b = 255 * ((float)b / (float)MaxRGB);
+
+      dLog("AFTER");
+      dLog(this->string());
+    } else
+      throw "Max RGB value is (255,255,255), but got (" + string();
+  }
+}
 Color::Color() : Color(0, 0, 0) {}
+
+const std::string Color::string() const {
+  std::stringstream ss;
+  ss << "(" << r << ", " << g << ", " << b << ")";
+  return ss.str();
+}
 
 Color Color::fromHSL(int h, float s, float l) {
   int r{}, g{}, b{};
@@ -86,6 +118,21 @@ Color operator*(const Color &c1, float value) {
   );
 }
 
+bool Color::operator==(const Color &c) const {
+  return r == c.r && g == c.g && b == c.b;
+}
+
 rgb_matrix::Color Color::toRGBMatrixColor() {
   return rgb_matrix::Color((uint8_t)r, (uint8_t)g, (uint8_t)b);
+}
+
+Color Color::fromMagickColor(Magick::Color c) {
+  auto col{Color{c.redQuantum(), c.greenQuantum(), c.blueQuantum()}};
+  return col;
+}
+// ----- CLI11 Lexical cast -----
+bool lexical_cast(const std::string &input, Color &v) {
+  v = Color::fromHex(input);
+
+  return true;
 }

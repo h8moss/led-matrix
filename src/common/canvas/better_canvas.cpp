@@ -1,14 +1,16 @@
-#include "common/util/better_canvas.hpp"
+#include "common/canvas/better_canvas.hpp"
 #include "common/models/colored_text.hpp"
+#include "common/util/config_loader.hpp"
 
+#include "common/util/debug_log.hpp"
 #include "graphics.h"
 #include "led-matrix.h"
 
-BetterCanvas::BetterCanvas(int argc, char **argv,
-                           rgb_matrix::RGBMatrix::Options options,
-                           std::string _fontName)
-    : canvas{nullptr}, fontName{_fontName} {
-  canvas = rgb_matrix::RGBMatrix::CreateFromFlags(&argc, &argv, &options);
+BetterCanvas::BetterCanvas() : canvas{nullptr}, font{nullptr} {
+
+  rgb_matrix::RGBMatrix::Options opts{loadConfig()};
+  rgb_matrix::RuntimeOptions rtOpts;
+  canvas = rgb_matrix::RGBMatrix::CreateFromOptions(opts, rtOpts);
   if (canvas == nullptr) {
     throw "Error creating canvas!";
   }
@@ -24,8 +26,15 @@ BetterCanvas BetterCanvas::operator=(const BetterCanvas &canvas1) {
 }
 
 BetterCanvas::~BetterCanvas() {
-  this->canvas->Clear();
-  delete this->canvas;
+  if (this->canvas != nullptr) {
+    delete this->canvas;
+    this->canvas = nullptr;
+  }
+
+  if (font != nullptr) {
+    delete font;
+    font = nullptr;
+  }
 }
 
 void BetterCanvas::setPixel(int x, int y, Color c) {
@@ -80,13 +89,14 @@ void BetterCanvas::drawCircle(int x, int y, int r, Color c, bool filled) {
   }
 }
 
+rgb_matrix::Canvas *BetterCanvas::getCanvas() { return canvas; }
+
 int BetterCanvas::getWidth() const { return canvas->width(); }
 int BetterCanvas::getHeight() const { return canvas->height(); }
 
 rgb_matrix::Font *BetterCanvas::getFont() {
   if (this->font == nullptr) {
 #ifndef FONT_DIR
-#define FONT_DIR "MISSING"
 
     throw "Missing font directory declaration, this should not happen, please "
           "contact developer!";
@@ -105,10 +115,16 @@ rgb_matrix::Font *BetterCanvas::getFont() {
 }
 
 void BetterCanvas::drawText(std::vector<ColoredText> text, int initialX) {
+  dLog("1");
   rgb_matrix::Font *font{getFont()};
   Color c{};
+
+  dLog("3");
   int x{initialX};
+  dLog("3.5");
   int y{2 + font->height()};
+
+  dLog("4");
   for (ColoredText t : text) {
     c = t.color;
     int len{x};
@@ -119,6 +135,8 @@ void BetterCanvas::drawText(std::vector<ColoredText> text, int initialX) {
       y += 2 + font->height();
       x = initialX;
     }
+
+    dLog("5");
 
     x += rgb_matrix::DrawText(canvas, *font, x, y, c.toRGBMatrixColor(),
                               nullptr, t.text.c_str());

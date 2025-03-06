@@ -1,20 +1,19 @@
 #include "modules/time-date/time_date_module.hpp"
-#include "common/util/better_canvas.hpp"
+#include "common/util/arg_parser.hpp"
+#include "common/util/debug_log.hpp"
 #include "common/util/pad_zeros.hpp"
 #include "modules/time-date/time_date_configuration.hpp"
 
 #include <chrono>
 #include <string>
 
-TimeDate::TimeDateModule::TimeDateModule(BetterCanvas *_canvas)
-    : Module(_canvas, new TimeDate::Configuration()) {
-  this->name = "time-date";
-  this->description = "Shows the current time and date";
-}
+TimeDate::TimeDateModule::TimeDateModule(ICanvas *_canvas)
+    : Module(_canvas, "time-date", "Shows the current time and date"), hours{},
+      minutes{}, seconds{}, config{TimeDate::Configuration::defaults} {}
 
 void TimeDate::TimeDateModule::setup() {
   canvas->clear();
-  canvas->fontName = getConfig()->font;
+  canvas->fontName = config.font;
 
   hours = "";
   minutes = "";
@@ -22,8 +21,10 @@ void TimeDate::TimeDateModule::setup() {
 }
 
 long int TimeDate::TimeDateModule::render() {
+  dLog("clearing");
   canvas->clear();
 
+  dLog("timing");
   auto time{std::chrono::system_clock::now()};
   auto timeT{std::chrono::system_clock::to_time_t(time)};
   auto tm{localtime(&timeT)};
@@ -57,6 +58,8 @@ long int TimeDate::TimeDateModule::render() {
 
   std::string timeText{hours + ":" + minutes + ":" + seconds};
 
+  dLog(timeText);
+
   canvas->drawText({{Color::red, timeText},
                     {Color::green, " " + weekday},
                     {Color::blue, dayNum + "/" + monthNum + "/" + yearNum}});
@@ -66,16 +69,21 @@ long int TimeDate::TimeDateModule::render() {
 
 void TimeDate::TimeDateModule::teardown() { canvas->clear(); }
 
-TimeDate::TimeDateModule::~TimeDateModule() {}
+void TimeDate::TimeDateModule::addFlags(CLI::App *app) {
+  CLI::App *cmd = app->add_subcommand(this->name, this->description);
 
-TimeDate::Configuration *TimeDate::TimeDateModule::getConfig() const {
-  return static_cast<TimeDate::Configuration *>(configuration);
+  cmd->add_option("--font,-f", config.font,
+                  "The font to use when displaying the time and date, with no "
+                  "extension, it must be one of the existing fonts, for more "
+                  "information check out the README.md file");
 }
 
-void TimeDate::TimeDateModule::createConfiguration() {
-  if (configuration != nullptr) {
-    delete configuration;
+void TimeDate::TimeDateModule::readArguments(
+    std::map<std::string, std::vector<std::string>> map) {
+  config = TimeDate::Configuration::defaults;
+  if (map.count("font")) {
+    config.font = ArgParser::ensureSingle(map, "font");
   }
-
-  configuration = new TimeDate::Configuration();
 }
+
+TimeDate::TimeDateModule::~TimeDateModule() {}

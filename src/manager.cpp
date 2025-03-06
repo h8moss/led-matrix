@@ -1,36 +1,50 @@
 #include <fcntl.h>
+#include <fstream>
 #include <iostream>
 #include <unistd.h>
 
-#include "common/util/better_canvas.hpp"
+#include "common/canvas/better_canvas.hpp"
+#include "common/canvas/debug_canvas.hpp"
+#include "common/canvas/icanvas.hpp"
+#include "common/util/arg_parser.hpp"
 #include "common/util/debug_log.hpp"
-#include "common/util/starts_with.hpp"
 #include "modules/colors/colors_module.hpp"
 #include "modules/game-of-life/game_of_life_module.hpp"
+#include "modules/images/images_module.hpp"
 #include "modules/module.hpp"
 #include "modules/time-date/time_date_module.hpp"
 
+#include "Magick++.h"
 #include "led-matrix.h"
 
 using std::cout;
 using std::endl;
 
 int main(int argc, char **argv) {
-  try {
-    rgb_matrix::RGBMatrix::Options defaults;
-    defaults.hardware_mapping = "regular";
-    defaults.rows = 64;
-    defaults.cols = 64;
-    defaults.chain_length = 1;
-    defaults.parallel = 1;
-    defaults.show_refresh_rate = false;
-    BetterCanvas *canvas = new BetterCanvas(argc, argv, defaults);
+  Magick::InitializeMagick(*argv);
+  ICanvas *canvas;
 
+  try {
+
+#ifdef DEVLAPTOP
+
+    canvas = new DebugCanvas();
+
+#else
+
+    // rgb_matrix::RGBMatrix::Options defaults;
+    // defaults.hardware_mapping = "regular";
+    // defaults.rows = 64;
+    // defaults.cols = 64;
+    // defaults.chain_length = 1;
+    // defaults.parallel = 1;
+    // defaults.show_refresh_rate = false;
+    canvas = new BetterCanvas();
+
+#endif
     std::vector<Module *> modules{
-        new Colors::ColorsModule(canvas),
-        new GameOfLife::GOLModule(canvas),
-        new TimeDate::TimeDateModule(canvas),
-    };
+        new Colors::ColorsModule(canvas), new GameOfLife::GOLModule(canvas),
+        new TimeDate::TimeDateModule(canvas), new Images::ImagesModule(canvas)};
 
     long int timeCounter{};
 
@@ -52,6 +66,7 @@ int main(int argc, char **argv) {
       if (timeCounter >= 1000) { // Only check commands every second
         number = read(fd, s, 50);
         timeCounter = 0;
+
       } else {
         number = 0;
       }
@@ -61,11 +76,13 @@ int main(int argc, char **argv) {
         dLog("Received instructions: ");
         s[number] = '\0';
         std::string instruction{s};
+        ArgParser parser{ArgParser()};
+        parser.parse(instruction);
 
-        if (instruction == "die") {
+        if (parser.name == "die") {
           dLog("Received DEATH");
           break;
-        } else if (instruction == "off") {
+        } else if (parser.name == "off") {
           module->teardown();
           module = nullptr;
           continue;
@@ -73,15 +90,15 @@ int main(int argc, char **argv) {
 
         for (auto mod : modules) {
           dLog("CHECKING " + mod->name);
-          if (startsWith(instruction, mod->name)) {
+          if (parser.name == mod->name) {
             dLog("Initiating " + mod->name);
             if (module != nullptr) {
               module->teardown();
             }
             module = mod;
-            module->createConfiguration();
-            module->configuration->parseData(instruction);
+            module->readArguments(parser.values);
             module->setup();
+            break;
           }
         }
       } else {
