@@ -14,6 +14,7 @@
 #include "modules/module.hpp"
 #include "modules/time-date/time_date_module.hpp"
 
+#include "CLI/CLI.hpp"
 #include "Magick++.h"
 #include "led-matrix.h"
 
@@ -45,6 +46,12 @@ int main(int argc, char **argv) {
     std::vector<Module *> modules{
         new Colors::ColorsModule(canvas), new GameOfLife::GOLModule(canvas),
         new TimeDate::TimeDateModule(canvas), new Images::ImagesModule(canvas)};
+
+    CLI::App app{"Led matrix"};
+    app.require_subcommand(1);
+    for (auto mod : modules) {
+      mod->addFlags(&app);
+    }
 
     long int timeCounter{};
 
@@ -88,18 +95,34 @@ int main(int argc, char **argv) {
           continue;
         }
 
+        Module *targetModule{nullptr};
         for (auto mod : modules) {
           dLog("CHECKING " + mod->name);
           if (parser.name == mod->name) {
-            dLog("Initiating " + mod->name);
-            if (module != nullptr) {
-              module->teardown();
-            }
-            module = mod;
-            module->readArguments(parser.values);
-            module->setup();
+            targetModule = mod;
             break;
           }
+        }
+
+        if (targetModule != nullptr) {
+          dLog("Initiating " + targetModule->name);
+          targetModule->resetToDefaults();
+
+          auto command{toCliCommand(parser.name, parser.values)};
+          app.clear();
+          try {
+            app.parse(command);
+          } catch (const CLI::ParseError &err) {
+            std::cerr << "Failed to parse arguments for " << parser.name
+                      << ": " << err.what() << std::endl;
+            continue;
+          }
+
+          if (module != nullptr) {
+            module->teardown();
+          }
+          module = targetModule;
+          module->setup();
         }
       } else {
         // Normal loop

@@ -26,22 +26,15 @@ void ArgParser::parse(std::string value) {
   }
 }
 
-std::string
-ArgParser::ensureSingle(std::map<std::string, std::vector<std::string>> map,
-                        std::string key) {
-  auto value = map[key];
-  if (value.size() != 1) {
-    throw std::string{"Expected "} + key + " to be passed only once";
-  }
-  return value[0];
-}
+std::string toCliCommand(std::string moduleName,
+                         std::map<std::string, std::vector<std::string>> values) {
+  std::string command{moduleName};
 
-bool ArgParser::ensureBoolean(
-    std::map<std::string, std::vector<std::string>> map, std::string key) {
-  auto valueVec = map[key];
-  auto value = ensureSingle(map, key);
-  if (value != "1" && value != "0") {
-    throw key + " expected either a 1 or a 0 as it's value";
+  for (const auto &entry : values) {
+    for (const auto &value : entry.second) {
+      command += " --" + entry.first + "=" + value;
+    }
   }
-  return value == "1";
+
+  return command;
 }

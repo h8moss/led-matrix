@@ -1,5 +1,4 @@
 #include "modules/colors/colors_module.hpp"
-#include "common/util/arg_parser.hpp"
 #include "common/util/enum_checked_transformer.hpp"
 #include "modules/colors/colors_configuration.hpp"
 #include "modules/colors/renderers/circle_animation_renderer.hpp"
@@ -42,26 +41,27 @@ Colors::ColorsModule::~ColorsModule() {
 void Colors::ColorsModule::addFlags(CLI::App *app) {
   auto module = app->add_subcommand(this->name, this->description);
 
-  auto colorOpt = module->add_option(
-      "--color,-c", config.colors, "A color you want the animation to contain");
+  auto colorOpt = module
+      ->add_option(
+          "--color,-c", config.colors, "A color you want the animation to contain")
+      ->type_name("color");
 
   module->add_option(
       "--duration,-d", config.duration,
       "The amount of time, in miliseconds, a color should remain on screen");
 
-  module
-      ->add_option("--animation, -a", config.animation, "The animation to show")
-      ->transform(EnumCheckedTransformer(
-          {{"pulse", Colors::Animation::pulse},
-           {"corners", Colors::Animation::corners},
-           {"grow", Colors::Animation::grow},
-           {"shrink", Colors::Animation::shrink}},
-          {{Colors::Animation::pulse, "A simple pulse animation"},
-           {Colors::Animation::corners,
-            "Colors rush from one corner to the other"},
-           {Colors::Animation::grow, "A circle of color grows from the center"},
-           {Colors::Animation::shrink,
-            "A circle of color shrinks into the center"}}));
+  addEnumOption(
+      module, "--animation, -a", config.animation, "The animation to show",
+      {{"pulse", Colors::Animation::pulse},
+       {"corners", Colors::Animation::corners},
+       {"grow", Colors::Animation::grow},
+       {"shrink", Colors::Animation::shrink}},
+      {{Colors::Animation::pulse, "A simple pulse animation"},
+       {Colors::Animation::corners,
+        "Colors rush from one corner to the other"},
+       {Colors::Animation::grow, "A circle of color grows from the center"},
+       {Colors::Animation::shrink,
+        "A circle of color shrinks into the center"}});
 
   module->add_option("--animation-duration,--ad", config.animationDuration,
                      "The amount of time, in miliseconds, tha transition "
@@ -81,47 +81,6 @@ void Colors::ColorsModule::addFlags(CLI::App *app) {
                    "The animation runs once and then it exits");
 }
 
-void Colors::ColorsModule::readArguments(
-    std::map<std::string, std::vector<std::string>> map) {
+void Colors::ColorsModule::resetToDefaults() {
   config = Colors::ConfigurationWithAnimation::defaults;
-
-  if (map.count("run-once")) {
-    config.runOnce = ArgParser::ensureBoolean(map, "run-once");
-  }
-  if (map.count("animation")) {
-    std::string value = ArgParser::ensureSingle(map, "animation");
-    if (!ConfigurationWithAnimation::animationMap.count(value)) {
-      throw "Unrecognized animation: " + value;
-    }
-    config.animation = ConfigurationWithAnimation::animationMap[value];
-  }
-  if (map.count("color")) {
-    config.colors = {};
-    for (auto c : map["color"]) {
-      config.colors.push_back(Color::fromHex(c));
-    }
-  }
-  if (map.count("fade")) {
-    config.fading = ArgParser::ensureBoolean(map, "fade");
-  }
-  if (map.count("duration")) {
-    std::string value = ArgParser::ensureSingle(map, "duration");
-    try {
-      config.duration = std::stof(value);
-    } catch (std::invalid_argument &e) {
-      throw "Could not understand the value of duration";
-    }
-  }
-  if (map.count("animation-duration")) {
-    std::string value = ArgParser::ensureSingle(map, "animation-duration");
-    try {
-      config.animationDuration = std::stof(value);
-    } catch (std::invalid_argument &e) {
-      throw "Could not understand the value of animation-duration";
-    }
-  }
-  if (map.count("true-random-colors")) {
-    config.useTrueRandomColors =
-        ArgParser::ensureBoolean(map, "true-random-colors");
-  }
 }

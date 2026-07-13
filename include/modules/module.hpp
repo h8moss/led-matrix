@@ -1,5 +1,6 @@
 #pragma once
 #include "common/canvas/icanvas.hpp"
+#include "common/util/enum_checked_transformer.hpp"
 
 #include "CLI/CLI.hpp"
 
@@ -19,11 +20,31 @@ public:
   virtual void teardown() = 0;
 
   virtual void addFlags(CLI::App *app) = 0;
-  virtual void
-  readArguments(std::map<std::string, std::vector<std::string>> args) = 0;
+  virtual void resetToDefaults() = 0;
+
+  const std::map<CLI::Option *, std::vector<EnumValueInfo>> &getEnumOptions() const {
+    return enumOptionValues;
+  }
 
   virtual ~Module() {}
 
 protected:
   ICanvas *canvas = nullptr;
+  std::map<CLI::Option *, std::vector<EnumValueInfo>> enumOptionValues;
+
+  // Registers an enum-backed option, wiring it up exactly like
+  // add_option(...)->transform(EnumCheckedTransformer(...)) while also
+  // retaining the same name/value/description data for introspection (e.g.
+  // by led-matrix-info), since CLI11 has no public API to recover that data
+  // back out of a Transformer once attached.
+  template <typename EnumT>
+  CLI::Option *addEnumOption(CLI::App *cmd, std::string flagNames, EnumT &target,
+                             std::string description,
+                             std::map<std::string, int> mapping,
+                             std::map<int, std::string> descriptions) {
+    auto option = cmd->add_option(flagNames, target, description)
+                      ->transform(EnumCheckedTransformer(mapping, descriptions));
+    enumOptionValues[option] = enumValueInfos(mapping, descriptions);
+    return option;
+  }
 };

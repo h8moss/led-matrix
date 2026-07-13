@@ -1,7 +1,6 @@
 #include "modules/game-of-life/game_of_life_module.hpp"
 #include "CLI/CLI.hpp"
 #include "common/models/fade_data.hpp"
-#include "common/util/arg_parser.hpp"
 #include "common/util/enum_checked_transformer.hpp"
 #include "modules/game-of-life/game_of_life_board.hpp"
 #include "modules/game-of-life/game_of_life_configuration.hpp"
@@ -124,52 +123,29 @@ void GameOfLife::GOLModule::addFlags(CLI::App *app) {
                                "Pass it to add a fading effect to dying cells");
   cmd->add_option("--color,-c", config.color,
                   "The color you want the game to be, in HEX")
-      ->each([this](std::string opt) { config.generateColor = false; });
+      ->each([this](std::string opt) { config.generateColor = false; })
+      ->type_name("color");
 
   cmd->add_option("--fade-speed,-s", config.fadeSpeed,
                   "Speed at which the fading effect occurs, ignored if --fade "
                   "is not passed")
       ->needs(fadeOpt);
-  cmd->add_option("--stagnation", config.onStagnation,
-                  "What the game should do if it encounters stagnation")
-      ->transform(EnumCheckedTransformer(
-          {{"quit", GameOfLife::StagnationBehaviour::quit},
-           {"reset", GameOfLife::StagnationBehaviour::reset},
-           {"ignore", GameOfLife::StagnationBehaviour::ignore}},
-          {{GameOfLife::StagnationBehaviour::ignore,
-            "The game ignores the stagnation and continues"},
-           {GameOfLife::StagnationBehaviour::reset,
-            "The game stars over when it finds stagnation"},
-           {GameOfLife::StagnationBehaviour::quit,
-            "The game ends when it finds stagnation"}}));
+  addEnumOption(
+      cmd, "--stagnation", config.onStagnation,
+      "What the game should do if it encounters stagnation",
+      {{"quit", GameOfLife::StagnationBehaviour::quit},
+       {"reset", GameOfLife::StagnationBehaviour::reset},
+       {"ignore", GameOfLife::StagnationBehaviour::ignore}},
+      {{GameOfLife::StagnationBehaviour::ignore,
+        "The game ignores the stagnation and continues"},
+       {GameOfLife::StagnationBehaviour::reset,
+        "The game stars over when it finds stagnation"},
+       {GameOfLife::StagnationBehaviour::quit,
+        "The game ends when it finds stagnation"}});
 }
 
-void GameOfLife::GOLModule::readArguments(
-    std::map<std::string, std::vector<std::string>> map) {
+void GameOfLife::GOLModule::resetToDefaults() {
   config = GameOfLife::Configuration::defaults;
-  if (map.count("duration")) {
-    std::string value{ArgParser::ensureSingle(map, "duration")};
-    try {
-      config.duration = std::stof(value);
-    } catch (std::invalid_argument) {
-      throw "Invalid argument for duration flag";
-    }
-  }
-  if (map.count("fade")) {
-    config.fade = ArgParser::ensureBoolean(map, "fade");
-  }
-  if (map.count("color")) {
-    config.color = Color::fromHex(ArgParser::ensureSingle(map, "color"));
-    config.generateColor = false;
-  }
-  if (map.count("fade-speed")) {
-    auto value = ArgParser::ensureSingle(map, "fade-speed");
-    try {
-      config.fadeSpeed = std::stof(value);
-    } catch (std::invalid_argument) {
-      throw "Invalid argument for fade-speed flag";
-    }
-  }
 }
 
 GameOfLife::GOLModule::~GOLModule() {}

@@ -1,5 +1,4 @@
 #include "modules/time-date/time_date_module.hpp"
-#include "common/util/arg_parser.hpp"
 #include "common/util/debug_log.hpp"
 #include "common/util/pad_zeros.hpp"
 #include "modules/time-date/time_date_configuration.hpp"
@@ -75,15 +74,12 @@ void TimeDate::TimeDateModule::addFlags(CLI::App *app) {
   cmd->add_option("--font,-f", config.font,
                   "The font to use when displaying the time and date, with no "
                   "extension, it must be one of the existing fonts, for more "
-                  "information check out the README.md file");
+                  "information check out the README.md file")
+      ->type_name("path");
 }
 
-void TimeDate::TimeDateModule::readArguments(
-    std::map<std::string, std::vector<std::string>> map) {
+void TimeDate::TimeDateModule::resetToDefaults() {
   config = TimeDate::Configuration::defaults;
-  if (map.count("font")) {
-    config.font = ArgParser::ensureSingle(map, "font");
-  }
 }
 
 TimeDate::TimeDateModule::~TimeDateModule() {}

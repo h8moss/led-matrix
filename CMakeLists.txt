@@ -117,6 +117,7 @@ set(SHARED_SOURCES
 	${CMAKE_SOURCE_DIR}/src/common/util/array_to_vector.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/config_loader.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/enum_checked_transformer.cpp
+	${CMAKE_SOURCE_DIR}/src/common/util/json_writer.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/pad_zeros.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/shuffle_vector.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/split_string.cpp
@@ -136,23 +137,28 @@ set(SHARED_SOURCES
 	${CMAKE_SOURCE_DIR}/src/modules/time-date/time_date_module.cpp
 )
 
-# Sources for the two different executables
+# Sources for the three different executables
 set(CLI_SOURCES ${SHARED_SOURCES} ${CMAKE_SOURCE_DIR}/src/cli.cpp)
 set(MANAGER_SOURCES ${SHARED_SOURCES} ${CMAKE_SOURCE_DIR}/src/manager.cpp)
+set(INFO_SOURCES ${SHARED_SOURCES} ${CMAKE_SOURCE_DIR}/src/info.cpp)
 
 # Add executables
 add_executable(led-matrix ${CLI_SOURCES})
 add_executable(led-matrix-manager ${MANAGER_SOURCES})
+add_executable(led-matrix-info ${INFO_SOURCES})
 
 # Make the executables depend on rpi-rgb-led-matrix
 add_dependencies(led-matrix rpi-rgb-led-matrix)
 add_dependencies(led-matrix-manager rpi-rgb-led-matrix)
+add_dependencies(led-matrix-info rpi-rgb-led-matrix)
 
 # Link the executables
 target_link_libraries(led-matrix PRIVATE  rt m pthread led-matrix-lib CLI11::CLI11 )
 target_link_libraries(led-matrix-manager PRIVATE  rt m pthread led-matrix-lib CLI11::CLI11 )
+target_link_libraries(led-matrix-info PRIVATE  rt m pthread led-matrix-lib CLI11::CLI11 )
 
 foreach(lib IN LISTS GM_LIBS_PROPER)
     target_link_libraries(led-matrix PRIVATE ${lib})
     target_link_libraries(led-matrix-manager PRIVATE ${lib})
+    target_link_libraries(led-matrix-info PRIVATE ${lib})
 endforeach()

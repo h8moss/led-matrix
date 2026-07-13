@@ -17,8 +17,7 @@ public:
   void teardown() override;
 
   void addFlags(CLI::App *app) override;
-  void
-  readArguments(std::map<std::string, std::vector<std::string>> args) override;
+  void resetToDefaults() override;
 
   ~ImagesModule();
 

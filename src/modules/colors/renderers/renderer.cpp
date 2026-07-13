@@ -11,5 +11,4 @@ Colors::Renderer::Renderer(ICanvas *canvas, Colors::Configuration _config)
 
 void Colors::Renderer::addFlags(CLI::App *app) {}
 
-void Colors::Renderer::readArguments(
-    std::map<std::string, std::vector<std::string>> _) {}
+void Colors::Renderer::resetToDefaults() {}

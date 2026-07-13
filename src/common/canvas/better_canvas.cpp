@@ -115,16 +115,12 @@ rgb_matrix::Font *BetterCanvas::getFont() {
 }
 
 void BetterCanvas::drawText(std::vector<ColoredText> text, int initialX) {
-  dLog("1");
   rgb_matrix::Font *font{getFont()};
   Color c{};
 
-  dLog("3");
   int x{initialX};
-  dLog("3.5");
   int y{2 + font->height()};
 
-  dLog("4");
   for (ColoredText t : text) {
     c = t.color;
     int len{x};
@@ -135,8 +131,6 @@ void BetterCanvas::drawText(std::vector<ColoredText> text, int initialX) {
       y += 2 + font->height();
       x = initialX;
     }
-
-    dLog("5");
 
     x += rgb_matrix::DrawText(canvas, *font, x, y, c.toRGBMatrixColor(),
                               nullptr, t.text.c_str());

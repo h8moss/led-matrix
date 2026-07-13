@@ -25,3 +25,14 @@ EnumCheckedTransformer::EnumCheckedTransformer(
     return out.str();
   };
 }
+
+std::vector<EnumValueInfo> enumValueInfos(std::map<std::string, int> mapping,
+                                          std::map<int, std::string> descriptions) {
+  std::vector<EnumValueInfo> result{};
+
+  for (const auto &entry : mapping) {
+    result.push_back({entry.first, entry.second, descriptions.at(entry.second)});
+  }
+
+  return result;
+}
