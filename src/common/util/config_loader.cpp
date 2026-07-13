@@ -11,7 +11,7 @@ rgb_matrix::RGBMatrix::Options loadConfig() {
 
   rgb_matrix::RGBMatrix::Options options{rgb_matrix::RGBMatrix::Options()};
 
-  std::string hardwareMapping = "regular";
+  static std::string hardwareMapping = "regular";
   int rows = 64;
   int cols = 64;
   int chainLength = 1;
@@ -28,7 +28,7 @@ rgb_matrix::RGBMatrix::Options loadConfig() {
     }
 
     std::string key{line.substr(0, position)};
-    std::string value{line.substr(position)};
+    std::string value{line.substr(position + 1)};
 
     if (key == "hardware_mapping") {
       hardwareMapping = value;

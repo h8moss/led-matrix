@@ -12,7 +12,7 @@ public:
   BetterCanvas();
   BetterCanvas(const BetterCanvas &canvas);
 
-  BetterCanvas operator=(const BetterCanvas &canvas);
+  BetterCanvas &operator=(const BetterCanvas &canvas1);
 
   void fill(Color c) override;
   void clear() override;

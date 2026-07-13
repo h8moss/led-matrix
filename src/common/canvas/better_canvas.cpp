@@ -20,9 +20,12 @@ BetterCanvas::BetterCanvas(const BetterCanvas &canvas) {
   this->canvas = canvas.canvas;
 }
 
-BetterCanvas BetterCanvas::operator=(const BetterCanvas &canvas1) {
-  this->canvas = canvas1.canvas;
-  this->fontName = canvas1.fontName;
+BetterCanvas &BetterCanvas::operator=(const BetterCanvas &canvas1) {
+  if (this != &canvas1) {
+    this->canvas = canvas1.canvas;
+    this->fontName = canvas1.fontName;
+  }
+  return *this;
 }
 
 BetterCanvas::~BetterCanvas() {
