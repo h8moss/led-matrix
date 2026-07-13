@@ -98,7 +98,10 @@ The time-date module uses BDF fonts for text rendering. Default fonts are includ
 led-matrix/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/fonts
 ```
 
+And then can be passed to the module using it's name as follows `--font my-font` for a file `led-matrix/rpi-rgb-led-matrix/src/rpi-rgb-led-matrix/fonts/my-font.bdf`
+
 Custom fonts in BDF format can be added to this directory. Online converters are available for converting other font formats to BDF. But beware, most fonts will be too big to fit in an ordinary LED matrix
+Alternatively, a full path to a .bdf font file can be passed.
 
 ## 🤝 Contributing
 

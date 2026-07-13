@@ -116,6 +116,7 @@ set(SHARED_SOURCES
 	${CMAKE_SOURCE_DIR}/src/common/util/arg_parser.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/array_to_vector.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/config_loader.cpp
+	${CMAKE_SOURCE_DIR}/src/common/util/ends_with.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/enum_checked_transformer.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/json_writer.cpp
 	${CMAKE_SOURCE_DIR}/src/common/util/pad_zeros.cpp
