@@ -97,7 +97,7 @@ long int GameOfLife::GOLModule::render() {
     }
 
     canvas->setPixel(fadeData[i].x, fadeData[i].y,
-                     fadeData[i].fade < 0.05f
+                     fadeData[i].fade <= 0.05f
                          ? Color::black
                          : config.color * fadeData[i].fade);
   }
@@ -105,7 +105,7 @@ long int GameOfLife::GOLModule::render() {
   // Remove fadeData
   fadeData.erase(
       std::remove_if(fadeData.begin(), fadeData.end(),
-                     [](const FadeData &d) { return d.fade < 0.12f; }),
+                     [](const FadeData &d) { return d.fade < 0.05f; }),
       fadeData.end());
 
   return config.duration * 1000;
@@ -130,18 +130,17 @@ void GameOfLife::GOLModule::addFlags(CLI::App *app) {
                   "Speed at which the fading effect occurs, ignored if --fade "
                   "is not passed")
       ->needs(fadeOpt);
-  addEnumOption(
-      cmd, "--stagnation", config.onStagnation,
-      "What the game should do if it encounters stagnation",
-      {{"quit", GameOfLife::StagnationBehaviour::quit},
-       {"reset", GameOfLife::StagnationBehaviour::reset},
-       {"ignore", GameOfLife::StagnationBehaviour::ignore}},
-      {{GameOfLife::StagnationBehaviour::ignore,
-        "The game ignores the stagnation and continues"},
-       {GameOfLife::StagnationBehaviour::reset,
-        "The game stars over when it finds stagnation"},
-       {GameOfLife::StagnationBehaviour::quit,
-        "The game ends when it finds stagnation"}});
+  addEnumOption(cmd, "--stagnation", config.onStagnation,
+                "What the game should do if it encounters stagnation",
+                {{"quit", GameOfLife::StagnationBehaviour::quit},
+                 {"reset", GameOfLife::StagnationBehaviour::reset},
+                 {"ignore", GameOfLife::StagnationBehaviour::ignore}},
+                {{GameOfLife::StagnationBehaviour::ignore,
+                  "The game ignores the stagnation and continues"},
+                 {GameOfLife::StagnationBehaviour::reset,
+                  "The game stars over when it finds stagnation"},
+                 {GameOfLife::StagnationBehaviour::quit,
+                  "The game ends when it finds stagnation"}});
 }
 
 void GameOfLife::GOLModule::resetToDefaults() {
