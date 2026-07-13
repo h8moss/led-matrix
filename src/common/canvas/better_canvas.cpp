@@ -1,8 +1,8 @@
 #include "common/canvas/better_canvas.hpp"
 #include "common/models/colored_text.hpp"
 #include "common/util/config_loader.hpp"
+#include "common/util/ends_with.hpp"
 
-#include "common/util/debug_log.hpp"
 #include "graphics.h"
 #include "led-matrix.h"
 
@@ -96,19 +96,25 @@ int BetterCanvas::getHeight() const { return canvas->height(); }
 
 rgb_matrix::Font *BetterCanvas::getFont() {
   if (this->font == nullptr) {
+    if (endsWith(fontName, ".bdf")) {
+      font = new rgb_matrix::Font();
+      font->LoadFont(fontName.c_str());
+    } else {
+
 #ifndef FONT_DIR
 
-    throw "Missing font directory declaration, this should not happen, please "
-          "contact developer!";
+      throw "Missing font directory declaration, this should not happen, "
+            "please contact developer!";
 #endif
 
-    if (fontName == "")
-      throw "Missing font name";
+      if (fontName == "")
+        throw "Missing font name";
 
-    std::string fontLocation{FONT_DIR + fontName + ".bdf"};
+      std::string fontLocation{FONT_DIR + fontName + ".bdf"};
 
-    font = new rgb_matrix::Font();
-    font->LoadFont(fontLocation.c_str());
+      font = new rgb_matrix::Font();
+      font->LoadFont(fontLocation.c_str());
+    }
   }
 
   return font;

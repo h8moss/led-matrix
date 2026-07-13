@@ -72,9 +72,9 @@ void TimeDate::TimeDateModule::addFlags(CLI::App *app) {
   CLI::App *cmd = app->add_subcommand(this->name, this->description);
 
   cmd->add_option("--font,-f", config.font,
-                  "The font to use when displaying the time and date, with no "
-                  "extension, it must be one of the existing fonts, for more "
-                  "information check out the README.md file")
+                  "The font to use when displaying the time and date. It must "
+                  "either be the name, with no extension, of a font in the "
+                  "font folder, or the full path to a font file.")
       ->type_name("path");
 }
 
