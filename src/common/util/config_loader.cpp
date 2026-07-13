@@ -1,4 +1,5 @@
 #include "common/util/config_loader.hpp"
+#include "common/util/debug_log.hpp"
 
 #include <fstream>
 #include <string>
@@ -20,6 +21,7 @@ rgb_matrix::RGBMatrix::Options loadConfig() {
   std::string line{};
   while (getline(f, line)) {
     size_t position = line.find('=');
+    dLog(line);
     if (position == std::string::npos) {
       throw "Problem parsing config. Make sure each line in the config has an "
             "= sign";
