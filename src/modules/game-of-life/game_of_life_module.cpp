@@ -82,12 +82,19 @@ long int GameOfLife::GOLModule::render() {
         } else {
           canvas->setPixel(x, y, config.color);
         }
-        Color c{board.get(x, y) ? config.color : Color::black};
-        canvas->setPixel(x, y, c);
+        // Color c{board.get(x, y) ? config.color : Color::black};
+        // canvas->setPixel(x, y, c);
         changes.set(x, y, false);
       }
     }
   }
+
+  // Remove fadeData
+  fadeData.erase(std::remove_if(fadeData.begin(), fadeData.end(),
+                                [this](const FadeData &d) {
+                                  return d.fade < 0.05f || board.get(d.x, d.y);
+                                }),
+                 fadeData.end());
 
   for (size_t i{}; i < fadeData.size(); i++) {
     if (config.fade) {
@@ -101,13 +108,6 @@ long int GameOfLife::GOLModule::render() {
                          ? Color::black
                          : config.color * fadeData[i].fade);
   }
-
-  // Remove fadeData
-  fadeData.erase(
-      std::remove_if(fadeData.begin(), fadeData.end(),
-                     [](const FadeData &d) { return d.fade < 0.05f; }),
-      fadeData.end());
-
   return config.duration * 1000;
 }
 
