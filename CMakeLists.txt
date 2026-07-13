@@ -110,56 +110,53 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -DDEBUG -DFONT_DIR=${FONT
 
 # All sources
 set(SHARED_SOURCES
-	${CMAKE_SOURCE_DIR}/src/common/canvas/better_canvas.cpp
-	${CMAKE_SOURCE_DIR}/src/common/canvas/debug_canvas.cpp
-	${CMAKE_SOURCE_DIR}/src/common/models/color.cpp
-	${CMAKE_SOURCE_DIR}/src/common/util/arg_parser.cpp
-	${CMAKE_SOURCE_DIR}/src/common/util/array_to_vector.cpp
-	${CMAKE_SOURCE_DIR}/src/common/util/config_loader.cpp
-	${CMAKE_SOURCE_DIR}/src/common/util/ends_with.cpp
-	${CMAKE_SOURCE_DIR}/src/common/util/enum_checked_transformer.cpp
-	${CMAKE_SOURCE_DIR}/src/common/util/json_writer.cpp
-	${CMAKE_SOURCE_DIR}/src/common/util/pad_zeros.cpp
-	${CMAKE_SOURCE_DIR}/src/common/util/shuffle_vector.cpp
-	${CMAKE_SOURCE_DIR}/src/common/util/split_string.cpp
-	${CMAKE_SOURCE_DIR}/src/common/util/starts_with.cpp
-	${CMAKE_SOURCE_DIR}/src/modules/colors/renderers/circle_animation_renderer.cpp
-	${CMAKE_SOURCE_DIR}/src/modules/colors/renderers/corners_animation_renderer.cpp
-	${CMAKE_SOURCE_DIR}/src/modules/colors/renderers/pulse_animation_renderer.cpp
-	${CMAKE_SOURCE_DIR}/src/modules/colors/renderers/renderer.cpp
-	${CMAKE_SOURCE_DIR}/src/modules/colors/colors_configuration.cpp
-	${CMAKE_SOURCE_DIR}/src/modules/colors/colors_module.cpp
-	${CMAKE_SOURCE_DIR}/src/modules/game-of-life/game_of_life_board.cpp
-	${CMAKE_SOURCE_DIR}/src/modules/game-of-life/game_of_life_configuration.cpp
-	${CMAKE_SOURCE_DIR}/src/modules/game-of-life/game_of_life_module.cpp
-	${CMAKE_SOURCE_DIR}/src/modules/images/images_configuration.cpp
-	${CMAKE_SOURCE_DIR}/src/modules/images/images_module.cpp
-	${CMAKE_SOURCE_DIR}/src/modules/time-date/time_date_configuration.cpp
-	${CMAKE_SOURCE_DIR}/src/modules/time-date/time_date_module.cpp
+   ${CMAKE_SOURCE_DIR}/src/common/canvas/better_canvas.cpp
+   ${CMAKE_SOURCE_DIR}/src/common/canvas/debug_canvas.cpp
+   ${CMAKE_SOURCE_DIR}/src/common/models/color.cpp
+   ${CMAKE_SOURCE_DIR}/src/common/util/arg_parser.cpp
+   ${CMAKE_SOURCE_DIR}/src/common/util/array_to_vector.cpp
+   ${CMAKE_SOURCE_DIR}/src/common/util/config_loader.cpp
+   ${CMAKE_SOURCE_DIR}/src/common/util/ends_with.cpp
+   ${CMAKE_SOURCE_DIR}/src/common/util/enum_checked_transformer.cpp
+   ${CMAKE_SOURCE_DIR}/src/common/util/json_writer.cpp
+   ${CMAKE_SOURCE_DIR}/src/common/util/pad_zeros.cpp
+   ${CMAKE_SOURCE_DIR}/src/common/util/shuffle_vector.cpp
+   ${CMAKE_SOURCE_DIR}/src/common/util/split_string.cpp
+   ${CMAKE_SOURCE_DIR}/src/common/util/starts_with.cpp
+   ${CMAKE_SOURCE_DIR}/src/modules/colors/renderers/circle_animation_renderer.cpp
+   ${CMAKE_SOURCE_DIR}/src/modules/colors/renderers/corners_animation_renderer.cpp
+   ${CMAKE_SOURCE_DIR}/src/modules/colors/renderers/pulse_animation_renderer.cpp
+   ${CMAKE_SOURCE_DIR}/src/modules/colors/renderers/renderer.cpp
+   ${CMAKE_SOURCE_DIR}/src/modules/colors/colors_configuration.cpp
+   ${CMAKE_SOURCE_DIR}/src/modules/colors/colors_module.cpp
+   ${CMAKE_SOURCE_DIR}/src/modules/game-of-life/game_of_life_board.cpp
+   ${CMAKE_SOURCE_DIR}/src/modules/game-of-life/game_of_life_configuration.cpp
+   ${CMAKE_SOURCE_DIR}/src/modules/game-of-life/game_of_life_module.cpp
+   ${CMAKE_SOURCE_DIR}/src/modules/images/images_configuration.cpp
+   ${CMAKE_SOURCE_DIR}/src/modules/images/images_module.cpp
+   ${CMAKE_SOURCE_DIR}/src/modules/time-date/time_date_configuration.cpp
+   ${CMAKE_SOURCE_DIR}/src/modules/time-date/time_date_module.cpp
 )
 
-# Sources for the three different executables
-set(CLI_SOURCES ${SHARED_SOURCES} ${CMAKE_SOURCE_DIR}/src/cli.cpp)
-set(MANAGER_SOURCES ${SHARED_SOURCES} ${CMAKE_SOURCE_DIR}/src/manager.cpp)
-set(INFO_SOURCES ${SHARED_SOURCES} ${CMAKE_SOURCE_DIR}/src/info.cpp)
+# Shared code compiled once into a static library
+add_library(led-matrix-common STATIC ${SHARED_SOURCES})
 
-# Add executables
-add_executable(led-matrix ${CLI_SOURCES})
-add_executable(led-matrix-manager ${MANAGER_SOURCES})
-add_executable(led-matrix-info ${INFO_SOURCES})
-
-# Make the executables depend on rpi-rgb-led-matrix
-add_dependencies(led-matrix rpi-rgb-led-matrix)
-add_dependencies(led-matrix-manager rpi-rgb-led-matrix)
-add_dependencies(led-matrix-info rpi-rgb-led-matrix)
-
-# Link the executables
-target_link_libraries(led-matrix PRIVATE  rt m pthread led-matrix-lib CLI11::CLI11 )
-target_link_libraries(led-matrix-manager PRIVATE  rt m pthread led-matrix-lib CLI11::CLI11 )
-target_link_libraries(led-matrix-info PRIVATE  rt m pthread led-matrix-lib CLI11::CLI11 )
+# The common lib needs rpi-rgb-led-matrix built first, and its link deps.
+# PUBLIC so the flags/libs propagate to every executable that links this.
+add_dependencies(led-matrix-common rpi-rgb-led-matrix)
+target_link_libraries(led-matrix-common PUBLIC
+        rt m pthread led-matrix-lib CLI11::CLI11)
 
 foreach(lib IN LISTS GM_LIBS_PROPER)
-    target_link_libraries(led-matrix PRIVATE ${lib})
-    target_link_libraries(led-matrix-manager PRIVATE ${lib})
-    target_link_libraries(led-matrix-info PRIVATE ${lib})
+    target_link_libraries(led-matrix-common PUBLIC ${lib})
 endforeach()
+
+# Add executables (only their own main-containing source each)
+add_executable(led-matrix         ${CMAKE_SOURCE_DIR}/src/cli.cpp)
+add_executable(led-matrix-manager ${CMAKE_SOURCE_DIR}/src/manager.cpp)
+add_executable(led-matrix-info    ${CMAKE_SOURCE_DIR}/src/info.cpp)
+
+# Link each executable against the shared library
+target_link_libraries(led-matrix         PRIVATE led-matrix-common)
+target_link_libraries(led-matrix-manager PRIVATE led-matrix-common)
+target_link_libraries(led-matrix-info    PRIVATE led-matrix-common)

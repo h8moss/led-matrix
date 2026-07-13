@@ -9,7 +9,7 @@ rgb_matrix::RGBMatrix::Options loadConfig() {
   std::fstream f{};
   f.open("./matrix.conf");
 
-  rgb_matrix::RGBMatrix::Options options;
+  rgb_matrix::RGBMatrix::Options options{rgb_matrix::RGBMatrix::Options()};
 
   std::string hardwareMapping = "regular";
   int rows = 64;
