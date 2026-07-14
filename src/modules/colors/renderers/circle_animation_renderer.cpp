@@ -49,7 +49,7 @@ long int Colors::CircleAnimationRenderer::render() {
       if (config.fading) {
         for (int i = 1; i <= 10; i++) {
           int r = currentRadius + i;
-          Color col = color * ((float)i / 10);
+          Color col = color * (1 - (float)i / 10);
           canvas->drawCircle(centerX, centerY, r, col, false);
         }
       }
