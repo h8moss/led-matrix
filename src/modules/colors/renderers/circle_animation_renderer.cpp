@@ -48,7 +48,7 @@ long int Colors::CircleAnimationRenderer::render() {
       if (config.fading) {
         for (int i = 1; i <= 10; i++) {
           int r = currentRadius - i;
-          float tran = (float)i / 10;
+          float tran = 1.0f - ((float)i / 10);
 
           canvas->drawCircle(centerX, centerY, r, color * tran, true);
         }
