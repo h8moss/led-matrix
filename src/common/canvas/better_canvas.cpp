@@ -84,8 +84,8 @@ void BetterCanvas::drawCircle(int x, int y, int r, Color c, bool filled) {
   for (int y0{-r}; y0 <= r; y0++) {
     for (int x0{-r}; x0 <= r; x0++) {
       int distanceSqrd{x0 * x0 + y0 * y0};
-      if ((filled && distanceSqrd < r * r + r) ||
-          (!filled && distanceSqrd < r * r + r && distanceSqrd > r * r - r)) {
+      if ((filled && distanceSqrd <= r * r + r) ||
+          (!filled && distanceSqrd <= r * r + r && distanceSqrd >= r * r - r)) {
         setPixel(x0 + x, y0 + y, c);
       }
     }
