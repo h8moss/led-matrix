@@ -44,9 +44,12 @@ long int Colors::CircleAnimationRenderer::render() {
     int nextRadius{(int)(radius * percent)};
     if (nextRadius != currentRadius) {
       currentRadius = nextRadius;
+
+      dLog(color);
       canvas->drawCircle(centerX, centerY, currentRadius, color,
                          !config.fading);
       if (config.fading) {
+        dLog(color);
         for (int i = 1; i <= 10; i++) {
           int r = currentRadius + i;
           Color col = color * (1 - (float)i / 10);
