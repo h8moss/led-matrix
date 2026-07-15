@@ -46,8 +46,7 @@ long int Colors::CircleAnimationRenderer::render() {
       currentRadius = nextRadius;
 
       dLog(color.string());
-      canvas->drawCircle(centerX, centerY, currentRadius, color,
-                         !config.fading);
+      canvas->drawCircle(centerX, centerY, currentRadius, color, true);
       if (config.fading) {
         dLog(color.string());
         for (int i = 1; i <= 10; i++) {
