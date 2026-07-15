@@ -41,7 +41,7 @@ long int Colors::CircleAnimationRenderer::render() {
     float percent{(float)progress / config.animationDuration};
     if (shrink)
       percent = 1.0f - percent;
-    int nextRadius{(int)(radius + 10 * percent) - 10};
+    int nextRadius{(int)((radius + 10) * percent) - 10};
     if (nextRadius != currentRadius) {
       currentRadius = nextRadius;
 
