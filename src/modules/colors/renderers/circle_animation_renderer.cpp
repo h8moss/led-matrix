@@ -45,10 +45,12 @@ long int Colors::CircleAnimationRenderer::render() {
     if (nextRadius != currentRadius) {
       currentRadius = nextRadius;
 
-      canvas->drawCircle(centerX, centerY, currentRadius, color, config.fading);
+      if (shrink)
+        canvas->drawCircle(centerX, centerY, currentRadius, color,
+                           config.fading);
       if (config.fading) {
         for (int i = 1; i <= 10; i++) {
-          int r = currentRadius + i;
+          int r = currentRadius + (shrink ? i : -i);
           float multiplier = (float)i / 10;
           if (shrink) {
             multiplier = 1 - multiplier;
@@ -58,6 +60,10 @@ long int Colors::CircleAnimationRenderer::render() {
           canvas->drawCircle(centerX, centerY, r, col, false);
         }
       }
+
+      if (!shrink)
+        canvas->drawCircle(centerX, centerY, currentRadius, color,
+                           config.fading);
     }
   }
 
