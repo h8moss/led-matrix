@@ -3,7 +3,6 @@
 #include "common/util/debug_log.hpp"
 #include "modules/colors/colors_configuration.hpp"
 
-#include <algorithm>
 #include <cmath>
 
 Colors::CircleAnimationRenderer::CircleAnimationRenderer(
@@ -30,6 +29,7 @@ long int Colors::CircleAnimationRenderer::render() {
   if (progress == 0) {
     canvas->fill(color);
     color = config.getColor();
+    dLog(color);
   }
 
   if (config.runOnce &&
@@ -41,7 +41,8 @@ long int Colors::CircleAnimationRenderer::render() {
     float percent{(float)progress / config.animationDuration};
     if (shrink)
       percent = 1.0f - percent;
-    int nextRadius{(int)((radius + 10) * percent) - 10};
+    int fadeOffset = config.fading ? 10 : 0;
+    int nextRadius{(int)((radius + fadeOffset) * percent) - fadeOffset};
     if (nextRadius != currentRadius) {
       currentRadius = nextRadius;
 
@@ -60,10 +61,6 @@ long int Colors::CircleAnimationRenderer::render() {
           canvas->drawCircle(centerX, centerY, r, col, false);
         }
       }
-
-      if (!shrink)
-        canvas->drawCircle(centerX, centerY, currentRadius, color,
-                           config.fading);
     }
   }
 

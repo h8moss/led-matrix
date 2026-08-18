@@ -1,5 +1,4 @@
 #include "modules/colors/colors_module.hpp"
-#include "common/util/enum_checked_transformer.hpp"
 #include "modules/colors/colors_configuration.hpp"
 #include "modules/colors/renderers/circle_animation_renderer.hpp"
 #include "modules/colors/renderers/corners_animation_renderer.hpp"
@@ -7,12 +6,11 @@
 #include "modules/module.hpp"
 
 #include "CLI/CLI.hpp"
-#include <stdexcept>
 #include <string>
 
 Colors::ColorsModule::ColorsModule(ICanvas *canvas)
-    : Module(canvas, "colors", "Shows simple color animations"),
-      config{Colors::ConfigurationWithAnimation::defaults}, renderer{} {}
+    : Module(canvas, "colors", "Shows simple color animations"), renderer{},
+      config{Colors::ConfigurationWithAnimation::defaults} {}
 
 void Colors::ColorsModule::setup() {
   if (config.animation == Animation::corners)
@@ -42,9 +40,9 @@ void Colors::ColorsModule::addFlags(CLI::App *app) {
   auto module = app->add_subcommand(this->name, this->description);
 
   auto colorOpt = module
-      ->add_option(
-          "--color,-c", config.colors, "A color you want the animation to contain")
-      ->type_name("color");
+                      ->add_option("--color,-c", config.colors,
+                                   "A color you want the animation to contain")
+                      ->type_name("color");
 
   module->add_option(
       "--duration,-d", config.duration,
@@ -57,8 +55,7 @@ void Colors::ColorsModule::addFlags(CLI::App *app) {
        {"grow", Colors::Animation::grow},
        {"shrink", Colors::Animation::shrink}},
       {{Colors::Animation::pulse, "A simple pulse animation"},
-       {Colors::Animation::corners,
-        "Colors rush from one corner to the other"},
+       {Colors::Animation::corners, "Colors rush from one corner to the other"},
        {Colors::Animation::grow, "A circle of color grows from the center"},
        {Colors::Animation::shrink,
         "A circle of color shrinks into the center"}});
